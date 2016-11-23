@@ -58,7 +58,7 @@
  - elementary OS
  - Android Studio
  - GIMP Image Editor
- - Inkscape Vector Graphics Editor
+ - Inkscape
  - Google Chrome
  
 - **Version Control:**
