@@ -35,6 +35,12 @@
 - Google Maps API
 - Internationalization
 
+###Project Info:
+
+- Status: **in Development**
+- Start Date: Nov 22, 2016
+- Developer: Haraldo Albergaria Filho
+
 ###Development Tools:
 
 - **Hardware:**
