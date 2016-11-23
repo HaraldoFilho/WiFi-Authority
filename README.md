@@ -1,10 +1,39 @@
 #**WiFi Authority**
 
-###Project Info:
+###About the application:
 
-- Status: **in Development**
-- Start Date: Nov 22, 2016
-- Developer: Haraldo Albergaria Filho
+**_WiFi Authority_** is a WiFi management app where it is with the following features:
+- List all WiFi Networks configured on the device.
+- Add new networks to the device.
+- Exclude networks from device.
+- Forget password of a network.
+- View the location of a network.
+- View the connection status.
+
+###This application uses:
+
+- Activities
+- Fragments
+- Intents
+- Settings
+- Splash Screen
+- Array Lists
+- Dialogs
+- Toasts
+- Floating Button
+- Text View
+- Image View
+- List View
+- Map View
+- Web View
+- WiFi Manager
+- WiFi Configuration
+- Network Location
+- Internet
+- Shared Preferences
+- Google Play Services API
+- Google Maps API
+- Internationalization
 
 ###Development Tools:
 
