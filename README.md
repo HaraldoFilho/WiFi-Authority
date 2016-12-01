@@ -4,7 +4,7 @@
 
 **_WiFi Authority_** is a WiFi management app with the following features:
 - List all WiFi Networks configured on the device
-- Give a description to the configured networks
+- Give a description for each configured network
 - Add new networks to the device
 - Exclude networks from device
 - Forget password of a network
