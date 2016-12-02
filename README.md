@@ -6,8 +6,7 @@
 - List all WiFi Networks configured on the device
 - Give a description for each configured network
 - Add new networks to the device
-- Exclude networks from device
-- Forget password of a network
+- Delete networks from device
 - View the location of a network
 - View the connection status
 
