@@ -37,8 +37,9 @@
 
 ###Project Info:
 
-- Status: **in Development**
+- Status: **in Alpha**
 - Start Date: Nov 22, 2016
+- Alpha release date: Dec 4, 2016
 - Developer: Haraldo Albergaria Filho
 
 ###Development Tools:
@@ -65,3 +66,4 @@
 
  - Git
  - Bitbucket
+ 
