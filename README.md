@@ -19,7 +19,6 @@
 - Activities
 - Fragments
 - Intents
-- Settings
 - Splash Screen
 - Array Lists
 - Dialogs
@@ -38,12 +37,14 @@
 - Google Play Services API
 - Google Maps API
 - Internationalization
+- Adaptative Interface Design
 
 ###Project Info:
 
-- Status: **in Alpha**
+- Status: **in Beta**
 - Start Date: Nov 22, 2016
 - Alpha release date: Dec 4, 2016
+- Beta release date: Jan 2, 2017
 - Developer: Haraldo Albergaria Filho
 
 ###Development Tools:
@@ -63,7 +64,6 @@
  - elementary OS
  - Android Studio
  - GIMP Image Editor
- - Inkscape
  - Google Chrome
  
 - **Version Control:**
