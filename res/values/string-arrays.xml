@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string-array name="security_options">
+        <item>Deactivated</item>
+        <item>WEP</item>
+        <item>WPA/WPA2/FT PSK</item>
+        <item>802.1x EAP</item>
+    </string-array>
+    
+</resources>
