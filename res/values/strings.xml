@@ -3,8 +3,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.1.0</string>
-    <string name="version_code" translatable="false">23</string>
+    <string name="version_number" translatable="false">0.1.1</string>
+    <string name="version_code" translatable="false">24</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -87,16 +87,18 @@
     <string name="alert_button_yes">Yes</string>
     <string name="alert_button_not_warn">Do not warn again</string>
 
+    <!-- Progress dialogs -->
+    <string name="progress_scan_networks">Scanning for available networks,\nplease wait...</string>
+
     <!--Toasts-->
-    <string name="toast_scan_networks">Scanning for available networks,\nplease wait...</string>
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
     <string name="toast_no_location_information">There is no location information for this network</string>
     <string name="toast_no_map_information">There is no map information available yet. Try again in a few seconds.</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
     <string name="toast_network_is_configured">This network is already configured</string>
     <string name="toast_wifi_disabled">WiFi is turned off, turning it on...</string>
-    <string name="toast_get_legal_notices">Loading text from internet...</string>
-    <string name="toast_no_legal_notices">Couldn\'t load legal notices text. Check your internet connection.</string>
+    <string name="toast_get_legal_notices">Loading legal notices text...</string>
+    <string name="toast_no_legal_notices">Couldn\'t load legal notices text</string>
     <string name="toast_get_help_page">Loading help page from internet...</string>
 
     <!--Layout resources-->

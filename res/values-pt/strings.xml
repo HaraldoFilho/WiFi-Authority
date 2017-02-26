@@ -15,8 +15,7 @@
     <string name="action_privacy_policy">Política de privacidade</string>
     <string name="action_legal_notices">Avisos legais\n(em Inglês)</string>
     <string name="action_feedback">Feedback</string>
-    <string name="toast_get_legal_notices">Carregando texto da internet...</string>
-    <string name="toast_no_legal_notices">Não foi possível carregar texto de avisos legais. Verifique a sua conexão de internet.</string>
+    <string name="toast_no_legal_notices">Não foi possível carregar texto de avisos legais</string>
     <string name="dialog_view_title">Título</string>
     <string name="action_send_question">Enviar dúvida</string>
     <string name="action_question">Dúvida</string>
@@ -41,7 +40,7 @@
     <string name="menu_refresh">Atualizar</string>
     <string name="alert_title_warning">ATENÇÃO!</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority precisa da permissão para obter a localização do dispositivo para gerar a lista de redes disponíveis. Você deseja ver novamente a janela de solicitação de permissão?\n</string>
-    <string name="toast_scan_networks">Procurando redes disponíveis,\npor favor aguarde...</string>
+    <string name="progress_scan_networks">Procurando redes disponíveis,\npor favor aguarde...</string>
     <string name="dialog_add_network_description">Descrição</string>
     <string name="dialog_add_network_password">Senha</string>
     <string name="dialog_add_network_security">Segurança</string>
@@ -88,5 +87,6 @@
     <string name="info_website">mohb-apps.com.br</string>
     <string name="info_feedback_email">duvida@mohb-apps.com.br</string>
     <string name="url_website">https://mohb-apps.com.br/</string>
+    <string name="toast_get_legal_notices">Carregando texto de notas legais...</string>
 
 </resources>

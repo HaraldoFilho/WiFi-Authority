@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 2/26/17 3:15 PM
  *
  *  -----------------------------------------------------------
  */
@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 public class Toasts {
 
-    private static Toast scanningNetworks;
     private static Toast unableRemoveNetwork;
     private static Toast noLocationInformation;
     private static Toast networkIsConfigured;
@@ -34,20 +33,6 @@ public class Toasts {
 
     public static void setContext(Context c) {
         context = c;
-    }
-
-
-    // Toast to notify that it is scanning for available networks
-    public static void showScanningNetworks(Context c) {
-        scanningNetworks = Toast.makeText((c), R.string.toast_scan_networks, Toast.LENGTH_SHORT);
-        scanningNetworks.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-        scanningNetworks.show();
-    }
-
-    public static void cancelScanningNetworks() {
-        if (scanningNetworks != null) {
-            scanningNetworks.cancel();
-        }
     }
 
     // Toast to notify that there is no location information
@@ -145,7 +130,6 @@ public class Toasts {
     // Cancel all toasts
 
     public static void cancelAllToasts() {
-        cancelScanningNetworks();
         cancelUnableRemoveNetwork();
         cancelNetworkIsConfigured();
         cancelWiFiDisabled();

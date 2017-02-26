@@ -512,16 +512,14 @@ public class ConfiguredNetworks {
 
             case Constants.SET_WEP:
                 configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
                 configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-                configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-                configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
                 configuration.wepTxKeyIndex = 0;
                 configuration.wepKeys[0] = password;
                 break;
 
             case Constants.SET_WPA:
                 configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
                 configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                 configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
                 configuration.preSharedKey = password;
@@ -529,7 +527,6 @@ public class ConfiguredNetworks {
 
             case Constants.SET_EAP:
                 configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
-                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
                 configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
                 configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
                 configuration.preSharedKey = password;
@@ -557,12 +554,14 @@ public class ConfiguredNetworks {
 
         if (security.contains(Constants.CFG_CCMP)) {
             configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
         }
         if (security.contains(Constants.CFG_TKIP)) {
             configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-            configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
         }
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 
         return configuration;
 

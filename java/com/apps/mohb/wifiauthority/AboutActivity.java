@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 2/26/17 3:35 PM
  *
  *  -----------------------------------------------------------
  */
@@ -21,11 +21,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.apps.mohb.wifiauthority.fragments.dialogs.LegalNoticesDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.MaterialIconsDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PrivacyPolicyDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.TermsOfUseDialogFragment;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 
 public class AboutActivity extends AppCompatActivity {
@@ -41,6 +43,7 @@ public class AboutActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             // show toast before start loading legal notices text
+            Toasts.setContext(getApplicationContext());
             Toasts.createLegalNotices();
             Toasts.setLegalNoticesText(R.string.toast_get_legal_notices);
             Toasts.showLegalNotices();
@@ -48,9 +51,16 @@ public class AboutActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            // get legal notices text from internet
+            // get legal notices text
             GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-            legalNotices = googleApiAvailability.getOpenSourceSoftwareLicenseInfo(getApplicationContext());
+            if(googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS) {
+                legalNotices = googleApiAvailability.getOpenSourceSoftwareLicenseInfo(getApplicationContext());
+            }
+            else {
+                // else show a toast informing that couldn't get
+                Toasts.setLegalNoticesText(R.string.toast_no_legal_notices);
+                Toasts.showLegalNotices();
+            }
             return null;
         }
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 1/2/17 9:46 PM
+ *  Last modified : 2/26/17 2:33 PM
  *
  *  -----------------------------------------------------------
  */
@@ -13,6 +13,7 @@
 package com.apps.mohb.wifiauthority;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -54,6 +55,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private ScannedNetworksListAdapter networksListAdapter;
     private WiFiScanReceiver wiFiScanReceiver;
     private ConfiguredNetworks configuredNetworks;
+    private ProgressDialog progressDialog;
 
 
     // Inner class to receive WiFi scan results
@@ -62,7 +64,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Toasts.cancelScanningNetworks();
+            progressDialog.cancel();
 
             wifiScannedNetworks = wifiManager.getScanResults();
 
@@ -263,7 +265,14 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     }
 
     private void scanForAvailableNetworks() {
-        Toasts.showScanningNetworks(getApplicationContext());
+
+        // Shows a dialog window with a spin wheel informing that data is being fetched
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.progress_scan_networks));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+        progressDialog.show();
+
         wiFiScanReceiver = new WiFiScanReceiver();
         registerReceiver(wiFiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
