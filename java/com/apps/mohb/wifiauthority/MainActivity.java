@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 1/2/17 9:46 PM
+ *  Last modified : 3/2/17 10:59 PM
  *
  *  -----------------------------------------------------------
  */
@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements
     private ListView networksListView;
     private View listHeader;
     private View listFooter;
+    private FloatingActionButton fab;
 
     private ConfiguredNetworksListAdapter networksListAdapter;
     private AdapterView.AdapterContextMenuInfo menuInfo;
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Create floating action button and handle clicks on it to add a network
         // The startWiFiCheckActivity will call the ScanNetworksActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,6 +329,24 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     Toasts.showWiFiDisabled(getApplicationContext());
                     wifiManager.setWifiEnabled(true);
+                }
+            }
+        });
+
+        networksListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // Required empty method
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                // If list is scrolling up hide the floating action button
+                if(firstVisibleItem > 0) {
+                    fab.hide();
+                }
+                else {
+                    fab.show();
                 }
             }
         });
