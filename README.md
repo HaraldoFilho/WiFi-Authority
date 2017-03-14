@@ -1,6 +1,6 @@
-#**WiFi Authority**
+# **WiFi Authority**
 
-###About the application:
+### About the application:
 
 **_WiFi Authority_** is a WiFi networks management application on which you can:
 
@@ -14,7 +14,7 @@
 - View the WiFi connection status
 
 
-###This application uses:
+### This application uses:
 
 - Activities
 - Fragments
@@ -39,7 +39,7 @@
 - Internationalization
 - Adaptative Interface Design
 
-###Project Info:
+### Project Info:
 
 - Status: **in Beta**
 - Start Date: Nov 22, 2016
@@ -47,11 +47,12 @@
 - Beta release date: Jan 2, 2017
 - Developer: Haraldo Albergaria Filho
 
-###Development Tools:
+### Development Tools:
 
-- **Hardware:**
+#### Hardware:
 
- - Dell Vostro 5470 Laptop Computer
+  - Dell Vostro 5470 Laptop Computer
+  
     - Processor: Intel Core i5-4210U CPU @ 1.70GHz
     - Memory: Kingston 8GB 1600Mhz DDR3
     - Graphics:
@@ -59,15 +60,16 @@
       - NVIDIA Corporation GK208M GeForce GT 740M (rev a1)
     - Storage: SSD Kingston V300 240GB
  
-- **Software:**
+#### Software:
 
- - elementary OS
- - Android Studio
- - GIMP Image Editor
- - Google Chrome
+  - elementary OS
+  - Android Studio
+  - GIMP Image Editor
+  - Google Chrome
  
-- **Version Control:**
+#### Version Control:
 
- - Git
- - Bitbucket
- 
+  - Git
+  - Bitbucket
+
+####
