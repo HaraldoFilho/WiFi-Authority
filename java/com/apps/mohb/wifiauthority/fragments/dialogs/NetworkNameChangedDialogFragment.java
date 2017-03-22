@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkNameChangedDialogFragment.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 1/2/17 9:56 PM
  *
  *  -----------------------------------------------------------
  */
@@ -78,7 +78,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
         checkPasswdVisible = (CheckBox) view.findViewById(R.id.checkNewPasswd);
         checkConnect = (CheckBox) view.findViewById(R.id.checkConnect);
 
-        wifiManager = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiConfiguration = new WifiConfiguration();
         configuredNetworks = new ConfiguredNetworks(getContext());
         connect = false;

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 2/26/17 2:33 PM
+ *  Last modified : 2/26/17 3:46 PM
  *
  *  -----------------------------------------------------------
  */
@@ -139,7 +139,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             listFooter.setClickable(false);
         }
 
-        wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         configuredNetworks = new ConfiguredNetworks(this);
 

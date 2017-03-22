@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : WiFiCheckActivity.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 1/2/17 9:56 PM
  *
  *  -----------------------------------------------------------
  */
@@ -31,7 +31,7 @@ public class WiFiCheckActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         Bundle bundle = getIntent().getExtras();
 

@@ -1,3 +1,6 @@
+####**0.1.3**
+- Made floating button translucent.
+
 ####**0.1.2**
 - Floating button was obstructing status icons of the last configured network visible 
 (when the list has more elements than the size of the screen). 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 1/2/17 9:56 PM
  *
  *  -----------------------------------------------------------
  */
@@ -39,7 +39,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
     public ScannedNetworksListAdapter(Context context, List<ScanResult> list) {
         super(context, 0, list);
-        wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         configuredNetworks = new ConfiguredNetworks(getContext());
 
     }

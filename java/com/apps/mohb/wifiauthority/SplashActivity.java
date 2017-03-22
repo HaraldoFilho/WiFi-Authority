@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : SplashActivity.java
- *  Last modified : 12/28/16 4:55 PM
+ *  Last modified : 1/2/17 9:56 PM
  *
  *  -----------------------------------------------------------
  */

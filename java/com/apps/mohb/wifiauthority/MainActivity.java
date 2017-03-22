@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 3/2/17 10:59 PM
+ *  Last modified : 3/21/17 10:53 PM
  *
  *  -----------------------------------------------------------
  */
@@ -282,6 +282,9 @@ public class MainActivity extends AppCompatActivity implements
         // Create floating action button and handle clicks on it to add a network
         // The startWiFiCheckActivity will call the ScanNetworksActivity
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        // Make floating button translucent
+        fab.setAlpha(Constants.FAB_TRANSLUCENT);
+        // Monitor clicks on button
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -333,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+
         networksListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -342,11 +346,16 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 // If list is scrolling up hide the floating action button
-                if(firstVisibleItem > 0) {
+                if (firstVisibleItem > 0) {
                     fab.hide();
-                }
-                else {
-                    fab.show();
+                } else {
+                    fab.show(new FloatingActionButton.OnVisibilityChangedListener() {
+                        @Override
+                        public void onShown(FloatingActionButton fab) {
+                            // Make floating button translucent
+                            fab.setAlpha(Constants.FAB_TRANSLUCENT);
+                        }
+                    });
                 }
             }
         });
@@ -567,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private void resumeApplication() {
-        wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         // Get configured networks additional data
         try {
@@ -658,9 +667,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        googleApiClient.disconnect();
     }
 
 

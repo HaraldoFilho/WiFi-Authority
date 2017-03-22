@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 2/26/17 2:03 PM
  *
  *  -----------------------------------------------------------
  */

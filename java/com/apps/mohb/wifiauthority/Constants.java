@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 12/22/16 8:31 PM
+ *  Last modified : 3/21/17 10:53 PM
  *
  *  -----------------------------------------------------------
  */
@@ -83,6 +83,10 @@ public class Constants {
     public static final int LEVEL_HIGH = 2;
     public static final int LEVEL_LOW = 1;
     public static final int LEVEL_VERY_LOW = 0;
+
+    // FAB alpha
+    public static final float FAB_OPAQUE = (float) 1.0;
+    public static final float FAB_TRANSLUCENT = (float) 0.8;
 
     // Caller Activity IDs for WiFiCheckActivity
     public static final int ACTIVITY_MAIN = 0;

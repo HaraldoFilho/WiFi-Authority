@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 2/26/17 3:35 PM
+ *  Last modified : 3/21/17 10:53 PM
  *
  *  -----------------------------------------------------------
  */
@@ -21,13 +21,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
 import com.apps.mohb.wifiauthority.fragments.dialogs.LegalNoticesDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.MaterialIconsDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PrivacyPolicyDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.TermsOfUseDialogFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 
 public class AboutActivity extends AppCompatActivity {
@@ -53,10 +52,9 @@ public class AboutActivity extends AppCompatActivity {
         protected Object doInBackground(Object[] params) {
             // get legal notices text
             GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-            if(googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS) {
                 legalNotices = googleApiAvailability.getOpenSourceSoftwareLicenseInfo(getApplicationContext());
-            }
-            else {
+            } else {
                 // else show a toast informing that couldn't get
                 Toasts.setLegalNoticesText(R.string.toast_no_legal_notices);
                 Toasts.showLegalNotices();
