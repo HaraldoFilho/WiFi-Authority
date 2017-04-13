@@ -1,6 +1,6 @@
 # **WiFi Authority**
 
-### About the application:
+### About the application
 
 **_WiFi Authority_** is a Wi-Fi networks management application for Android™ on which you can:
 
@@ -13,8 +13,15 @@
 - View the locations of the configured networks in a map
 - View the Wi-Fi connection status
 
+### Project Info
 
-### This application uses:
+- Status: **in Beta**
+- Start Date: Nov 22, 2016
+- Alpha release date: Dec 4, 2016
+- Beta release date: Jan 2, 2017
+- Developer: Haraldo Albergaria Filho
+
+#### This application uses:
 
 - Activities
 - Fragments
@@ -39,17 +46,9 @@
 - Internationalization
 - Adaptative Interface Design
 
-### Project Info:
+### Development Tools
 
-- Status: **in Beta**
-- Start Date: Nov 22, 2016
-- Alpha release date: Dec 4, 2016
-- Beta release date: Jan 2, 2017
-- Developer: Haraldo Albergaria Filho
-
-### Development Tools:
-
-#### Hardware:
+#### Hardware
 
   - Dell Vostro 5470 Laptop Computer
   
@@ -60,14 +59,14 @@
       - NVIDIA Corporation GK208M GeForce GT 740M (rev a1)
     - Storage: SSD Kingston V300 240GB
  
-#### Software:
+#### Software
 
   - elementary OS
   - Android Studio
   - GIMP Image Editor
   - Google Chrome
  
-#### Version Control:
+#### Version Control
 
   - Git
   - Bitbucket
