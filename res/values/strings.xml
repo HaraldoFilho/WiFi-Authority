@@ -3,8 +3,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.1.3</string>
-    <string name="version_code" translatable="false">26</string>
+    <string name="version_number" translatable="false">0.1.4</string>
+    <string name="version_code" translatable="false">27</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -15,7 +15,7 @@
     <string name="info_developer">Developer:</string>
     <string name="info_developer_name" translatable="false">Haraldo Albergaria Filho</string>
     <string name="info_skype" translatable="false">skype: mohb.apps</string>
-    <string name="info_copyright_text" translatable="false">Copyright © 2016 mohb apps</string>
+    <string name="info_copyright_text" translatable="false">Copyright © 2017 mohb apps</string>
     <string name="info_rights_reserved_text">All Rights Reserved.</string>
 
     <!--System time-->

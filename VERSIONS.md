@@ -1,3 +1,6 @@
+#### **0.1.4**
+- Made status green icons darker to be more visible below floating button.
+
 #### **0.1.3**
 - Made floating button translucent.
 

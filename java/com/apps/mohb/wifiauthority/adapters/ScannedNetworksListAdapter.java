@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 1/2/17 9:56 PM
+ *  Last modified : 3/21/17 11:05 PM
  *
  *  -----------------------------------------------------------
  */

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 3/21/17 10:53 PM
+ *  Last modified : 3/21/17 10:54 PM
  *
  *  -----------------------------------------------------------
  */

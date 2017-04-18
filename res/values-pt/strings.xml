@@ -87,6 +87,6 @@
     <string name="info_website">mohb-apps.com.br</string>
     <string name="info_feedback_email">duvida@mohb-apps.com.br</string>
     <string name="url_website">https://mohb-apps.com.br/</string>
-    <string name="toast_get_legal_notices">Carregando texto de notas legais...</string>
+    <string name="toast_get_legal_notices">Carregando texto de avisos legais...</string>
 
 </resources>

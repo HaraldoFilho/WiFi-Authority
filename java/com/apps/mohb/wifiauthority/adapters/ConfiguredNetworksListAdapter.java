@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 2/26/17 2:15 PM
+ *  Last modified : 3/21/17 10:54 PM
  *
  *  -----------------------------------------------------------
  */
