@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkNameChangedDialogFragment.java
- *  Last modified : 3/21/17 11:03 PM
+ *  Last modified : 6/25/17 12:55 PM
  *
  *  -----------------------------------------------------------
  */
@@ -133,7 +133,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                     wifiManager.saveConfiguration();
 
                     configuredNetworks.removeNetworkData(oldSSID);
-                    configuredNetworks.addNetworkData(newSSID, mac, description,
+                    configuredNetworks.addNetworkData(newSSID, mac, security, description,
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {

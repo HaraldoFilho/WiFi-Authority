@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DescriptionEditDialogFragment.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/25/17 12:54 PM
  *
  *  -----------------------------------------------------------
  */
@@ -66,7 +66,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData(networkSSID, "", text.getText().toString(),
+                    configuredNetworks.addNetworkData(networkSSID, "", "", text.getText().toString(),
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 configuredNetworks.updateNetworkDescription(networkSSID, text.getText().toString());

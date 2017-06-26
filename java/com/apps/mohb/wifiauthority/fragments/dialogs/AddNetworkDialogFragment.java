@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 3/21/17 11:03 PM
+ *  Last modified : 6/25/17 10:36 PM
  *
  *  -----------------------------------------------------------
  */
@@ -135,11 +135,14 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     if (bundle != null) {
                         bssid = bundle.getString(Constants.KEY_BSSID);
                     }
+
+                    String description = networkDescription.getText().toString();
+
                     if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
-                        configuredNetworks.addNetworkData(ssid, bssid, networkDescription.getText().toString(),
+                        configuredNetworks.addNetworkData(ssid, bssid, security, description,
                                 Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     } else {
-                        configuredNetworks.updateNetworkDescription(ssid, networkDescription.getText().toString());
+                        configuredNetworks.updateNetworkDescription(ssid, description);
                     }
                     configuredNetworks.saveDataState();
                 } else {

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/26/17 12:27 AM
  *
  *  -----------------------------------------------------------
  */
@@ -25,6 +25,7 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -51,6 +52,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements
     private WifiManager wifiManager;
     private WiFiScanReceiver wifiScanReceiver;
     private List<ScanResult> wifiScannedNetworks;
+    private List<WifiConfiguration> wifiConfiguredNetworks;
     private ListView networksListView;
     private View listHeader;
     private View listFooter;
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
     private boolean networkNameChangedDialogOpened;
     private String ssid;
 
+    private SharedPreferences settings;
 
     // Inner class to receive WiFi scan results
     private class WiFiScanReceiver extends BroadcastReceiver {
@@ -121,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 try {
 
-                    if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), scanResult.SSID)) {
+                    if (configuredNetworks.isConfiguredBySSID(wifiConfiguredNetworks, scanResult.SSID)) {
                         if (!configuredNetworks.isConfiguredByMacAddress(scanResult.BSSID)) {
                             if (configuredNetworks.hasNetworkAdditionalData(scanResult.SSID)) {
                                 configuredNetworks.setMacAddressBySSID(scanResult.SSID, scanResult.BSSID);
@@ -143,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements
                                 if (location != null) {
                                     // Create additional data for the network with the scanned SSID, Mac Address and the current location
                                     configuredNetworks.addNetworkData(scanResult.SSID, scanResult.BSSID,
-                                            "", location.getLatitude(), location.getLongitude());
+                                            scanResult.capabilities, "", location.getLatitude(), location.getLongitude());
                                 } else { // If location has not been acquired create additional data for the network
                                     // with the scanned SSID, Mac Address and the default location (0,0)
                                     configuredNetworks.addNetworkData(scanResult.SSID, scanResult.BSSID,
-                                            "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                                            scanResult.capabilities, "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                                 }
                             }
 
@@ -185,9 +190,9 @@ public class MainActivity extends AppCompatActivity implements
 
             // Iterates over the list of configured networks...
             ListIterator<WifiConfiguration> wifiConfigurationListIterator
-                    = wifiManager.getConfiguredNetworks().listIterator();
+                    = wifiConfiguredNetworks.listIterator();
             while (wifiConfigurationListIterator.hasNext()) {
-                WifiConfiguration wifiConfiguration = wifiManager.getConfiguredNetworks()
+                WifiConfiguration wifiConfiguration = wifiConfiguredNetworks
                         .get(wifiConfigurationListIterator.nextIndex());
                 ssid = wifiConfiguration.SSID;
 
@@ -196,8 +201,12 @@ public class MainActivity extends AppCompatActivity implements
                 while (scanResultListIterator.hasNext()) {
                     ScanResult scanResult = wifiScannedNetworks.get(scanResultListIterator.nextIndex());
 
-                    // Check if Mac Address of configured network matches Mac Address of scanned network...
-                    if ((configuredNetworks.getMacAddressBySSID(ssid).matches(scanResult.BSSID))
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+                    // Check if ssid reconfiguration is active ...
+                    if (settings.getBoolean(Constants.PREF_KEY_RECONFIG, true)
+                            // ... if Mac Address of configured network matches Mac Address of scanned network...
+                            && (configuredNetworks.getMacAddressBySSID(ssid).matches(scanResult.BSSID))
                             // ... if network is not hidden...
                             && (!scanResult.SSID.isEmpty())
                             // ... and if SSID of the network has been changed
@@ -205,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements
 
                         // Updates the SSID of the configured network
                         WifiConfiguration configuration = configuredNetworks
-                                .updateSSIDbyMacAddress(wifiManager.getConfiguredNetworks(), scanResult.BSSID, scanResult.SSID);
+                                .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, scanResult.SSID);
                         int updateResult = wifiManager.updateNetwork(configuration);
 
                         // Check if update has failed and the name changed dialog is not opened
@@ -310,8 +319,8 @@ public class MainActivity extends AppCompatActivity implements
                     int correctPosition = getCorrectPosition(position);
 
                     // Check if position is inside networks list size (not header or footer)
-                    if ((correctPosition >= 0) && (correctPosition < wifiManager.getConfiguredNetworks().size())) {
-                        ssid = wifiManager.getConfiguredNetworks().get(correctPosition).SSID;
+                    if ((correctPosition >= 0) && (correctPosition < wifiConfiguredNetworks.size())) {
+                        ssid = wifiConfiguredNetworks.get(correctPosition).SSID;
                         latitude = configuredNetworks.getLatitudeBySSID(ssid);
                         longitude = configuredNetworks.getLongitudeBySSID(ssid);
                     }
@@ -373,6 +382,8 @@ public class MainActivity extends AppCompatActivity implements
                     .build();
         }
 
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Shared preferences variable to control if Network Management Policy Dialog for Marshmallow (version 6.x)
         // or higher must be shown
         showNetworkManagementPolicyWarnPref = this.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
@@ -421,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_map:
                 // If current location is acquired and there are configured networks,
                 // show all networks locations on a map centralized in the current location
-                if ((location != null) && (!wifiManager.getConfiguredNetworks().isEmpty())) {
+                if ((location != null) && (!wifiConfiguredNetworks.isEmpty())) {
                     intent = new Intent(this, MapActivity.class);
                     bundle = new Bundle();
                     bundle.putString(Constants.KEY_SSID, "");
@@ -438,6 +449,12 @@ public class MainActivity extends AppCompatActivity implements
                                 R.string.toast_no_configured_networks);
                     }
                 }
+                break;
+
+            // Settings
+            case R.id.action_main_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
 
             // Help
@@ -477,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements
 
             MenuItem item = menu.findItem(R.id.connect);
             AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            WifiConfiguration network = wifiManager.getConfiguredNetworks().get(getCorrectPosition(menuInfo.position));
+            WifiConfiguration network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
 
             // Disable item clicks (default)
             item.setEnabled(false);
@@ -513,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onContextItemSelected(MenuItem item) {
         menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        network = wifiManager.getConfiguredNetworks().get(getCorrectPosition(menuInfo.position));
+        network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
         ssid = network.SSID;
 
         switch (item.getItemId()) {
@@ -640,15 +657,56 @@ public class MainActivity extends AppCompatActivity implements
 
     private void createListOfNetworks() {
         if (wifiManager.isWifiEnabled()) {
+
+            if(wifiConfiguredNetworks != null) {
+                wifiConfiguredNetworks.clear();
+            }
+            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+
+            String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
+                getResources().getString(R.string.pref_def_sort));
+
+            switch (sort) {
+
+                case Constants.PREF_SORT_NAME:
+                    // sort list by ascending order of network name
+                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                        @Override
+                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                            return lhs.SSID.compareTo(rhs.SSID);
+                        }
+                    });
+                    break;
+
+                case Constants.PREF_SORT_DESCRIPTION:
+                    // sort list by ascending order of network description
+                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+
+                        ConfiguredNetworks network = new ConfiguredNetworks(getApplicationContext());
+
+                        @Override
+                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                            return network.getDescriptionBySSID(lhs.SSID).compareTo(network.getDescriptionBySSID(rhs.SSID));
+                        }
+                    });
+                    break;
+
+                default:
+                    break;
+
+            }
+
+
             if (networksListAdapter == null) {
                 networksListAdapter = new ConfiguredNetworksListAdapter(this,
-                        wifiManager.getConfiguredNetworks(), configuredNetworks);
+                        wifiConfiguredNetworks, configuredNetworks);
                 networksListView.setAdapter(networksListAdapter);
+            } else {
+                // Refresh list
+                networksListAdapter.clear();
+                networksListAdapter.addAll(wifiConfiguredNetworks);
+                networksListAdapter.notifyDataSetChanged();
             }
-            // Refresh list
-            networksListAdapter.clear();
-            networksListAdapter.addAll(wifiManager.getConfiguredNetworks());
-            networksListAdapter.notifyDataSetChanged();
         } else {
             wifiManager.setWifiEnabled(true);
         }
@@ -698,7 +756,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Check if network removal was successful
         if (wifiManager.removeNetwork(network.networkId)) {
-            wifiManager.getConfiguredNetworks().remove(network);
+            wifiConfiguredNetworks.remove(network);
             wifiManager.saveConfiguration();
             createListOfNetworks();
             configuredNetworks.removeNetworkData(network.SSID);

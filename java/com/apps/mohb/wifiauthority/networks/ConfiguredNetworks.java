@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/25/17 10:30 PM
  *
  *  -----------------------------------------------------------
  */
@@ -52,8 +52,8 @@ public class ConfiguredNetworks {
 
     }
 
-    public void addNetworkData(String ssid, String bssid, String description, double latitude, double longitude) {
-        NetworkAdditionalData data = new NetworkAdditionalData(getDataSSID(ssid), bssid, description, latitude, longitude);
+    public void addNetworkData(String ssid, String bssid, String security, String description, double latitude, double longitude) {
+        NetworkAdditionalData data = new NetworkAdditionalData(getDataSSID(ssid), bssid, security, description, latitude, longitude);
         networksData.add(data);
         saveDataState();
     }
@@ -201,6 +201,22 @@ public class ConfiguredNetworks {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 data.setMacAddress(mac);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
+    public boolean setDescriptionBySSID(String ssid, String description) {
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDescriptionBySSID(ssid).matches(data.getSSID())) {
+                data.setDescription(description);
                 saveDataState();
                 return true;
             }
@@ -365,6 +381,7 @@ public class ConfiguredNetworks {
     public NetworkAdditionalData readDataItem(JsonReader jsonReader) throws IOException {
         String dataSSID = "";
         String dataBSSID = "";
+        String dataSecurity = "";
         String dataDescription = "";
         Double dataLatitude = Constants.DEFAULT_LATITUDE;
         Double dataLongitude = Constants.DEFAULT_LONGITUDE;
@@ -378,6 +395,9 @@ public class ConfiguredNetworks {
                     break;
                 case Constants.JSON_BSSID:
                     dataBSSID = jsonReader.nextString();
+                    break;
+                case Constants.JSON_SECURITY:
+                    dataDescription = jsonReader.nextString();
                     break;
                 case Constants.JSON_DESCRIPTION:
                     dataDescription = jsonReader.nextString();
@@ -395,7 +415,7 @@ public class ConfiguredNetworks {
         }
         jsonReader.endObject();
         NetworkAdditionalData dataItem = new NetworkAdditionalData(dataSSID, dataBSSID,
-                dataDescription, dataLatitude, dataLongitude);
+                dataSecurity, dataDescription, dataLatitude, dataLongitude);
         return dataItem;
     }
 

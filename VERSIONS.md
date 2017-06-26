@@ -1,3 +1,7 @@
+#### **0.2.0**
+- Added setting options.
+- Improvements on code.
+
 #### **0.1.4**
 - Made status green icons darker to be more visible below floating button.
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/pref_group_your_networks"
+        android:key="@string/pref_group_your_networks_settings">
+
+    <!-- Header -->
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_header_titles"
+        android:entryValues="@array/pref_header_entry_values"
+        android:key="@string/pref_key_header"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_header" />
+
+    <!-- Sort -->
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_sort_titles"
+        android:entryValues="@array/pref_sort_entry_values"
+        android:key="@string/pref_key_sort"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_sort" />
+
+    <!--Reconfiguration-->
+    <CheckBoxPreference
+        android:key="@string/pref_key_reconfig"
+        android:title="@string/pref_title_reconfig"
+        android:summaryOn="@string/pref_reconfig_summ_on"
+        android:summaryOff="@string/pref_reconfig_summ_off"
+        android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_group_available_networks"
+        android:key="@string/pref_group_available_networks_settings">
+
+    <!-- Security -->
+    <ListPreference
+        android:defaultValue="3"
+        android:entries="@array/pref_security_titles"
+        android:entryValues="@array/pref_security_entry_values"
+        android:key="@string/pref_key_security"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_security" />
+
+    <!-- Signal Level -->
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_signal_titles"
+        android:entryValues="@array/pref_signal_entry_values"
+        android:key="@string/pref_key_signal"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_signal" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

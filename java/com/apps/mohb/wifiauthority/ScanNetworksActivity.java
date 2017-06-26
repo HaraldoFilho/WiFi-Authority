@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 3/21/17 11:04 PM
+ *  Last modified : 6/26/17 1:51 AM
  *
  *  -----------------------------------------------------------
  */
@@ -18,11 +18,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -56,7 +58,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private WiFiScanReceiver wiFiScanReceiver;
     private ConfiguredNetworks configuredNetworks;
     private ProgressDialog progressDialog;
-
+    private SharedPreferences settings;
 
     // Inner class to receive WiFi scan results
     private class WiFiScanReceiver extends BroadcastReceiver {
@@ -68,16 +70,63 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
             wifiScannedNetworks = wifiManager.getScanResults();
 
-            // remove hidden networks from list
-            ListIterator<ScanResult> listIteratorHidden = wifiScannedNetworks.listIterator();
-            while (listIteratorHidden.hasNext()) {
-                int indexHidden = listIteratorHidden.nextIndex();
-                String ssid = wifiScannedNetworks.get(indexHidden).SSID;
-                if (ssid.isEmpty()) {
-                    listIteratorHidden.next();
-                    listIteratorHidden.remove();
+            ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
+            while (scanResultListIterator.hasNext()) {
+                int index = scanResultListIterator.nextIndex();
+                String ssid = wifiScannedNetworks.get(index).SSID;
+                String capabilities = wifiScannedNetworks.get(index).capabilities;
+
+                // Get security levels to remove
+                String minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
+                        getResources().getString(R.string.pref_def_security));
+
+                boolean isWep = false;
+                boolean isOpen = false;
+
+                if (capabilities.contains(Constants.SCAN_WEP)) {
+                    isWep = true;
                 } else {
-                    listIteratorHidden.next();
+                    if (!capabilities.contains(Constants.SCAN_EAP)
+                            && !capabilities.contains(Constants.SCAN_WEP)
+                            && !capabilities.contains(Constants.SCAN_WPA)) {
+                        isOpen = true;
+                    }
+
+                }
+
+                // Get signal levels to remove
+                String minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
+                        getResources().getString(R.string.pref_def_signal));
+
+                int minSignalLevel;
+
+                switch (minSignalLevelToShow) {
+
+                    case Constants.PREF_MIN_SIGNAL_HIGH:
+                        minSignalLevel = Constants.LEVEL_HIGH;
+                        break;
+
+                     case Constants.PREF_MIN_SIGNAL_LOW:
+                        minSignalLevel = Constants.LEVEL_LOW;
+                        break;
+
+                     default:
+                        minSignalLevel = Constants.LEVEL_VERY_LOW;
+                        break;
+
+                }
+
+                int signalLevel = wifiManager.calculateSignalLevel(wifiScannedNetworks.get(index).level, Constants.LEVELS);
+
+                // Remove unsecure (if option is activated), low signal levels and hidden networks from list
+                if ((minSecurityToShow.matches(Constants.PREF_SECURITY_WPA_EAP) && (isWep || isOpen)
+                        || (minSecurityToShow.matches(Constants.PREF_SECURITY_WEP) && (isOpen)))
+                        || (signalLevel < minSignalLevel)
+                        || ssid.isEmpty()) {
+                    scanResultListIterator.next();
+                    scanResultListIterator.remove();
+                } else {
+                    scanResultListIterator.next();
                 }
             }
 
@@ -138,6 +187,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             listHeader.setClickable(false);
             listFooter.setClickable(false);
         }
+
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
@@ -225,6 +276,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+        Intent intent;
 
         switch (id) {
 
@@ -234,12 +286,15 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 dialog.show(getSupportFragmentManager(), "AddHiddenNetworkDialogFragment");
                 break;
 
+            // Settings
+            case R.id.action_scan_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+
             // Help
             case R.id.action_help_scan:
-                Intent intent = new Intent(this, HelpActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_help_scan));
-                intent.putExtras(bundle);
+                intent = new Intent(this, HelpActivity.class);
                 startActivity(intent);
                 break;
 

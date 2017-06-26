@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/26/17 12:27 AM
  *
  *  -----------------------------------------------------------
  */
@@ -13,9 +13,11 @@
 package com.apps.mohb.wifiauthority.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +44,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
     private WifiConfiguration configuration;
     private String ssid;
 
+    private SharedPreferences settings;
 
     public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> list,
                                          ConfiguredNetworks configuredNetworks) {
@@ -62,28 +65,36 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         configuration = (WifiConfiguration) getItem(position);
         ssid = configuredNetworks.getDataSSID(configuration.SSID);
 
+        settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_networks, parent, false);
         }
 
-        // Network name (SSID)
-
         TextView txtNetworkName = (TextView) convertView.findViewById(R.id.txtNetName);
-        txtNetworkName.setText(ssid);
-
-
-        // Network description
-
         TextView txtNetworkDescription = (TextView) convertView.findViewById(R.id.txtNetDescription);
 
+        // Get network description
         String description = configuredNetworks.getDescriptionBySSID(ssid);
 
-        if (!description.isEmpty()) {
-            txtNetworkDescription.setText(description);
-        } else {
-            txtNetworkDescription.setText(configuredNetworks.getCfgSSID(ssid));
+        // If has no description use the SSID instead
+        if (description.isEmpty()) {
+            description = configuredNetworks.getCfgSSID(ssid);
+            configuredNetworks.setDescriptionBySSID(ssid, description);
         }
 
+        String header = settings.getString(getContext().getResources().getString(R.string.pref_key_header),
+                getContext().getResources().getString(R.string.pref_def_header));
+
+        // Check if option to show description first is selected
+        if(header.matches(Constants.PREF_HEADER_NAME)) {
+            txtNetworkName.setText(ssid);
+            txtNetworkDescription.setText(description);
+        }
+        else {
+            txtNetworkName.setText(description);
+            txtNetworkDescription.setText(ssid);
+        }
 
         // Network security
 

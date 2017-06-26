@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/26/17 1:49 AM
  *
  *  -----------------------------------------------------------
  */
@@ -27,6 +27,7 @@ public class Constants {
     public static final String DATA = "Data";
     public static final String JSON_SSID = "ssid";
     public static final String JSON_BSSID = "bssid";
+    public static final String JSON_SECURITY = "security";
     public static final String JSON_DESCRIPTION = "description";
     public static final String JSON_LATITUDE = "latitude";
     public static final String JSON_LONGITUDE = "longitude";
@@ -94,5 +95,19 @@ public class Constants {
 
     // Network updated result failed code
     public static final int NETWORK_UPDATE_FAIL = -1;
+
+    // Settings
+    public static final String PREF_HEADER_NAME = "1";
+
+    public static final String PREF_SORT_NAME = "2";
+    public static final String PREF_SORT_DESCRIPTION = "3";
+
+    public static final String PREF_KEY_RECONFIG = "SSID_RECONFIG";
+
+    public static final String PREF_SECURITY_WPA_EAP = "1";
+    public static final String PREF_SECURITY_WEP = "2";
+
+    public static final String PREF_MIN_SIGNAL_LOW = "2";
+    public static final String PREF_MIN_SIGNAL_HIGH = "3";
 
 }

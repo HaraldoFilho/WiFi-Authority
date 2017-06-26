@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkAdditionalData.java
- *  Last modified : 3/21/17 10:54 PM
+ *  Last modified : 6/25/17 2:33 PM
  *
  *  -----------------------------------------------------------
  */
@@ -17,6 +17,7 @@ public class NetworkAdditionalData {
 
     private String ssid;
     private String mac;
+    private String security;
     private String description;
     private double latitude;
     private double longitude;
@@ -26,9 +27,10 @@ public class NetworkAdditionalData {
         // empty constructor
     }
 
-    public NetworkAdditionalData(String ssid, String bssid, String description, double latitude, double longitude) {
+    public NetworkAdditionalData(String ssid, String bssid, String security, String description, double latitude, double longitude) {
         this.ssid = ssid;
         this.mac = bssid;
+        this.security = security;
         this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -43,6 +45,10 @@ public class NetworkAdditionalData {
         return mac;
     }
 
+    public String getSecurity() {
+        return security;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -53,6 +59,10 @@ public class NetworkAdditionalData {
 
     public void setMacAddress(String mac) {
         this.mac = mac;
+    }
+
+    public void setSecurity(String security) {
+        this.security = security;
     }
 
     public void setDescription(String description) {
