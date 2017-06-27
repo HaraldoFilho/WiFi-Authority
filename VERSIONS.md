@@ -1,3 +1,7 @@
+#### **0.2.1**
+- Fixed bug of network automatically reconnecting after being disconnected.
+- Fixed delay on updating changes on connection status of a network.
+
 #### **0.2.0**
 - Added setting options.
 - Improvements on code.
@@ -9,8 +13,8 @@
 - Made floating button translucent.
 
 #### **0.1.2**
-- Floating button was obstructing status icons of the last configured network visible 
-(when the list has more elements than the size of the screen). 
+- Floating button was obstructing status icons of the last configured network visible
+(when the list has more elements than the size of the screen).
 Now, it is hidden when list is scrolled up to avoid this.
 
 #### **0.1.1**
@@ -20,4 +24,3 @@ Now, it is hidden when list is scrolled up to avoid this.
 
 #### **0.1.0**
 - Initial beta release.
-

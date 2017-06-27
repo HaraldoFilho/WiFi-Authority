@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 6/26/17 12:27 AM
+ *  Last modified : 6/26/17 11:15 PM
  *
  *  -----------------------------------------------------------
  */
@@ -87,11 +87,10 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                 getContext().getResources().getString(R.string.pref_def_header));
 
         // Check if option to show description first is selected
-        if(header.matches(Constants.PREF_HEADER_NAME)) {
+        if (header.matches(Constants.PREF_HEADER_NAME)) {
             txtNetworkName.setText(ssid);
             txtNetworkDescription.setText(description);
-        }
-        else {
+        } else {
             txtNetworkName.setText(description);
             txtNetworkDescription.setText(ssid);
         }

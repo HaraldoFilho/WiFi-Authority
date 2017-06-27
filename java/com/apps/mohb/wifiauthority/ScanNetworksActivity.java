@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 6/26/17 1:51 AM
+ *  Last modified : 6/26/17 11:15 PM
  *
  *  -----------------------------------------------------------
  */
@@ -106,11 +106,11 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         minSignalLevel = Constants.LEVEL_HIGH;
                         break;
 
-                     case Constants.PREF_MIN_SIGNAL_LOW:
+                    case Constants.PREF_MIN_SIGNAL_LOW:
                         minSignalLevel = Constants.LEVEL_LOW;
                         break;
 
-                     default:
+                    default:
                         minSignalLevel = Constants.LEVEL_VERY_LOW;
                         break;
 

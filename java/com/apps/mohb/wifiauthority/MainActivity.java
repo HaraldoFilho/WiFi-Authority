@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 6/26/17 12:27 AM
+ *  Last modified : 6/27/17 1:49 AM
  *
  *  -----------------------------------------------------------
  */
@@ -20,6 +20,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements
     private AdapterView.AdapterContextMenuInfo menuInfo;
 
     private ConfiguredNetworks configuredNetworks;
-    private WifiConfiguration network;
+    protected WifiConfiguration network;
 
     private GoogleApiClient googleApiClient;
     private Location location;
@@ -91,6 +92,18 @@ public class MainActivity extends AppCompatActivity implements
     private String ssid;
 
     private SharedPreferences settings;
+
+
+    // Inner class to monitor network state changes
+    public class NetworkStateMonitor extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Refresh list of networks when connection state changes
+            createListOfNetworks();
+        }
+
+    }
 
     // Inner class to receive WiFi scan results
     private class WiFiScanReceiver extends BroadcastReceiver {
@@ -388,6 +401,11 @@ public class MainActivity extends AppCompatActivity implements
         // or higher must be shown
         showNetworkManagementPolicyWarnPref = this.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
 
+        // Register a broadcast receiver to monitor changes on network state to update network status
+        BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(wifiStateMonitor, filter);
+
     }
 
 
@@ -546,13 +564,17 @@ public class MainActivity extends AppCompatActivity implements
 
             // Connect
             case R.id.connect:
-                // Disconnect and try to connect to the network selected
+                // Disconnect
                 wifiManager.disconnect();
+                // Check if it is trying to connect to a different network
                 if (network.status != WifiConfiguration.Status.CURRENT) {
                     wifiManager.enableNetwork(network.networkId, true);
                     wifiManager.reconnect();
+                } else {
+                    // Disable disconnected network to avoid automatic reconnection
+                    wifiManager.disableNetwork(network.networkId);
                 }
-                createListOfNetworks();
+                //createListOfNetworks();
                 return true;
 
             // Delete
@@ -658,13 +680,13 @@ public class MainActivity extends AppCompatActivity implements
     private void createListOfNetworks() {
         if (wifiManager.isWifiEnabled()) {
 
-            if(wifiConfiguredNetworks != null) {
+            if (wifiConfiguredNetworks != null) {
                 wifiConfiguredNetworks.clear();
             }
             wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
 
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
-                getResources().getString(R.string.pref_def_sort));
+                    getResources().getString(R.string.pref_def_sort));
 
             switch (sort) {
 
