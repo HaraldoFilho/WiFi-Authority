@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 6/26/17 11:15 PM
+ *  Last modified : 6/29/17 1:11 AM
  *
  *  -----------------------------------------------------------
  */
@@ -14,8 +14,10 @@ package com.apps.mohb.wifiauthority.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -39,11 +41,11 @@ import java.util.List;
 public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     private WifiManager wifiManager;
+    private NetworkInfo.DetailedState networkState;
     private List<ScanResult> wifiScannedNetworks;
     private ConfiguredNetworks configuredNetworks;
     private WifiConfiguration configuration;
     private String ssid;
-
     private SharedPreferences settings;
 
     public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> list,
@@ -57,6 +59,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -174,17 +177,47 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             }
 
 
-            // Network status
+            // Network state
 
-            TextView txtNetworkStatus = (TextView) convertView.findViewById(R.id.txtNetStatus);
-            txtNetworkStatus.setText(R.string.layout_net_out_of_reach);
+            TextView txtNetworkState = (TextView) convertView.findViewById(R.id.txtNetStatus);
+            txtNetworkState.setText(R.string.layout_net_out_of_reach);
 
-            if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid)) {
-                txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                txtNetworkStatus.setText(R.string.layout_net_connected);
-            } else {
+
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            String suplicantSSID = configuredNetworks.getDataSSID(wifiInfo.getSSID());
+            String state;
+
+            if (!suplicantSSID.matches(ssid)) {
                 txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-                txtNetworkStatus.setText(R.string.layout_net_disconnected);
+                txtNetworkState.setText(R.string.layout_net_disconnected);
+            } else {
+                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid)) {
+                    txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                    txtNetworkState.setText(R.string.layout_net_connected);
+                } else {
+                    switch (networkState) {
+                        case DISCONNECTED:
+                            state = getContext().getResources().getString(R.string.net_state_disconnected);
+                            break;
+                        case SCANNING:
+                            state = getContext().getResources().getString(R.string.net_state_scannig);
+                            break;
+                        case CONNECTING:
+                            state = getContext().getResources().getString(R.string.net_state_connecting);
+                            break;
+                        case AUTHENTICATING:
+                            state = getContext().getResources().getString(R.string.net_state_authenticating);
+                            break;
+                        case OBTAINING_IPADDR:
+                            state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
+                            break;
+                        default:
+                            state = getContext().getResources().getString(R.string.net_state_idle);
+                            break;
+                    }
+
+                    txtNetworkState.setText(state);
+                }
             }
 
 
@@ -207,6 +240,10 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         return convertView;
 
+    }
+
+    public void setNetworkState(NetworkInfo.DetailedState state) {
+        networkState = state;
     }
 
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkAdditionalData.java
- *  Last modified : 6/26/17 11:15 PM
+ *  Last modified : 6/28/17 1:00 AM
  *
  *  -----------------------------------------------------------
  */

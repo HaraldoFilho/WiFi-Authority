@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 6/27/17 1:49 AM
+ *  Last modified : 6/29/17 1:11 AM
  *
  *  -----------------------------------------------------------
  */
@@ -21,8 +21,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private ConfiguredNetworks configuredNetworks;
     protected WifiConfiguration network;
+    private NetworkInfo.DetailedState networkState;
 
     private GoogleApiClient googleApiClient;
     private Location location;
@@ -99,6 +103,12 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            // Get suplicant state
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            networkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+            Log.d("DEBUG_WIFI", networkState.toString());
+
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
         }
@@ -404,6 +414,19 @@ public class MainActivity extends AppCompatActivity implements
         // Register a broadcast receiver to monitor changes on network state to update network status
         BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.EXTRA_NETWORK_INFO);
+        filter.addAction(WifiManager.EXTRA_WIFI_INFO);
+        filter.addAction(WifiManager.EXTRA_WIFI_STATE);
+        filter.addAction(WifiManager.EXTRA_NEW_STATE);
+        filter.addAction(WifiManager.EXTRA_SUPPLICANT_CONNECTED);
+        filter.addAction(WifiManager.EXTRA_SUPPLICANT_ERROR);
+        filter.addAction(WifiManager.EXTRA_NEW_STATE);
+        filter.addAction(WifiManager.EXTRA_PREVIOUS_WIFI_STATE);
+        filter.addAction(WifiManager.EXTRA_RESULTS_UPDATED);
         this.registerReceiver(wifiStateMonitor, filter);
 
     }
@@ -722,6 +745,7 @@ public class MainActivity extends AppCompatActivity implements
                 // Refresh list
                 networksListAdapter.clear();
                 networksListAdapter.addAll(wifiConfiguredNetworks);
+                networksListAdapter.setNetworkState(networkState);
                 networksListAdapter.notifyDataSetChanged();
             }
         } else {

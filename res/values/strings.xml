@@ -3,8 +3,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.2.2</string>
-    <string name="version_code" translatable="false">30</string>
+    <string name="version_number" translatable="false">0.2.3</string>
+    <string name="version_code" translatable="false">31</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -132,6 +132,15 @@
     <string name="security_EAP" translatable="false">802.1x EAP</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_settings">Settings</string>
+
+    <!-- Network states -->
+
+    <string name="net_state_disconnected">Disconnected</string>
+    <string name="net_state_scannig">Scanning</string>
+    <string name="net_state_connecting">Connecting</string>
+    <string name="net_state_authenticating">Authenticating</string>
+    <string name="net_state_obt_ip_address">Obtaining IP address</string>
+    <string name="net_state_idle">Idle</string>
 
     <!-- Settings -->
 

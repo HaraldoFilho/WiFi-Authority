@@ -1,3 +1,6 @@
+#### **0.2.3**
+- More detailed network state description.
+
 #### **0.2.2**
 - Added option to store password in the application (will be used later)
 - Other UI and code improvements.

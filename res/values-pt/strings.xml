@@ -104,6 +104,12 @@
     <string name="pref_title_store_password">Armazenar senha</string>
     <string name="dialog_check_store_passwd">Armazenar senha</string>
     <string name="layout_net_title">Titulo</string>
+    <string name="net_state_authenticating">Autenticando</string>
+    <string name="net_state_connecting">Conectando</string>
+    <string name="net_state_disconnected">Desconectada</string>
+    <string name="net_state_idle">Aguardando</string>
+    <string name="net_state_obt_ip_address">Obtendo endereço IP</string>
+    <string name="net_state_scannig">Escaneando</string>
 
 
 </resources>
