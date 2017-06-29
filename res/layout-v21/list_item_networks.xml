@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="@dimen/item_elevation"
-    android:background="@drawable/item_card" >
+    android:background="@drawable/item_tile" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/layout_net_name"
-        android:id="@+id/txtNetName"
+        android:text="@string/layout_net_title"
+        android:id="@+id/txtNetTitle"
         android:layout_gravity="left"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/text_size_big"
@@ -20,13 +20,13 @@
         android:layout_marginTop="@dimen/item_margin_top" />
 
     <TextView
-        android:text="@string/layout_net_description"
+        android:text="@string/layout_net_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtNetName"
-        android:id="@+id/txtNetDescription"
-        android:layout_alignLeft="@+id/txtNetName"
-        android:layout_alignStart="@+id/txtNetName"
+        android:layout_below="@+id/txtNetTitle"
+        android:id="@+id/txtNetSubtitle"
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle"
         android:textStyle="normal|bold" />
 
     <TextView
@@ -34,15 +34,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtNetSecurityTitle"
-        android:layout_below="@+id/txtNetDescription"
-        android:layout_alignLeft="@+id/txtNetName"
-        android:layout_alignStart="@+id/txtNetName" />
+        android:layout_below="@+id/txtNetSubtitle"
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle" />
 
     <TextView
         android:text="@string/layout_net_security"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtNetDescription"
+        android:layout_below="@+id/txtNetSubtitle"
         android:layout_toRightOf="@+id/txtNetSecurityTitle"
         android:id="@+id/txtNetSecurity" />
 
@@ -52,8 +52,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtNetStatusTitle"
         android:layout_below="@+id/txtNetSecurityTitle"
-        android:layout_alignLeft="@+id/txtNetName"
-        android:layout_alignStart="@+id/txtNetName" />
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle" />
 
     <TextView
         android:text="@string/layout_net_status"

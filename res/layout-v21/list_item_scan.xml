@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:elevation="@dimen/item_elevation"
-    android:background="@drawable/item_card" >
+    android:background="@drawable/item_tile" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/layout_net_name"
+        android:text="@string/layout_net_title"
         android:id="@+id/txtScanNetName"
         android:layout_gravity="left"
         android:textColor="@color/colorBlack"

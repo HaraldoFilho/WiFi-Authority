@@ -71,8 +71,8 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_networks, parent, false);
         }
 
-        TextView txtNetworkName = (TextView) convertView.findViewById(R.id.txtNetName);
-        TextView txtNetworkDescription = (TextView) convertView.findViewById(R.id.txtNetDescription);
+        TextView txtNetworkName = (TextView) convertView.findViewById(R.id.txtNetTitle);
+        TextView txtNetworkDescription = (TextView) convertView.findViewById(R.id.txtNetSubtitle);
 
         // Get network description
         String description = configuredNetworks.getDescriptionBySSID(ssid);
@@ -87,12 +87,12 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                 getContext().getResources().getString(R.string.pref_def_header));
 
         // Check if option to show description first is selected
-        if (header.matches(Constants.PREF_HEADER_NAME)) {
-            txtNetworkName.setText(ssid);
-            txtNetworkDescription.setText(description);
-        } else {
+        if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
             txtNetworkName.setText(description);
             txtNetworkDescription.setText(ssid);
+        } else {
+            txtNetworkName.setText(ssid);
+            txtNetworkDescription.setText(description);
         }
 
         // Network security
@@ -206,6 +206,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         }
 
         return convertView;
+
     }
 
 

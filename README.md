@@ -19,6 +19,8 @@
 - Start Date: Nov 22, 2016
 - Alpha release date: Dec 4, 2016
 - Beta release date: Jan 2, 2017
+- Put on hold: Apr 17, 2017
+- Resumed: Jun 26, 2017
 - Developer: Haraldo Albergaria Filho
 
 #### This application uses:

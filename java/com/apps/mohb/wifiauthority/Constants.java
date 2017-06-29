@@ -25,10 +25,11 @@ public class Constants {
 
     // Lists Saved Preferences
     public static final String DATA = "Data";
+    public static final String JSON_DESCRIPTION = "description";
     public static final String JSON_SSID = "ssid";
     public static final String JSON_BSSID = "bssid";
     public static final String JSON_SECURITY = "security";
-    public static final String JSON_DESCRIPTION = "description";
+    public static final String JSON_PASSWORD = "password";
     public static final String JSON_LATITUDE = "latitude";
     public static final String JSON_LONGITUDE = "longitude";
 
@@ -57,10 +58,10 @@ public class Constants {
     public static final String KEY_WPA2 = "{2}";
     public static final String KEY_EAP = "{3}";
 
+    public static final String KEY_DESCRIPTION = "DESCRIPTION";
     public static final String KEY_SSID = "SSID";
     public static final String KEY_BSSID = "BSSID";
     public static final String KEY_SECURITY = "SECURITY";
-    public static final String KEY_DESCRIPTION = "DESCRIPTION";
     public static final String KEY_LATITUDE = "LATITUDE";
     public static final String KEY_LONGITUDE = "LONGITUDE";
     public static final String KEY_OLD_NAME = "OLD_SSID";
@@ -97,12 +98,14 @@ public class Constants {
     public static final int NETWORK_UPDATE_FAIL = -1;
 
     // Settings
-    public static final String PREF_HEADER_NAME = "1";
+    public static final String PREF_HEADER_DESCRIPTION = "1";
 
-    public static final String PREF_SORT_NAME = "2";
-    public static final String PREF_SORT_DESCRIPTION = "3";
+    public static final String PREF_SORT_AUTO = "1";
+    public static final String PREF_SORT_DESCRIPTION = "2";
+    public static final String PREF_SORT_NAME = "3";
 
     public static final String PREF_KEY_RECONFIG = "SSID_RECONFIG";
+    public static final String PREF_KEY_STORE_PASSWORD = "STORE_PASSWORD";
 
     public static final String PREF_SECURITY_WPA_EAP = "1";
     public static final String PREF_SECURITY_WEP = "2";

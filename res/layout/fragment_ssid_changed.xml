@@ -21,14 +21,14 @@
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         android:layout_below="@+id/txtMessage"
-        android:id="@+id/txtNetDescription" />
+        android:id="@+id/txtNetSubtitle" />
 
     <TextView
         android:text="@string/dialog_network_name_changed_old_name"
         android:layout_width="@dimen/dialog_tag_width"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dialog_text_margin"
-        android:layout_below="@+id/txtNetDescription"
+        android:layout_below="@+id/txtNetSubtitle"
         android:id="@+id/txtOldNameTag" />
 
     <TextView

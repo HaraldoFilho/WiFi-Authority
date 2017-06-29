@@ -42,11 +42,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/info_app_name"
+            android:label="@string/activity_title_your_networks"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ScanNetworksActivity"
-            android:label="@string/info_app_name"
+            android:label="@string/activity_title_networks"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity

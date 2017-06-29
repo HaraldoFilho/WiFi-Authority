@@ -66,7 +66,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData(networkSSID, "", "", text.getText().toString(),
+                    configuredNetworks.addNetworkData(text.getText().toString(), networkSSID, "", "", "",
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 configuredNetworks.updateNetworkDescription(networkSSID, text.getText().toString());

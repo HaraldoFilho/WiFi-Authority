@@ -57,6 +57,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
     String ssid;
     String security = "";
+    String password = "";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -113,6 +114,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
                 mListener.onAddNetworkDialogPositiveClick(AddNetworkDialogFragment.this);
 
                 ssid = networkName.getText().toString();
+                password = "\"" + networkPasswd.getText().toString() + "\"";
 
                 if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
 
@@ -121,8 +123,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     wifiConfiguration.priority = 40;
 
                     wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
-                            networkSecurity.getSelectedItemPosition(),
-                            "\"" + networkPasswd.getText().toString() + "\"");
+                            networkSecurity.getSelectedItemPosition(), password);
 
                     wifiManager.disconnect();
                     int netId = wifiManager.addNetwork(wifiConfiguration);
@@ -139,7 +140,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     String description = networkDescription.getText().toString();
 
                     if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
-                        configuredNetworks.addNetworkData(ssid, bssid, security, description,
+                        configuredNetworks.addNetworkData(description, ssid, bssid, security, password,
                                 Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     } else {
                         configuredNetworks.updateNetworkDescription(ssid, description);

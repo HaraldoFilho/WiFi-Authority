@@ -7,7 +7,7 @@
 
     <!-- Header -->
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="@string/pref_def_header"
         android:entries="@array/pref_header_titles"
         android:entryValues="@array/pref_header_entry_values"
         android:key="@string/pref_key_header"
@@ -17,7 +17,7 @@
 
     <!-- Sort -->
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="@string/pref_def_sort"
         android:entries="@array/pref_sort_titles"
         android:entryValues="@array/pref_sort_entry_values"
         android:key="@string/pref_key_sort"
@@ -41,7 +41,7 @@
 
     <!-- Security -->
     <ListPreference
-        android:defaultValue="3"
+        android:defaultValue="@string/pref_def_security"
         android:entries="@array/pref_security_titles"
         android:entryValues="@array/pref_security_entry_values"
         android:key="@string/pref_key_security"
@@ -51,7 +51,7 @@
 
     <!-- Signal Level -->
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="@string/pref_def_signal"
         android:entries="@array/pref_signal_titles"
         android:entryValues="@array/pref_signal_entry_values"
         android:key="@string/pref_key_signal"
@@ -60,5 +60,21 @@
         android:title="@string/pref_title_signal" />
 
     </PreferenceCategory>
+
+<!--
+    <PreferenceCategory
+        android:title="@string/pref_group_security"
+        android:key="@string/pref_group_security_settings">
+
+    &lt;!&ndash;Password storage&ndash;&gt;
+    <CheckBoxPreference
+        android:key="@string/pref_key_store_password"
+        android:title="@string/pref_title_store_password"
+        android:summaryOn="@string/pref_store_password_summ_on"
+        android:summaryOff="@string/pref_store_password_summ_off"
+        android:defaultValue="false" />
+
+    </PreferenceCategory>
+-->
 
 </PreferenceScreen>

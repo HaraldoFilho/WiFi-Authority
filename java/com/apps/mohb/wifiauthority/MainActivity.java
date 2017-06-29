@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             // Refresh list of networks when connection state changes
-            createListOfNetworks();
+            updateListOfNetworks();
         }
 
     }
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            createListOfNetworks();
+            updateListOfNetworks();
             wifiScannedNetworks = wifiManager.getScanResults();
 
             // Get the last user's none location. Most of the times
@@ -160,11 +160,11 @@ public class MainActivity extends AppCompatActivity implements
                                 // Check if user's last known location has been acquired
                                 if (location != null) {
                                     // Create additional data for the network with the scanned SSID, Mac Address and the current location
-                                    configuredNetworks.addNetworkData(scanResult.SSID, scanResult.BSSID,
+                                    configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
                                             scanResult.capabilities, "", location.getLatitude(), location.getLongitude());
                                 } else { // If location has not been acquired create additional data for the network
                                     // with the scanned SSID, Mac Address and the default location (0,0)
-                                    configuredNetworks.addNetworkData(scanResult.SSID, scanResult.BSSID,
+                                    configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
                                             scanResult.capabilities, "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                                 }
                             }
@@ -574,7 +574,6 @@ public class MainActivity extends AppCompatActivity implements
                     // Disable disconnected network to avoid automatic reconnection
                     wifiManager.disableNetwork(network.networkId);
                 }
-                //createListOfNetworks();
                 return true;
 
             // Delete
@@ -631,7 +630,7 @@ public class MainActivity extends AppCompatActivity implements
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if (wifiManager.isWifiEnabled()) {
-                createListOfNetworks();
+                updateListOfNetworks();
                 // If GoogleApiClient is connected start scanning for available networks
                 if (googleApiClient.isConnected()) {
                     wifiManager.startScan();
@@ -668,7 +667,7 @@ public class MainActivity extends AppCompatActivity implements
                 // if permission is granted create list of networks
                 if (grantResults.length > 0
                         && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
-                    createListOfNetworks();
+                    updateListOfNetworks();
                 } else {
                     finish();
                 }
@@ -677,7 +676,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void createListOfNetworks() {
+    private void updateListOfNetworks() {
         if (wifiManager.isWifiEnabled()) {
 
             if (wifiConfiguredNetworks != null) {
@@ -688,29 +687,25 @@ public class MainActivity extends AppCompatActivity implements
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
                     getResources().getString(R.string.pref_def_sort));
 
+            String header = settings.getString(getResources().getString(R.string.pref_key_header),
+                    getResources().getString(R.string.pref_def_header));
+
             switch (sort) {
 
-                case Constants.PREF_SORT_NAME:
-                    // sort list by ascending order of network name
-                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                        @Override
-                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                            return lhs.SSID.compareTo(rhs.SSID);
-                        }
-                    });
+                case Constants.PREF_SORT_AUTO:
+                    if (header == Constants.PREF_HEADER_DESCRIPTION) {
+                        sortByDescription();
+                    } else {
+                        sortByName();
+                    }
                     break;
 
                 case Constants.PREF_SORT_DESCRIPTION:
-                    // sort list by ascending order of network description
-                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                    sortByDescription();
+                    break;
 
-                        ConfiguredNetworks network = new ConfiguredNetworks(getApplicationContext());
-
-                        @Override
-                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                            return network.getDescriptionBySSID(lhs.SSID).compareTo(network.getDescriptionBySSID(rhs.SSID));
-                        }
-                    });
+                case Constants.PREF_SORT_NAME:
+                    sortByName();
                     break;
 
                 default:
@@ -734,6 +729,27 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void sortByDescription() {
+        // sort list by ascending order of network description
+        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+            ConfiguredNetworks network = new ConfiguredNetworks(getApplicationContext());
+
+            @Override
+            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                return network.getDescriptionBySSID(lhs.SSID).compareTo(network.getDescriptionBySSID(rhs.SSID));
+            }
+        });
+    }
+
+    private void sortByName() {
+        // sort list by ascending order of network name
+        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+            @Override
+            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                return lhs.SSID.compareTo(rhs.SSID);
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {
@@ -780,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements
         if (wifiManager.removeNetwork(network.networkId)) {
             wifiConfiguredNetworks.remove(network);
             wifiManager.saveConfiguration();
-            createListOfNetworks();
+            updateListOfNetworks();
             configuredNetworks.removeNetworkData(network.SSID);
         } else {
             // If version is Marshmallow (6.x) or higher show dialog explaining new networks manage,ent policy

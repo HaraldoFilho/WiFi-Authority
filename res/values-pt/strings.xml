@@ -54,7 +54,7 @@
     <string name="layout_net_status">"Estado: "</string>
     <string name="layout_net_connected">Conectada</string>
     <string name="layout_net_disconnected">Desconectada</string>
-    <string name="layout_net_description">Descrição da rede</string>
+    <string name="layout_net_subtitle">Subtitulo</string>
     <string name="security_deactivated">Aberta</string>
     <string name="layout_net_signal">"Nível do sinal: "</string>
     <string name="url_help_scan">wifiauthority-ajuda-redes-disponiveis</string>
@@ -89,8 +89,8 @@
     <string name="url_website">https://mohb-apps.com.br/</string>
     <string name="toast_get_legal_notices">Carregando texto de avisos legais...</string>
     <string name="menu_settings">Configurações</string>
-    <string name="pref_reconfig_summ_off">Não é reconfigurada se o nome mudar</string>
-    <string name="pref_reconfig_summ_on">Reconfigurada se o nome mudar</string>
+    <string name="pref_reconfig_summ_off">Não reconfigura se o nome mudar</string>
+    <string name="pref_reconfig_summ_on">Reconfigura se o nome mudar</string>
     <string name="pref_title_header">Títulos</string>
     <string name="pref_title_reconfig">Reconfiguração automática de rede</string>
     <string name="pref_title_security">Nivel de segurança mínimo</string>
@@ -98,47 +98,12 @@
     <string name="title_activity_settings">Configurações</string>
     <string name="pref_group_available_networks">REDES DISPONÍVEIS</string>
     <string name="pref_group_your_networks">SUAS REDES</string>
+    <string name="pref_group_security">SEGURANÇA</string>
+    <string name="pref_store_password_summ_off">Senha não é armazenada no aplicativo</string>
+    <string name="pref_store_password_summ_on">Senha é armazenada no aplicativo</string>
+    <string name="pref_title_store_password">Armazenar senha</string>
+    <string name="dialog_check_store_passwd">Armazenar senha</string>
+    <string name="layout_net_title">Titulo</string>
 
-    <string-array name="pref_header_titles">
-        <item>Nome da rede</item>
-        <item>Descrição</item>
-    </string-array>
-    <string-array name="pref_header_entry_values">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="pref_sort_titles">
-        <item>Desordenado</item>
-        <item>Nome da rede</item>
-        <item>Descrição</item>
-    </string-array>
-    <string-array name="pref_sort_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="pref_security_titles">
-        <item>WPA/EAP</item>
-        <item>WEP</item>
-        <item>Aberta</item>
-    </string-array>
-    <string-array name="pref_security_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string name="pref_title_signal">Nível mínimo de sinal</string>
-    <string-array name="pref_signal_titles">
-        <item>Alto</item>
-        <item>Baixo</item>
-        <item>Muito baixo</item>
-    </string-array>
-    <string-array name="pref_signal_entry_values">
-        <item>3</item>
-        <item>2</item>
-        <item>1</item>
-    </string-array>
 
 </resources>

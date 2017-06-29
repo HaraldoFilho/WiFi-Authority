@@ -15,28 +15,6 @@
     tools:context="com.apps.mohb.wifiauthority.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/configTitle"
-        android:text="@string/activity_title_your_networks"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:textStyle="bold"
-        android:gravity="left"
-        android:layout_marginBottom="@dimen/item_margin_bottom"
-        android:paddingBottom="@dimen/item_margin_bottom"
-        android:paddingLeft="@dimen/item_margin_left"
-        android:paddingRight="@dimen/item_margin_right"
-        android:paddingTop="@dimen/item_margin_top" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_separator_height"
-        android:background="@color/colorBlack"
-        android:layout_marginLeft="@dimen/item_margin"
-        android:layout_marginRight="@dimen/item_margin"
-        android:layout_marginBottom="@dimen/item_margin" />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

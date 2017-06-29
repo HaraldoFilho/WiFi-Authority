@@ -71,7 +71,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_ssid_changed, null);
 
-        networkDescription = (TextView) view.findViewById(R.id.txtNetDescription);
+        networkDescription = (TextView) view.findViewById(R.id.txtNetSubtitle);
         networkOldName = (TextView) view.findViewById(R.id.txtOldName);
         networkNewName = (TextView) view.findViewById(R.id.txtNewName);
         networkPasswd = (EditText) view.findViewById(R.id.txtNewPassword);
@@ -133,7 +133,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                     wifiManager.saveConfiguration();
 
                     configuredNetworks.removeNetworkData(oldSSID);
-                    configuredNetworks.addNetworkData(newSSID, mac, security, description,
+                    configuredNetworks.addNetworkData(description, newSSID, mac, security, "",
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {
