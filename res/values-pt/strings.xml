@@ -64,7 +64,7 @@
     <string name="context_connect">Conectar</string>
     <string name="context_disconnect">Desconectar</string>
     <string name="toast_unable_remove_network">A rede selecionada não pode ser removida</string>
-    <string name="layout_net_out_of_reach">Fora de alcance</string>
+    <string name="layout_net_out_of_reach">Fora do alcance</string>
     <string name="dialog_edit_description">Editar descrição</string>
     <string name="toast_network_is_configured">Esta rede já está configurada</string>
     <string name="alert_message_delete_network">Esta ação não poderá ser desfeita</string>
@@ -104,12 +104,14 @@
     <string name="pref_title_store_password">Armazenar senha</string>
     <string name="dialog_check_store_passwd">Armazenar senha</string>
     <string name="layout_net_title">Titulo</string>
-    <string name="net_state_authenticating">Autenticando</string>
-    <string name="net_state_connecting">Conectando</string>
+    <string name="net_state_authenticating">Autenticando...</string>
+    <string name="net_state_connecting">Conectando...</string>
     <string name="net_state_disconnected">Desconectada</string>
     <string name="net_state_idle">Aguardando</string>
-    <string name="net_state_obt_ip_address">Obtendo endereço IP</string>
-    <string name="net_state_scannig">Escaneando</string>
+    <string name="net_state_obt_ip_address">Obtendo endereço IP...</string>
+    <string name="net_state_scannig">Escaneando...</string>
+    <string name="toast_authentication_failed">Falha na autenticação</string>
+    <string name="toast_ip_address_failed">Falha ao obter o endereço IP</string>
 
 
 </resources>

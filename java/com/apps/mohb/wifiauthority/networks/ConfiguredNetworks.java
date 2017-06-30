@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 6/28/17 10:58 PM
+ *  Last modified : 6/29/17 11:52 PM
  *
  *  -----------------------------------------------------------
  */
@@ -514,6 +514,16 @@ public class ConfiguredNetworks {
         return false;
     }
 
+
+    public boolean isAvailable(
+            List<ScanResult> wifiScannedNetworks, String ssid, String mac) throws NullPointerException {
+
+        if (isAvailableBySSID(wifiScannedNetworks, ssid) || isAvailableByMacAddress(wifiScannedNetworks, mac)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public boolean isAvailableBySSID(
             List<ScanResult> wifiScannedNetworks, String ssid) throws NullPointerException {

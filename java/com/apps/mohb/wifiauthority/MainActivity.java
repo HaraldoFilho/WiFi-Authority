@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 6/29/17 1:11 AM
+ *  Last modified : 6/29/17 11:46 PM
  *
  *  -----------------------------------------------------------
  */
@@ -33,7 +33,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private ConfiguredNetworks configuredNetworks;
     protected WifiConfiguration network;
-    private NetworkInfo.DetailedState networkState;
 
     private GoogleApiClient googleApiClient;
     private Location location;
@@ -97,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private SharedPreferences settings;
 
+    public static NetworkInfo.DetailedState networkState;
+    public static String supplicantSSID;
 
     // Inner class to monitor network state changes
     public class NetworkStateMonitor extends BroadcastReceiver {
@@ -107,10 +107,11 @@ public class MainActivity extends AppCompatActivity implements
             // Get suplicant state
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             networkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-            Log.d("DEBUG_WIFI", networkState.toString());
+            supplicantSSID = wifiInfo.getSSID();
 
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
+
         }
 
     }
@@ -576,15 +577,6 @@ public class MainActivity extends AppCompatActivity implements
 
         switch (item.getItemId()) {
 
-            // Edit Description
-            case R.id.editDescription:
-                DialogFragment dialogEdit = new DescriptionEditDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KEY_SSID, ssid);
-                dialogEdit.setArguments(bundle);
-                dialogEdit.show(getSupportFragmentManager(), "DescriptionEditDialogFragment");
-                return true;
-
             // Connect
             case R.id.connect:
                 // Disconnect
@@ -597,6 +589,15 @@ public class MainActivity extends AppCompatActivity implements
                     // Disable disconnected network to avoid automatic reconnection
                     wifiManager.disableNetwork(network.networkId);
                 }
+                return true;
+
+            // Edit Description
+            case R.id.editDescription:
+                DialogFragment dialogEdit = new DescriptionEditDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KEY_SSID, ssid);
+                dialogEdit.setArguments(bundle);
+                dialogEdit.show(getSupportFragmentManager(), "DescriptionEditDialogFragment");
                 return true;
 
             // Delete
@@ -745,7 +746,6 @@ public class MainActivity extends AppCompatActivity implements
                 // Refresh list
                 networksListAdapter.clear();
                 networksListAdapter.addAll(wifiConfiguredNetworks);
-                networksListAdapter.setNetworkState(networkState);
                 networksListAdapter.notifyDataSetChanged();
             }
         } else {

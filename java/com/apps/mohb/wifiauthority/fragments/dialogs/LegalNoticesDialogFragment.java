@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : LegalNoticesDialogFragment.java
- *  Last modified : 6/27/17 1:49 AM
+ *  Last modified : 6/29/17 1:12 AM
  *
  *  -----------------------------------------------------------
  */

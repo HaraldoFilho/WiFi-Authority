@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 6/29/17 1:11 AM
+ *  Last modified : 6/29/17 11:52 PM
  *
  *  -----------------------------------------------------------
  */
@@ -14,21 +14,22 @@ package com.apps.mohb.wifiauthority.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apps.mohb.wifiauthority.Constants;
+import com.apps.mohb.wifiauthority.MainActivity;
 import com.apps.mohb.wifiauthority.R;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 
@@ -41,12 +42,18 @@ import java.util.List;
 public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     private WifiManager wifiManager;
-    private NetworkInfo.DetailedState networkState;
     private List<ScanResult> wifiScannedNetworks;
     private ConfiguredNetworks configuredNetworks;
     private WifiConfiguration configuration;
     private String ssid;
+    private String mac;
     private SharedPreferences settings;
+
+    private String state;
+    private String suplicantSSID;
+
+    private boolean auth_try = false;
+    private boolean ip_get_try = false;
 
     public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> list,
                                          ConfiguredNetworks configuredNetworks) {
@@ -67,6 +74,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         configuration = (WifiConfiguration) getItem(position);
         ssid = configuredNetworks.getDataSSID(configuration.SSID);
+        mac = configuredNetworks.getMacAddressBySSID(ssid);
 
         settings = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -140,17 +148,13 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         }
 
-
-        // Network signal level
-
-        ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
-
         try {
 
-            if ((configuredNetworks.isAvailableBySSID(wifiScannedNetworks, ssid))
-                    || (configuredNetworks.isAvailableByMacAddress(wifiScannedNetworks,
-                    configuredNetworks.getMacAddressBySSID(ssid)))
-                    || (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid))) {
+            // Network signal level
+
+            ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
+
+            if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
                 switch (wifiManager.calculateSignalLevel(
                         configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
 
@@ -180,48 +184,62 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             // Network state
 
             TextView txtNetworkState = (TextView) convertView.findViewById(R.id.txtNetStatus);
-            txtNetworkState.setText(R.string.layout_net_out_of_reach);
+            txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
 
+            suplicantSSID = configuredNetworks.getDataSSID(MainActivity.supplicantSSID);
 
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            String suplicantSSID = configuredNetworks.getDataSSID(wifiInfo.getSSID());
-            String state;
-
-            if (!suplicantSSID.matches(ssid)) {
-                txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
-                txtNetworkState.setText(R.string.layout_net_disconnected);
+            if (ssid.matches(suplicantSSID)) {
+                Log.d("DEBUG_WIFI", ssid + ": " + MainActivity.networkState);
+                switch (MainActivity.networkState) {
+                    case DISCONNECTED:
+                        state = getContext().getResources().getString(R.string.net_state_disconnected);
+                        if (auth_try) {
+                            Toast.makeText(getContext(), R.string.toast_authentication_failed, Toast.LENGTH_SHORT).show();
+                            wifiManager.disableNetwork(configuration.networkId);
+                        } else {
+                            if (ip_get_try) {
+                                Toast.makeText(getContext(), R.string.toast_ip_address_failed, Toast.LENGTH_SHORT).show();
+                                wifiManager.disableNetwork(configuration.networkId);
+                            }
+                        }
+                        auth_try = false;
+                        ip_get_try = false;
+                        break;
+                    case SCANNING:
+                        state = getContext().getResources().getString(R.string.net_state_scannig);
+                        break;
+                    case CONNECTING:
+                        state = getContext().getResources().getString(R.string.net_state_connecting);
+                        break;
+                    case AUTHENTICATING:
+                        state = getContext().getResources().getString(R.string.net_state_authenticating);
+                        auth_try = true;
+                        break;
+                    case OBTAINING_IPADDR:
+                        state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
+                        auth_try = false;
+                        ip_get_try = true;
+                        if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid)) {
+                            txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                            state = getContext().getResources().getString(R.string.layout_net_connected);
+                            ip_get_try = false;
+                        }
+                        break;
+                    default:
+                        state = getContext().getResources().getString(R.string.net_state_idle);
+                        break;
+                }
+                txtNetworkState.setText(state);
             } else {
-                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid)) {
-                    txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                    txtNetworkState.setText(R.string.layout_net_connected);
+                if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+                    txtNetworkState.setText(R.string.layout_net_disconnected);
                 } else {
-                    switch (networkState) {
-                        case DISCONNECTED:
-                            state = getContext().getResources().getString(R.string.net_state_disconnected);
-                            break;
-                        case SCANNING:
-                            state = getContext().getResources().getString(R.string.net_state_scannig);
-                            break;
-                        case CONNECTING:
-                            state = getContext().getResources().getString(R.string.net_state_connecting);
-                            break;
-                        case AUTHENTICATING:
-                            state = getContext().getResources().getString(R.string.net_state_authenticating);
-                            break;
-                        case OBTAINING_IPADDR:
-                            state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
-                            break;
-                        default:
-                            state = getContext().getResources().getString(R.string.net_state_idle);
-                            break;
-                    }
-
-                    txtNetworkState.setText(state);
+                    txtNetworkState.setText(R.string.layout_net_out_of_reach);
                 }
             }
 
 
-            // Network hidden
+            // Hidden network
 
             ImageView imgHidden = (ImageView) convertView.findViewById(R.id.imgHidden);
 
@@ -241,10 +259,5 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         return convertView;
 
     }
-
-    public void setNetworkState(NetworkInfo.DetailedState state) {
-        networkState = state;
-    }
-
 
 }

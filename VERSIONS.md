@@ -1,3 +1,6 @@
+#### **0.2.4**
+- Bug fixes and improvements on user interface.
+
 #### **0.2.3**
 - More detailed network state description.
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 6/28/17 1:51 AM
+ *  Last modified : 6/29/17 1:12 AM
  *
  *  -----------------------------------------------------------
  */
