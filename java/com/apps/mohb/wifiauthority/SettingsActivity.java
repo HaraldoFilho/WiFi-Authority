@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : SettingsActivity.java
- *  Last modified : 6/29/17 1:12 AM
+ *  Last modified : 6/29/17 11:53 PM
  *
  *  -----------------------------------------------------------
  */

@@ -3,8 +3,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.2.4</string>
-    <string name="version_code" translatable="false">32</string>
+    <string name="version_number" translatable="false">0.2.5</string>
+    <string name="version_code" translatable="false">33</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -52,6 +52,7 @@
     <!--Context menus-->
     <string name="context_edit_description">Edit description</string>
     <string name="context_connect">Connect</string>
+    <string name="context_cancel">Cancel</string>
     <string name="context_disconnect">Disconnect</string>
     <string name="context_forget">Forget</string>
     <string name="context_delete">Delete</string>
@@ -103,7 +104,7 @@
     <string name="toast_no_legal_notices">Couldn\'t load legal notices text</string>
     <string name="toast_get_help_page">Loading help page from internet...</string>
     <string name="toast_authentication_failed">Authentication failed</string>
-    <string name="toast_ip_address_failed">Failed on obtain IP address</string>
+    <string name="toast_obt_ip_address_failed">Failed on obtain IP address</string>
 
     <!--Layout resources-->
     <string name="layout_net_subtitle">Subtitle</string>

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 6/29/17 11:52 PM
+ *  Last modified : 7/1/17 1:58 AM
  *
  *  -----------------------------------------------------------
  */
@@ -15,6 +15,7 @@ package com.apps.mohb.wifiauthority.networks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.preference.PreferenceManager;
@@ -34,6 +35,10 @@ import java.util.ListIterator;
 public class ConfiguredNetworks {
 
     private static ArrayList<NetworkAdditionalData> networksData;
+    public static NetworkInfo.DetailedState supplicantNetworkState;
+    public static NetworkInfo.DetailedState lastSupplicantNetworkState;
+    public static String supplicantSSID;
+    public static String lastSupplicantSSID;
 
     private SharedPreferences preferences;
     private SharedPreferences settings;
@@ -44,6 +49,12 @@ public class ConfiguredNetworks {
         if (networksData == null) {
             networksData = new ArrayList<>();
         }
+
+        supplicantNetworkState = NetworkInfo.DetailedState.IDLE;
+        lastSupplicantNetworkState = NetworkInfo.DetailedState.IDLE;
+        supplicantSSID = "";
+        lastSupplicantSSID = "";
+
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         preferences = context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
         editor = preferences.edit();

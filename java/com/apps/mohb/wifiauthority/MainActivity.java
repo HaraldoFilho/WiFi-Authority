@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 6/29/17 11:46 PM
+ *  Last modified : 7/1/17 1:58 AM
  *
  *  -----------------------------------------------------------
  */
@@ -95,9 +95,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private SharedPreferences settings;
 
-    public static NetworkInfo.DetailedState networkState;
-    public static String supplicantSSID;
-
     // Inner class to monitor network state changes
     public class NetworkStateMonitor extends BroadcastReceiver {
 
@@ -106,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements
 
             // Get suplicant state
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            networkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-            supplicantSSID = wifiInfo.getSSID();
+            ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+            ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
 
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
@@ -415,19 +412,7 @@ public class MainActivity extends AppCompatActivity implements
         // Register a broadcast receiver to monitor changes on network state to update network status
         BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
         filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.EXTRA_NETWORK_INFO);
-        filter.addAction(WifiManager.EXTRA_WIFI_INFO);
-        filter.addAction(WifiManager.EXTRA_WIFI_STATE);
-        filter.addAction(WifiManager.EXTRA_NEW_STATE);
-        filter.addAction(WifiManager.EXTRA_SUPPLICANT_CONNECTED);
-        filter.addAction(WifiManager.EXTRA_SUPPLICANT_ERROR);
-        filter.addAction(WifiManager.EXTRA_NEW_STATE);
-        filter.addAction(WifiManager.EXTRA_PREVIOUS_WIFI_STATE);
-        filter.addAction(WifiManager.EXTRA_RESULTS_UPDATED);
         this.registerReceiver(wifiStateMonitor, filter);
 
     }
@@ -538,13 +523,23 @@ public class MainActivity extends AppCompatActivity implements
             AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             WifiConfiguration network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
 
-            // Disable item clicks (default)
+            // Disable item clicks and set text to connect by default
+            item.setTitle(R.string.context_connect);
             item.setEnabled(false);
 
-            // If network is connected set item title to "Disconnect" (default is "Connect")
-            if (network.status == WifiConfiguration.Status.CURRENT) {
-                item.setTitle(R.string.context_disconnect);
-                item.setEnabled(true);
+            // Set text according to network state
+            switch (network.status) {
+                // Connected
+                case WifiConfiguration.Status.CURRENT:
+                    item.setTitle(R.string.context_disconnect);
+                    break;
+                // Connecting...
+                case WifiConfiguration.Status.ENABLED:
+                    item.setTitle(R.string.context_cancel);
+                    break;
+                // Disconnected
+                default:
+                    break;
             }
 
 
@@ -579,15 +574,18 @@ public class MainActivity extends AppCompatActivity implements
 
             // Connect
             case R.id.connect:
-                // Disconnect
+                // Get network id of the current active network
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                int activeNetworkId = wifiInfo.getNetworkId();
+                // Disconnect and disable the current network
                 wifiManager.disconnect();
+                wifiManager.disableNetwork(activeNetworkId);
+                ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+                ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
                 // Check if it is trying to connect to a different network
-                if (network.status != WifiConfiguration.Status.CURRENT) {
+                if (network.networkId != activeNetworkId) {
+                    // Enable and connect to the new network
                     wifiManager.enableNetwork(network.networkId, true);
-                    wifiManager.reconnect();
-                } else {
-                    // Disable disconnected network to avoid automatic reconnection
-                    wifiManager.disableNetwork(network.networkId);
                 }
                 return true;
 
@@ -701,43 +699,52 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void updateListOfNetworks() {
+
         if (wifiManager.isWifiEnabled()) {
 
+            // Reset the configured networks list
             if (wifiConfiguredNetworks != null) {
                 wifiConfiguredNetworks.clear();
             }
             wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
 
+            // Get networks list sort mode from settings
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
                     getResources().getString(R.string.pref_def_sort));
 
+            // Get the title display mode from settings
             String header = settings.getString(getResources().getString(R.string.pref_key_header),
                     getResources().getString(R.string.pref_def_header));
 
             switch (sort) {
 
+                // Automatic
                 case Constants.PREF_SORT_AUTO:
-                    if (header == Constants.PREF_HEADER_DESCRIPTION) {
+                    // Sorts according to title display mode preference
+                    if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
                         sortByDescription();
                     } else {
                         sortByName();
                     }
                     break;
 
+                // By description
                 case Constants.PREF_SORT_DESCRIPTION:
                     sortByDescription();
                     break;
 
+                // By network name
                 case Constants.PREF_SORT_NAME:
                     sortByName();
                     break;
 
+                // Unsorted
                 default:
                     break;
 
             }
 
-
+            // Create an list adapter if one was not created yet
             if (networksListAdapter == null) {
                 networksListAdapter = new ConfiguredNetworksListAdapter(this,
                         wifiConfiguredNetworks, configuredNetworks);
@@ -756,11 +763,13 @@ public class MainActivity extends AppCompatActivity implements
     private void sortByDescription() {
         // sort list by ascending order of network description
         Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-            ConfiguredNetworks network = new ConfiguredNetworks(getApplicationContext());
 
             @Override
             public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                return network.getDescriptionBySSID(lhs.SSID).compareTo(network.getDescriptionBySSID(rhs.SSID));
+                // Get description for each ssid and compare them
+                String lhsDescription = configuredNetworks.getDescriptionBySSID(lhs.SSID);
+                String rhsDescription = configuredNetworks.getDescriptionBySSID(rhs.SSID);
+                return lhsDescription.compareToIgnoreCase(rhsDescription);
             }
         });
     }
@@ -770,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements
         Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
             @Override
             public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                return lhs.SSID.compareTo(rhs.SSID);
+                return lhs.SSID.compareToIgnoreCase(rhs.SSID);
             }
         });
     }
