@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 6/29/17 11:53 PM
+ *  Last modified : 7/1/17 10:40 AM
  *
  *  -----------------------------------------------------------
  */
@@ -59,6 +59,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private ConfiguredNetworks configuredNetworks;
     private ProgressDialog progressDialog;
     private SharedPreferences settings;
+    private String minSecurityToShow;
+    private String minSignalLevelToShow;
 
     // Inner class to receive WiFi scan results
     private class WiFiScanReceiver extends BroadcastReceiver {
@@ -70,6 +72,26 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
             wifiScannedNetworks = wifiManager.getScanResults();
 
+            if (wifiScannedNetworks.isEmpty()) {
+                Toasts.showNoNetworkFound(context, R.string.toast_no_network_found);
+                return;
+            }
+
+            // remove duplicated networks from list
+            String uniques = "";
+            ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
+            while (listIteratorDuplicate.hasNext()) {
+                int indexDuplicate = listIteratorDuplicate.nextIndex();
+                String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
+                if (uniques.contains(ssid)) {
+                    listIteratorDuplicate.next();
+                    listIteratorDuplicate.remove();
+                } else {
+                    uniques = uniques.concat("[" + ssid + "]");
+                    listIteratorDuplicate.next();
+                }
+            }
+
             ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
             while (scanResultListIterator.hasNext()) {
                 int index = scanResultListIterator.nextIndex();
@@ -77,7 +99,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 String capabilities = wifiScannedNetworks.get(index).capabilities;
 
                 // Get security levels to remove
-                String minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
+                minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
                         getResources().getString(R.string.pref_def_security));
 
                 boolean isWep = false;
@@ -95,7 +117,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
 
                 // Get signal levels to remove
-                String minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
+                minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
                         getResources().getString(R.string.pref_def_signal));
 
                 int minSignalLevel;
@@ -130,6 +152,13 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
             }
 
+            if (wifiScannedNetworks.isEmpty()) {
+                if (minSecurityToShow.matches(Constants.PREF_SECURITY_OPEN)
+                        || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
+                    Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
+                }
+            }
+
             // sort list by decreasing order of signal level
             Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
                 @Override
@@ -138,21 +167,6 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
             });
 
-
-            // remove duplicated networks from list
-            String uniques = "";
-            ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
-            while (listIteratorDuplicate.hasNext()) {
-                int indexDuplicate = listIteratorDuplicate.nextIndex();
-                String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
-                if (uniques.contains(ssid)) {
-                    listIteratorDuplicate.next();
-                    listIteratorDuplicate.remove();
-                } else {
-                    uniques = uniques.concat("[" + ssid + "]");
-                    listIteratorDuplicate.next();
-                }
-            }
 
             if (networksListAdapter == null) {
                 networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
@@ -165,6 +179,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
 
         }
+
     }
 
 
@@ -331,6 +346,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         wiFiScanReceiver = new WiFiScanReceiver();
         registerReceiver(wiFiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
+
     }
 
     // List item position correction due to header

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 6/30/17 8:59 PM
+ *  Last modified : 7/1/17 10:40 AM
  *
  *  -----------------------------------------------------------
  */
@@ -109,8 +109,10 @@ public class Constants {
 
     public static final String PREF_SECURITY_WPA_EAP = "3";
     public static final String PREF_SECURITY_WEP = "2";
-
-    public static final String PREF_MIN_SIGNAL_LOW = "2";
+    public static final String PREF_SECURITY_OPEN = "1";
+    ;
     public static final String PREF_MIN_SIGNAL_HIGH = "3";
+    public static final String PREF_MIN_SIGNAL_LOW = "2";
+    public static final String PREF_MIN_SIGNAL_VERY_LOW = "1";
 
 }

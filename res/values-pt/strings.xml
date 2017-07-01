@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="alert_button_no">Não</string>
     <string name="alert_button_yes">Sim</string>
@@ -113,6 +114,8 @@
     <string name="toast_authentication_failed">Falha na autenticação</string>
     <string name="toast_obt_ip_address_failed">Falha ao obter o endereço IP</string>
     <string name="context_cancel">Cancelar</string>
+    <string name="toast_no_network_found">Nenhuma rede foi encontrada</string>
+    <string name="toast_no_network_to_display">Nenhuma rede para mostrar\nTente diminuir os níveis mínimos\nnas configurações</string>
 
 
 </resources>

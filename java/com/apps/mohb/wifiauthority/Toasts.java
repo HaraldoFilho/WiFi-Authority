@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 7/1/17 1:51 AM
+ *  Last modified : 7/1/17 10:35 AM
  *
  *  -----------------------------------------------------------
  */
@@ -25,6 +25,7 @@ public class Toasts {
     private static Toast noLocationInformation;
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
+    private static Toast noNetworkFound;
     private static Toast wifiDisabled;
     private static Toast legalNotices;
     private static Toast helpPage;
@@ -59,6 +60,19 @@ public class Toasts {
     public static void cancelUnableRemoveNetwork() {
         if (unableRemoveNetwork != null) {
             unableRemoveNetwork.cancel();
+        }
+    }
+
+    // Toast to notify that there is no network found or to display
+    public static void showNoNetworkFound(Context c, int textId) {
+        noNetworkFound = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
+        noNetworkFound.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        noNetworkFound.show();
+    }
+
+    public static void cancelNoNetworkFound() {
+        if (noNetworkFound != null) {
+            noNetworkFound.cancel();
         }
     }
 
@@ -145,6 +159,7 @@ public class Toasts {
         cancelUnableRemoveNetwork();
         cancelNetworkIsConfigured();
         cancelNetworkConnectionError();
+        cancelNoNetworkFound();
         cancelWiFiDisabled();
         cancelNoLocationInformation();
         cancelLegalNotices();

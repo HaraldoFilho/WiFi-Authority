@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 7/1/17 1:58 AM
+ *  Last modified : 7/1/17 10:40 AM
  *
  *  -----------------------------------------------------------
  */
@@ -150,6 +150,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
 
             if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+
                 switch (wifiManager.calculateSignalLevel(
                         configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
 
@@ -182,9 +183,12 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
 
             if (ssid.matches(configuredNetworks.getDataSSID(ConfiguredNetworks.supplicantSSID))) {
+
                 switch (ConfiguredNetworks.supplicantNetworkState) {
+
                     case DISCONNECTED:
                         wifiManager.disableNetwork(configuration.networkId);
+
                         switch (ConfiguredNetworks.lastSupplicantNetworkState) {
                             case AUTHENTICATING:
                                 Toasts.showNetworkConnectionError(getContext(), R.string.toast_authentication_failed);
@@ -198,18 +202,22 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                         state = getContext().getResources().getString(R.string.net_state_disconnected);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
                         break;
+
                     case SCANNING:
                         state = getContext().getResources().getString(R.string.net_state_scannig);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.SCANNING;
                         break;
+
                     case CONNECTING:
                         state = getContext().getResources().getString(R.string.net_state_connecting);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTING;
                         break;
+
                     case AUTHENTICATING:
                         state = getContext().getResources().getString(R.string.net_state_authenticating);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.AUTHENTICATING;
                         break;
+
                     case OBTAINING_IPADDR:
                         state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
@@ -219,6 +227,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                             ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
                         }
                         break;
+
                     default:
                         break;
                 }

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/1/17 1:58 AM
+ *  Last modified : 7/1/17 9:47 AM
  *
  *  -----------------------------------------------------------
  */
@@ -100,11 +100,6 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            // Get suplicant state
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-            ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
 
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
@@ -698,7 +693,15 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void getSupplicantState() {
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+        ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
+    }
+
     private void updateListOfNetworks() {
+
+        getSupplicantState();
 
         if (wifiManager.isWifiEnabled()) {
 
