@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/1/17 9:47 AM
+ *  Last modified : 7/4/17 12:18 AM
  *
  *  -----------------------------------------------------------
  */
@@ -49,6 +49,7 @@ import com.apps.mohb.wifiauthority.fragments.dialogs.LocationPermissionsAlertFra
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkDeleteAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkManagementPolicyAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkNameChangedDialogFragment;
+import com.apps.mohb.wifiauthority.fragments.dialogs.PasswordChangeDialogFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements
         AddNetworkDialogFragment.AddNetworkDialogListener,
         NetworkDeleteAlertFragment.NetworkDeleteDialogListener,
         NetworkNameChangedDialogFragment.NetworkNameChangedDialogListener,
+        PasswordChangeDialogFragment.PasswordChangeDialogListener,
         LocationPermissionsAlertFragment.LocationPermissionsDialogListener,
         NetworkManagementPolicyAlertFragment.NetworkManagementPolicyDialogListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements
     private String ssid;
 
     private SharedPreferences settings;
+
 
     // Inner class to monitor network state changes
     public class NetworkStateMonitor extends BroadcastReceiver {
@@ -514,27 +517,34 @@ public class MainActivity extends AppCompatActivity implements
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.context_main, menu);
 
-            MenuItem item = menu.findItem(R.id.connect);
-            AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            MenuItem itemConnect = menu.findItem(R.id.connect);
+            MenuItem itemPassword = menu.findItem(R.id.changePassword);
+
+            AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) itemConnect.getMenuInfo();
             WifiConfiguration network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
 
-            // Disable item clicks and set text to connect by default
-            item.setTitle(R.string.context_connect);
-            item.setEnabled(false);
+            // Disable connect item clicks and set text to connect by default
+            itemConnect.setTitle(R.string.context_connect);
+            itemConnect.setEnabled(false);
 
             // Set text according to network state
             switch (network.status) {
                 // Connected
                 case WifiConfiguration.Status.CURRENT:
-                    item.setTitle(R.string.context_disconnect);
+                    itemConnect.setTitle(R.string.context_disconnect);
                     break;
                 // Connecting...
                 case WifiConfiguration.Status.ENABLED:
-                    item.setTitle(R.string.context_cancel);
+                    itemConnect.setTitle(R.string.context_cancel);
                     break;
                 // Disconnected
                 default:
                     break;
+            }
+
+            // Disable password item if network is open
+            if ((network.wepKeys[0] == null) && (network.preSharedKey == null)) {
+                itemPassword.setEnabled(false);
             }
 
 
@@ -547,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements
                 ScanResult scanResult = wifiScannedNetworks.get(index);
                 if ((configuredNetworks.getDataSSID(network.SSID).matches(scanResult.SSID))
                         || (configuredNetworks.getMacAddressBySSID(network.SSID).matches(scanResult.BSSID))) {
-                    item.setEnabled(true);
+                    itemConnect.setEnabled(true);
                 }
                 listIterator.next();
             }
@@ -564,6 +574,8 @@ public class MainActivity extends AppCompatActivity implements
 
         network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
         ssid = network.SSID;
+
+        Bundle bundle;
 
         switch (item.getItemId()) {
 
@@ -587,10 +599,21 @@ public class MainActivity extends AppCompatActivity implements
             // Edit Description
             case R.id.editDescription:
                 DialogFragment dialogEdit = new DescriptionEditDialogFragment();
-                Bundle bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putString(Constants.KEY_SSID, ssid);
                 dialogEdit.setArguments(bundle);
                 dialogEdit.show(getSupportFragmentManager(), "DescriptionEditDialogFragment");
+                return true;
+
+            // Change password
+            case R.id.changePassword:
+                DialogFragment dialogPassword = new PasswordChangeDialogFragment();
+                bundle = new Bundle();
+                bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
+                bundle.putString(Constants.KEY_SSID, ssid);
+                bundle.putString(Constants.KEY_SECURITY, network.allowedKeyManagement.toString());
+                dialogPassword.setArguments(bundle);
+                dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
                 return true;
 
             // Delete
@@ -814,7 +837,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // OK
     public void onDescriptionEditDialogPositiveClick(DialogFragment dialog) {
-        onResume();
+        updateListOfNetworks();
     }
 
     @Override // Cancel
@@ -822,6 +845,18 @@ public class MainActivity extends AppCompatActivity implements
         dialog.getDialog().cancel();
     }
 
+
+    // PASSWORD CHANGE DIALOG
+
+    @Override
+    public void onPasswordChangeDialogPositiveClick(DialogFragment dialog) {
+        updateListOfNetworks();
+    }
+
+    @Override
+    public void onPasswordChangeDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
+    }
 
     // NETWORK DELETE DIALOG
 

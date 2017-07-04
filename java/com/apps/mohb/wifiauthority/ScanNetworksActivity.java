@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/1/17 10:40 AM
+ *  Last modified : 7/4/17 12:55 AM
  *
  *  -----------------------------------------------------------
  */
@@ -78,17 +78,19 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
 
             // remove duplicated networks from list
-            String uniques = "";
-            ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
-            while (listIteratorDuplicate.hasNext()) {
-                int indexDuplicate = listIteratorDuplicate.nextIndex();
-                String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
-                if (uniques.contains(ssid)) {
-                    listIteratorDuplicate.next();
-                    listIteratorDuplicate.remove();
-                } else {
-                    uniques = uniques.concat("[" + ssid + "]");
-                    listIteratorDuplicate.next();
+            if (settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+                String uniques = "";
+                ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
+                while (listIteratorDuplicate.hasNext()) {
+                    int indexDuplicate = listIteratorDuplicate.nextIndex();
+                    String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
+                    if (uniques.contains(ssid)) {
+                        listIteratorDuplicate.next();
+                        listIteratorDuplicate.remove();
+                    } else {
+                        uniques = uniques.concat("[" + ssid + "]");
+                        listIteratorDuplicate.next();
+                    }
                 }
             }
 
@@ -140,7 +142,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
                 int signalLevel = wifiManager.calculateSignalLevel(wifiScannedNetworks.get(index).level, Constants.LEVELS);
 
-                // Remove unsecure (if option is activated), low signal levels and hidden networks from list
+                // Remove insecure (if option is activated), low signal levels and hidden networks from list
                 if ((minSecurityToShow.matches(Constants.PREF_SECURITY_WPA_EAP) && (isWep || isOpen)
                         || (minSecurityToShow.matches(Constants.PREF_SECURITY_WEP) && (isOpen)))
                         || (signalLevel < minSignalLevel)

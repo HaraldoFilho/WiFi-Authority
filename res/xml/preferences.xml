@@ -5,33 +5,33 @@
         android:title="@string/pref_group_your_networks"
         android:key="@string/pref_group_your_networks_settings">
 
-    <!-- Header -->
-    <ListPreference
-        android:defaultValue="@string/pref_def_header"
-        android:entries="@array/pref_header_titles"
-        android:entryValues="@array/pref_header_entry_values"
-        android:key="@string/pref_key_header"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_header" />
+        <!-- Header -->
+        <ListPreference
+            android:defaultValue="@string/pref_def_header"
+            android:entries="@array/pref_header_titles"
+            android:entryValues="@array/pref_header_entry_values"
+            android:key="@string/pref_key_header"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_header" />
 
-    <!-- Sort -->
-    <ListPreference
-        android:defaultValue="@string/pref_def_sort"
-        android:entries="@array/pref_sort_titles"
-        android:entryValues="@array/pref_sort_entry_values"
-        android:key="@string/pref_key_sort"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_sort" />
+        <!-- Sort -->
+        <ListPreference
+            android:defaultValue="@string/pref_def_sort"
+            android:entries="@array/pref_sort_titles"
+            android:entryValues="@array/pref_sort_entry_values"
+            android:key="@string/pref_key_sort"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_sort" />
 
-    <!--Reconfiguration-->
-    <CheckBoxPreference
-        android:key="@string/pref_key_reconfig"
-        android:title="@string/pref_title_reconfig"
-        android:summaryOn="@string/pref_reconfig_summ_on"
-        android:summaryOff="@string/pref_reconfig_summ_off"
-        android:defaultValue="true" />
+        <!-- Reconfiguration -->
+        <CheckBoxPreference
+            android:key="@string/pref_key_reconfig"
+            android:title="@string/pref_title_reconfig"
+            android:summaryOn="@string/pref_reconfig_summ_on"
+            android:summaryOff="@string/pref_reconfig_summ_off"
+            android:defaultValue="@string/pref_def_reconfig" />
 
     </PreferenceCategory>
 
@@ -39,42 +39,50 @@
         android:title="@string/pref_group_available_networks"
         android:key="@string/pref_group_available_networks_settings">
 
-    <!-- Security -->
-    <ListPreference
-        android:defaultValue="@string/pref_def_security"
-        android:entries="@array/pref_security_titles"
-        android:entryValues="@array/pref_security_entry_values"
-        android:key="@string/pref_key_security"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_security" />
+        <!-- Security -->
+        <ListPreference
+            android:defaultValue="@string/pref_def_security"
+            android:entries="@array/pref_security_titles"
+            android:entryValues="@array/pref_security_entry_values"
+            android:key="@string/pref_key_security"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_security" />
 
-    <!-- Signal Level -->
-    <ListPreference
-        android:defaultValue="@string/pref_def_signal"
-        android:entries="@array/pref_signal_titles"
-        android:entryValues="@array/pref_signal_entry_values"
-        android:key="@string/pref_key_signal"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_signal" />
+        <!-- Signal Level -->
+        <ListPreference
+            android:defaultValue="@string/pref_def_signal"
+            android:entries="@array/pref_signal_titles"
+            android:entryValues="@array/pref_signal_entry_values"
+            android:key="@string/pref_key_signal"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_signal" />
 
-    </PreferenceCategory>
-
-<!--
-    <PreferenceCategory
-        android:title="@string/pref_group_security"
-        android:key="@string/pref_group_security_settings">
-
-    &lt;!&ndash;Password storage&ndash;&gt;
-    <CheckBoxPreference
-        android:key="@string/pref_key_store_password"
-        android:title="@string/pref_title_store_password"
-        android:summaryOn="@string/pref_store_password_summ_on"
-        android:summaryOff="@string/pref_store_password_summ_off"
-        android:defaultValue="false" />
+        <!--Show all networks-->
+        <CheckBoxPreference
+            android:key="@string/pref_key_show_all"
+            android:title="@string/pref_title_show_all"
+            android:summaryOn="@string/pref_show_all_summ_on"
+            android:summaryOff="@string/pref_show_all_summ_off"
+            android:defaultValue="@string/pref_def_show_all" />
 
     </PreferenceCategory>
--->
+
+    <!--
+        <PreferenceCategory
+            android:title="@string/pref_group_security"
+            android:key="@string/pref_group_security_settings">
+
+        &lt;!&ndash;Password storage&ndash;&gt;
+        <CheckBoxPreference
+            android:key="@string/pref_key_store_password"
+            android:title="@string/pref_title_store_password"
+            android:summaryOn="@string/pref_store_password_summ_on"
+            android:summaryOff="@string/pref_store_password_summ_off"
+            android:defaultValue="false" />
+
+        </PreferenceCategory>
+    -->
 
 </PreferenceScreen>

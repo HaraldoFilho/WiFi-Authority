@@ -1,3 +1,7 @@
+#### **0.3.0**
+- Added new feature to change password of a network
+- Added new feature to show all access points on 'Available Networks'
+
 #### **0.2.6**
 - Bug fixes and improvements on user interface.
 

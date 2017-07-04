@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 6/29/17 11:53 PM
+ *  Last modified : 7/4/17 12:18 AM
  *
  *  -----------------------------------------------------------
  */
@@ -128,8 +128,6 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     wifiManager.disconnect();
                     int netId = wifiManager.addNetwork(wifiConfiguration);
                     wifiManager.enableNetwork(netId, true);
-                    wifiManager.saveConfiguration();
-
                     wifiManager.reconnect();
 
                     String bssid = "";

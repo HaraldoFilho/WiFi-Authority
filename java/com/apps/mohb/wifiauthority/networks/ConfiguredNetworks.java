@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/1/17 1:58 AM
+ *  Last modified : 7/4/17 12:18 AM
  *
  *  -----------------------------------------------------------
  */
@@ -244,6 +244,22 @@ public class ConfiguredNetworks {
 
     }
 
+    public boolean updateNetworkDescription(String ssid, String description) {
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                data.setDescription(description);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
     public WifiConfiguration updateSSIDbyMacAddress(
             List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
         ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
@@ -299,22 +315,6 @@ public class ConfiguredNetworks {
             iterator.next();
         }
         return null;
-
-    }
-
-    public boolean updateNetworkDescription(String ssid, String description) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                data.setDescription(description);
-                saveDataState();
-                return true;
-            }
-            iterator.next();
-        }
-        return false;
 
     }
 

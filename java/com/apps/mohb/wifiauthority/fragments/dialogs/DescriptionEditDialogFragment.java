@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DescriptionEditDialogFragment.java
- *  Last modified : 6/29/17 11:53 PM
+ *  Last modified : 7/3/17 11:31 PM
  *
  *  -----------------------------------------------------------
  */

@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.2.6</string>
-    <string name="version_code" translatable="false">34</string>
+    <string name="version_number" translatable="false">0.3.0</string>
+    <string name="version_code" translatable="false">35</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -57,6 +57,7 @@
     <string name="context_disconnect">Disconnect</string>
     <string name="context_forget">Forget</string>
     <string name="context_delete">Delete</string>
+    <string name="context_change_password">Change password</string>
 
     <!--Dialogs-->
     <string name="dialog_button_ok">OK</string>
@@ -79,6 +80,7 @@
     <string name="dialog_network_name_changed_password">Type again the network password:</string>
     <string name="dialog_network_name_changed_connect">Connect to network</string>
     <string name="dialog_edit_description">Edit description</string>
+    <string name="dialog_change_password">Change password</string>
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
     <string name="alert_title_wifi_disabled">WiFi is disabled</string>
@@ -184,6 +186,13 @@
     <string name="pref_key_signal" translatable="false">SIGNAL</string>
     <string name="pref_title_signal">Minimum signal level</string>
     <string name="pref_def_signal" translatable="false">1</string>
+
+    <!-- Show all access points -->
+    <string name="pref_key_show_all" translatable="false">SHOW_ALL_APS</string>
+    <string name="pref_title_show_all">Show all access points</string>
+    <string name="pref_show_all_summ_on">Showing all access points</string>
+    <string name="pref_show_all_summ_off">Hiding duplicate access points</string>
+    <string name="pref_def_show_all" translatable="false">false</string>
 
     <!-- SECURITY GROUP -->
     <string name="pref_group_security_settings" translatable="false">SECURITY_KEY</string>

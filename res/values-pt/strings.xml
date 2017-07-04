@@ -116,6 +116,11 @@
     <string name="context_cancel">Cancelar</string>
     <string name="toast_no_network_found">Nenhuma rede foi encontrada</string>
     <string name="toast_no_network_to_display">Nenhuma rede para mostrar\nTente diminuir os níveis mínimos\nnas configurações</string>
+    <string name="dialog_change_password">Alterar senha</string>
+    <string name="context_change_password">Alterar senha</string>
+    <string name="pref_show_all_summ_off">Escondendo pontos de acesso duplicados</string>
+    <string name="pref_show_all_summ_on">Mostrando todos os pontos de acesso</string>
+    <string name="pref_title_show_all">Mostrar todos os pontos de acesso</string>
 
 
 </resources>
