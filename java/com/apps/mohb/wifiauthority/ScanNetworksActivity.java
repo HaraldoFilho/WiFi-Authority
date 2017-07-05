@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/4/17 12:55 AM
+ *  Last modified : 7/4/17 10:15 PM
  *
  *  -----------------------------------------------------------
  */
@@ -78,7 +78,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
 
             // remove duplicated networks from list
-            if (settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+            if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
                 String uniques = "";
                 ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
                 while (listIteratorDuplicate.hasNext()) {

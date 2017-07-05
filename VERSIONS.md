@@ -1,3 +1,6 @@
+#### **0.3.1**
+- Fixed bug of the 'show all networks' feature on 'Available Networks' not working correctly.
+
 #### **0.3.0**
 - Added new feature to change password of a network
 - Added new feature to show all access points on 'Available Networks'

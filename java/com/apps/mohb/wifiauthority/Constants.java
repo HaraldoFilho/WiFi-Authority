@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/4/17 12:31 AM
+ *  Last modified : 7/4/17 10:23 PM
  *
  *  -----------------------------------------------------------
  */
@@ -108,7 +108,7 @@ public class Constants {
 
     public static final String PREF_KEY_RECONFIG = "SSID_RECONFIG";
     public static final String PREF_KEY_STORE_PASSWORD = "STORE_PASSWORD";
-    public static final String PREF_KEY_SHOW_ALL_APS = "SHOW_ALL_APPS";
+    public static final String PREF_KEY_SHOW_ALL_APS = "SHOW_ALL_APS";
 
     public static final String PREF_SECURITY_WPA_EAP = "3";
     public static final String PREF_SECURITY_WEP = "2";
