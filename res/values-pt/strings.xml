@@ -93,7 +93,7 @@
     <string name="pref_reconfig_summ_off">Não reconfigura com mudança de nome</string>
     <string name="pref_reconfig_summ_on">Reconfigura com mudança de nome</string>
     <string name="pref_title_header">Títulos</string>
-    <string name="pref_title_reconfig">Reconfiguração automática de rede</string>
+    <string name="pref_title_reconfig">Reconfiguração automática</string>
     <string name="pref_title_security">Nivel de segurança mínimo</string>
     <string name="pref_title_sort">Ordenação</string>
     <string name="title_activity_settings">Configurações</string>
@@ -120,7 +120,14 @@
     <string name="context_change_password">Alterar senha</string>
     <string name="pref_show_all_summ_off">Escondendo pontos de acesso duplicados</string>
     <string name="pref_show_all_summ_on">Mostrando todos os pontos de acesso</string>
-    <string name="pref_title_show_all">Mostrar todos os pontos de acesso</string>
+    <string name="pref_title_show_all">Mostrar todos os APs</string>
+    <string name="activity_title_details">Detalhes da Rede</string>
+    <string name="toast_missing_information">Ainda faltam algumas informações para esta rede.\nTente novamente em alguns segundos.</string>
+    <string name="layout_net_frequency">"Frequência: "</string>
+    <string name="layout_net_speed">"Velocidade do link: "</string>
+    <string name="layout_net_ip_address">"Endereço IP: "</string>
+    <string name="layout_net_signal_level">"Nível do sinal: "</string>
+    <string name="layout_net_mac">"Endereço MAC: "</string>
 
 
 </resources>

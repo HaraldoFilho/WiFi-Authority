@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.3.1</string>
-    <string name="version_code" translatable="false">36</string>
+    <string name="version_number" translatable="false">0.4.0</string>
+    <string name="version_code" translatable="false">37</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -34,6 +34,7 @@
     <!--Activities titles-->
     <string name="activity_title_your_networks">Your Networks</string>
     <string name="activity_title_networks">Available Networks</string>
+    <string name="activity_title_details">Network Details</string>
     <string name="activity_title_help">Help</string>
     <string name="activity_title_about">About</string>
 
@@ -98,6 +99,7 @@
 
     <!--Toasts-->
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
+    <string name="toast_missing_information">There is still some missing information for this network\nTry again in a few seconds</string>
     <string name="toast_no_location_information">There is no location information for this network</string>
     <string name="toast_no_map_information">There is no map information available yet. Try again in a few seconds.</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
@@ -112,9 +114,15 @@
     <string name="toast_no_network_to_display">No network to display.\nTry decreasing minimum levels\non settings</string>
 
     <!--Layout resources-->
-    <string name="layout_net_subtitle">Subtitle</string>
     <string name="layout_net_title">Title</string>
+    <string name="layout_net_subtitle">Subtitle</string>
+    <string name="layout_net_ssid" translatable="false">SSID: "</string>
+    <string name="layout_net_mac">"MAC Address: "</string>
     <string name="layout_net_security">"Security: "</string>
+    <string name="layout_net_ip_address">"IP address: "</string>
+    <string name="layout_net_frequency">"Frequency: "</string>
+    <string name="layout_net_speed">"Link speed: "</string>
+    <string name="layout_net_signal_level">"Signal level: "</string>
     <string name="layout_net_status">"Status: "</string>
     <string name="layout_net_signal">"Signal level: "</string>
     <string name="layout_db" translatable="false">dBm</string>
@@ -168,7 +176,7 @@
 
     <!-- Automatic reconfiguration -->
     <string name="pref_key_reconfig" translatable="false">SSID_RECONFIG</string>
-    <string name="pref_title_reconfig">Automatic network reconfiguration</string>
+    <string name="pref_title_reconfig">Automatic reconfiguration</string>
     <string name="pref_reconfig_summ_on">Reconfigure if name changes</string>
     <string name="pref_reconfig_summ_off">Don not reconfigure if name changes</string>
     <string name="pref_def_reconfig" translatable="false">true</string>
@@ -189,7 +197,7 @@
 
     <!-- Show all access points -->
     <string name="pref_key_show_all" translatable="false">SHOW_ALL_APS</string>
-    <string name="pref_title_show_all">Show all access points</string>
+    <string name="pref_title_show_all">Show all APs</string>
     <string name="pref_show_all_summ_on">Showing all access points</string>
     <string name="pref_show_all_summ_off">Hiding duplicate access points</string>
     <string name="pref_def_show_all" translatable="false">false</string>

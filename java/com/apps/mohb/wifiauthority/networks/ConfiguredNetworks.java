@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/4/17 12:18 AM
+ *  Last modified : 7/4/17 11:35 PM
  *
  *  -----------------------------------------------------------
  */
@@ -129,6 +129,19 @@ public class ConfiguredNetworks {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 return data.getMacAddress();
+            }
+            iterator.next();
+        }
+        return "";
+    }
+
+    public String getNetworkSecurityBySSID(String ssid) {
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.getSecurity();
             }
             iterator.next();
         }

@@ -1,3 +1,6 @@
+#### **0.4.0**
+- Added 'Network Details' activity.
+
 #### **0.3.1**
 - Fixed bug of the 'show all networks' feature on 'Available Networks' not working correctly.
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/4/17 12:18 AM
+ *  Last modified : 7/5/17 11:22 PM
  *
  *  -----------------------------------------------------------
  */
@@ -156,12 +156,11 @@ public class MainActivity extends AppCompatActivity implements
                                     // Note: while the network is on reach the location will be constantly updated,
                                     // but when the network turns out of reach the additional data will store the last
                                     // saved location
+
                                     configuredNetworks.setLocationBySSID(scanResult.SSID,
                                             location.getLatitude(), location.getLongitude());
-                                } else { // If location was not acquired save default location (0,0)
-                                    configuredNetworks.setLocationBySSID(scanResult.SSID,
-                                            Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                                 }
+
                             } else { // If network doesn't have additional data
                                 // Check if user's last known location has been acquired
                                 if (location != null) {
@@ -181,10 +180,8 @@ public class MainActivity extends AppCompatActivity implements
                                 // Save location with mac address
                                 configuredNetworks.setLocationByMacAddress(scanResult.BSSID,
                                         location.getLatitude(), location.getLongitude());
-                            } else { // If location has not been acquired save the default location (0,0)
-                                configuredNetworks.setLocationByMacAddress(scanResult.BSSID,
-                                        Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                             }
+
                         }
                     }
 
@@ -344,19 +341,18 @@ public class MainActivity extends AppCompatActivity implements
                         longitude = configuredNetworks.getLongitudeBySSID(ssid);
                     }
 
-                    // If network has location data show it on a map
-                    if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.KEY_SSID, configuredNetworks.getDataSSID(ssid));
-                        bundle.putDouble(Constants.KEY_LATITUDE, latitude);
-                        bundle.putDouble(Constants.KEY_LONGITUDE, longitude);
-                        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    } else { // if no location data, show toast to inform this
-                        Toasts.showNoLocationInformation(getApplicationContext(),
-                                R.string.toast_no_location_information);
-                    }
+                    String mac = configuredNetworks.getMacAddressBySSID(ssid);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.KEY_SSID, configuredNetworks.getDataSSID(ssid));
+                    bundle.putString(Constants.KEY_BSSID, mac);
+                    bundle.putDouble(Constants.KEY_LATITUDE, latitude);
+                    bundle.putDouble(Constants.KEY_LONGITUDE, longitude);
+                    Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+
                 } else {
                     Toasts.showWiFiDisabled(getApplicationContext());
                     wifiManager.setWifiEnabled(true);
@@ -467,10 +463,10 @@ public class MainActivity extends AppCompatActivity implements
                     startActivity(intent);
                 } else {
                     if (location == null) {
-                        Toasts.showNoLocationInformation(getApplicationContext(),
+                        Toasts.showMissingInformation(getApplicationContext(),
                                 R.string.toast_no_map_information);
                     } else {
-                        Toasts.showNoLocationInformation(getApplicationContext(),
+                        Toasts.showMissingInformation(getApplicationContext(),
                                 R.string.toast_no_configured_networks);
                     }
                 }

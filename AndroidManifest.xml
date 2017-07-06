@@ -37,6 +37,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,6 +48,11 @@
         <activity
             android:name=".ScanNetworksActivity"
             android:label="@string/activity_title_networks"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DetailsActivity"
+            android:label="@string/activity_title_details"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
         <activity

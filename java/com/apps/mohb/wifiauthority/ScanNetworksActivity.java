@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/4/17 10:15 PM
+ *  Last modified : 7/4/17 10:34 PM
  *
  *  -----------------------------------------------------------
  */

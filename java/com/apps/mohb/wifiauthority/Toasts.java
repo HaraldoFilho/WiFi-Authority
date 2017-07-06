@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 7/1/17 10:41 AM
+ *  Last modified : 7/5/17 9:03 PM
  *
  *  -----------------------------------------------------------
  */
@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class Toasts {
 
     private static Toast unableRemoveNetwork;
-    private static Toast noLocationInformation;
+    private static Toast missingInformation;
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
@@ -38,15 +38,15 @@ public class Toasts {
     }
 
     // Toast to notify that there is no location information
-    public static void showNoLocationInformation(Context c, int textId) {
-        noLocationInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
-        noLocationInformation.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-        noLocationInformation.show();
+    public static void showMissingInformation(Context c, int textId) {
+        missingInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
+        missingInformation.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        missingInformation.show();
     }
 
-    public static void cancelNoLocationInformation() {
-        if (noLocationInformation != null) {
-            noLocationInformation.cancel();
+    public static void cancelMissingInformation() {
+        if (missingInformation != null) {
+            missingInformation.cancel();
         }
     }
 
@@ -161,7 +161,7 @@ public class Toasts {
         cancelNetworkConnectionError();
         cancelNoNetworkFound();
         cancelWiFiDisabled();
-        cancelNoLocationInformation();
+        cancelMissingInformation();
         cancelLegalNotices();
         cancelHelpPage();
     }

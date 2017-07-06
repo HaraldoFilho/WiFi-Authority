@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : WiFiCheckActivity.java
- *  Last modified : 7/1/17 1:59 AM
+ *  Last modified : 7/4/17 12:56 AM
  *
  *  -----------------------------------------------------------
  */

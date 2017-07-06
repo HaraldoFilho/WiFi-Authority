@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : PasswordChangeDialogFragment.java
- *  Last modified : 7/4/17 12:48 AM
+ *  Last modified : 7/4/17 12:56 AM
  *
  *  -----------------------------------------------------------
  */

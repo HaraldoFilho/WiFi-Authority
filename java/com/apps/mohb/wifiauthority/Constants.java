@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/4/17 10:23 PM
+ *  Last modified : 7/6/17 1:02 AM
  *
  *  -----------------------------------------------------------
  */
@@ -117,5 +117,7 @@ public class Constants {
     public static final String PREF_MIN_SIGNAL_HIGH = "3";
     public static final String PREF_MIN_SIGNAL_LOW = "2";
     public static final String PREF_MIN_SIGNAL_VERY_LOW = "1";
+
+    public static final String NO_INFO = "-";
 
 }
