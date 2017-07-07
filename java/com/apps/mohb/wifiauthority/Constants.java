@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/6/17 1:02 AM
+ *  Last modified : 7/7/17 12:49 AM
  *
  *  -----------------------------------------------------------
  */
@@ -34,12 +34,19 @@ public class Constants {
     public static final String JSON_LONGITUDE = "longitude";
 
     // Location
+    public static final int MAP_MAX_ZOOM_LEVEL = 20;
     public static final int MAP_HIGH_ZOOM_LEVEL = 16;
     public static final int MAP_MID_ZOOM_LEVEL = 8;
     public static final int MAP_LOW_ZOOM_LEVEL = 4;
+    public static final int MAP_MIN_ZOOM_LEVEL = 2;
 
     public static final double DEFAULT_LATITUDE = 0;
     public static final double DEFAULT_LONGITUDE = 0;
+    public static final double MIN_LATITUDE = -90;
+    public static final double MAX_LATITUDE = 90;
+    public static final double MIN_LONGITUDE = -180;
+    public static final double MAX_LONGITUDE = 180;
+    public static final double MAX_MAX_DELTA = 360;
 
     // Lists
     public static final int LIST_HEAD = 0;

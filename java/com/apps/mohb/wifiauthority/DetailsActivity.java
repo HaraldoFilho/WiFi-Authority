@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/6/17 1:08 AM
+ *  Last modified : 7/6/17 10:37 PM
  *
  *  -----------------------------------------------------------
  */
@@ -116,15 +116,27 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
-    private String getIpAddressString(int ipAddr) {
-        byte[] ipAddressBytes = BigInteger.valueOf(ipAddr).toByteArray();
-        String ipAddress = String.valueOf(ipAddressBytes[3]) + "."
-                + String.valueOf(ipAddressBytes[2]) + "."
-                + String.valueOf(ipAddressBytes[1]) + "."
-                + String.valueOf(ipAddressBytes[0]);
+    private String getIpAddressString(int ipAddressInteger) {
+
+        byte[] ipAddressBytes = BigInteger.valueOf(Integer.reverseBytes(ipAddressInteger)).toByteArray();
+
+        int ip1 = convertToUnsignedInteger(ipAddressBytes[0]);
+        int ip2 = convertToUnsignedInteger(ipAddressBytes[1]);
+        int ip3 = convertToUnsignedInteger(ipAddressBytes[2]);
+        int ip4 = convertToUnsignedInteger(ipAddressBytes[3]);
+
+        String ipAddress
+                = Integer.toString(ip1) + "."
+                + Integer.toString(ip2) + "."
+                + Integer.toString(ip3) + "."
+                + Integer.toString(ip4);
 
         return ipAddress;
 
+    }
+
+    private int convertToUnsignedInteger(int signedInteger) {
+        return signedInteger & 0xFF;
     }
 
     @Override

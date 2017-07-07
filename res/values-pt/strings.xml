@@ -34,8 +34,6 @@
     <string name="url_bug_report">relatorio-de-falha</string>
     <string name="url_contact">contato</string>
     <string name="dialog_view_text">texto</string>
-    <string name="alert_message_wifi_disabled">Você deseja ligar o WiFi? Se você responder NÃO o aplicativo será fechado\n</string>
-    <string name="alert_title_wifi_disabled">O WiFi está desligado</string>
     <string name="menu_add_network">Adicionar Rede Oculta</string>
     <string name="activity_title_networks">Redes Disponíveis</string>
     <string name="menu_refresh">Atualizar</string>
@@ -82,7 +80,7 @@
     <string name="title_activity_map">Mapa</string>
     <string name="menu_map">Mapa</string>
     <string name="toast_no_location_information">Não há nenhuma informação de local para esta rede</string>
-    <string name="toast_no_map_information">Não há nenhuma informação de mapa disponível ainda. Tente novamente em alguns segundos.</string>
+    <string name="toast_no_map_information">Não há nenhuma informação do local atual ainda. Tente novamente em alguns segundos.</string>
     <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
     <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>
     <string name="info_website">mohb-apps.com.br</string>
@@ -128,6 +126,7 @@
     <string name="layout_net_ip_address">"Endereço IP: "</string>
     <string name="layout_net_signal_level">"Nível do sinal: "</string>
     <string name="layout_net_mac">"Endereço MAC: "</string>
+    <string name="button_turn_wifi_on">LIGAR WIFI</string>
 
 
 </resources>

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/4/17 10:34 PM
+ *  Last modified : 7/6/17 10:35 PM
  *
  *  -----------------------------------------------------------
  */
@@ -312,6 +312,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             // Help
             case R.id.action_help_scan:
                 intent = new Intent(this, HelpActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", getString(R.string.url_help_scan));
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
 

@@ -81,6 +81,9 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".WiFiDisabledActivity"
+            android:label="@string/info_app_name" />
 
         <!-- Google Maps-based APIs Key -->
         <meta-data

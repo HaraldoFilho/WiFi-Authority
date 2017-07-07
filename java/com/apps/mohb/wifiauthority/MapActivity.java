@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/7/17 12:54 AM
  *
  *  -----------------------------------------------------------
  */
@@ -36,8 +36,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     private Bundle bundle;
 
     private String ssid;
+
     private double latitude;
     private double longitude;
+    private double minLatitude;
+    private double minLongitude;
+    private double maxLatitude;
+    private double maxLongitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,53 +54,88 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        minLatitude = Constants.MAX_LATITUDE;
+        maxLatitude = Constants.MIN_LATITUDE;
+        minLongitude = Constants.MAX_LONGITUDE;
+        maxLongitude = Constants.MIN_LONGITUDE;
+
         bundle = getIntent().getExtras();
 
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // If bundle has no SSID, i.e. no individual network was clicked, iterates over the list of
-        // configured networks and, if available, put a marker on the location of the network
-        if (bundle.getString(Constants.KEY_SSID).isEmpty()) {
-            ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(this);
-            List<NetworkAdditionalData> networksData = configuredNetworks.getConfiguredNetworksData();
+        ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(this);
+        List<NetworkAdditionalData> networksData = configuredNetworks.getConfiguredNetworksData();
 
-            ListIterator iterator = networksData.listIterator();
+        ListIterator iterator = networksData.listIterator();
 
-            while (iterator.hasNext()) {
-                ssid = networksData.get(iterator.nextIndex()).getSSID();
-                latitude = networksData.get(iterator.nextIndex()).getLatitude();
-                longitude = networksData.get(iterator.nextIndex()).getLongitude();
+        while (iterator.hasNext()) {
+            ssid = networksData.get(iterator.nextIndex()).getSSID();
+            latitude = networksData.get(iterator.nextIndex()).getLatitude();
+            longitude = networksData.get(iterator.nextIndex()).getLongitude();
 
-                if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
-                    LatLng networkPosition = new LatLng(latitude, longitude);
-                    Marker marker = mMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
-                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
-                }
-
-                iterator.next();
+            if (latitude < minLatitude) {
+                minLatitude = latitude;
+            }
+            if (latitude > maxLatitude) {
+                maxLatitude = latitude;
+            }
+            if (longitude < minLongitude) {
+                minLongitude = longitude;
+            }
+            if (longitude > maxLongitude) {
+                maxLongitude = longitude;
             }
 
-            LatLng currentLocation = new LatLng(bundle.getDouble(Constants.KEY_LATITUDE),
-                    bundle.getDouble(Constants.KEY_LONGITUDE));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, Constants.MAP_LOW_ZOOM_LEVEL));
+            if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
+                LatLng networkPosition = new LatLng(latitude, longitude);
+                Marker marker = mMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
+                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
+            }
 
-        } else { // if an individual network was clicked, put a marker on its location
-
-            ssid = bundle.getString(Constants.KEY_SSID);
-            latitude = bundle.getDouble(Constants.KEY_LATITUDE);
-            longitude = bundle.getDouble(Constants.KEY_LONGITUDE);
-
-            LatLng networkPosition = new LatLng(latitude, longitude);
-            Marker marker = mMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
-            marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
-            marker.showInfoWindow();
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_HIGH_ZOOM_LEVEL));
-
+            iterator.next();
         }
+
+        double deltaLatitude = maxLatitude - minLatitude;
+        double deltaLongitude = maxLongitude - minLongitude;
+
+        double maxDelta;
+
+        if (deltaLatitude > deltaLongitude) {
+            maxDelta = deltaLatitude;
+        } else {
+            maxDelta = deltaLongitude;
+        }
+
+        maxDelta = absoluteValue(maxDelta);
+
+        if (maxDelta > Constants.MAX_MAX_DELTA) {
+            maxDelta = Constants.MAX_MAX_DELTA;
+        }
+
+        maxDelta /= Constants.MAP_MAX_ZOOM_LEVEL;
+        maxDelta -= Constants.MAP_MIN_ZOOM_LEVEL;
+
+        maxDelta = absoluteValue(maxDelta);
+
+        int zoomLevel = (int) absoluteValue(
+                (Constants.MAP_MAX_ZOOM_LEVEL - Constants.MAP_MIN_ZOOM_LEVEL) - maxDelta);
+
+        LatLng currentLocation = new LatLng(bundle.getDouble(Constants.KEY_LATITUDE),
+                bundle.getDouble(Constants.KEY_LONGITUDE));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+
     }
+
+    private double absoluteValue(double value) {
+        if (value < 0) {
+            value *= -1;
+        }
+        return value;
+    }
+
 }
+

@@ -1,3 +1,9 @@
+#### **0.4.1**
+- Fixed bug of negative numbers being displayed on ip addresses of 'Network Details'.
+- Fixed bug of app crashing when clicking on 'help' options menu item of 'Available Networks'.
+- Fixed bug of map not opening because last known location was lost.
+- Replaced WiFi disabled dialog with a button to turn WiFi on.
+
 #### **0.4.0**
 - Added 'Network Details' activity.
 

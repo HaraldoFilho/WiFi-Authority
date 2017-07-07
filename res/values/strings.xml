@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.4.0</string>
-    <string name="version_code" translatable="false">37</string>
+    <string name="version_number" translatable="false">0.4.1</string>
+    <string name="version_code" translatable="false">38</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -84,8 +84,6 @@
     <string name="dialog_change_password">Change password</string>
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
-    <string name="alert_title_wifi_disabled">WiFi is disabled</string>
-    <string name="alert_message_wifi_disabled">Do you want to turn on WiFi? If you answer NO the application will be closed</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
     <string name="alert_message_delete_network">This action can not be undone\n</string>
     <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to delete networks unless they were added by WiFi Authority.\n</string>
@@ -101,7 +99,7 @@
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
     <string name="toast_missing_information">There is still some missing information for this network\nTry again in a few seconds</string>
     <string name="toast_no_location_information">There is no location information for this network</string>
-    <string name="toast_no_map_information">There is no map information available yet. Try again in a few seconds.</string>
+    <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds.</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
     <string name="toast_network_is_configured">This network is already configured</string>
     <string name="toast_wifi_disabled">WiFi is turned off, turning it on...</string>
@@ -132,6 +130,9 @@
     <string name="layout_no_play_services_title">Google Play Services is not installed or needs to be updated</string>
     <string name="layout_no_play_services_text">WiFi Authority needs Google Play Services up-to-date  to work\nPlease, install or update Google Play Services and reopen the application</string>
     <string name="layout_press_back_button">Press back button to exit</string>
+
+    <!-- Button -->
+    <string name="button_turn_wifi_on">TURN WIFI ON</string>
 
     <!--Help pages-->
     <string name="url_website">https://mohb-apps.com/</string>

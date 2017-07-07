@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/5/17 11:22 PM
+ *  Last modified : 7/6/17 11:46 PM
  *
  *  -----------------------------------------------------------
  */
@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private GoogleApiClient googleApiClient;
     private Location location;
+    private double lastLatitude;
+    private double lastLongitude;
 
     private SharedPreferences showNetworkManagementPolicyWarnPref;
     private boolean networkNameChangedDialogOpened;
@@ -105,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
 
             // Refresh list of networks when connection state changes
-            updateListOfNetworks();
+            if(wifiManager.isWifiEnabled()) {
+                updateListOfNetworks();
+            }
 
         }
 
@@ -117,13 +121,25 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            updateListOfNetworks();
+            if(wifiManager.isWifiEnabled()) {
+                updateListOfNetworks();
+            }
+            else {
+                intent = new Intent(getApplicationContext(), WiFiDisabledActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
             wifiScannedNetworks = wifiManager.getScanResults();
 
             // Get the last user's none location. Most of the times
             // this corresponds to user's current location or very near
             try {
                 location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                if (location != null) {
+                    lastLatitude = location.getLatitude();
+                    lastLongitude = location.getLongitude();
+                }
             } catch (SecurityException e) {
                 e.printStackTrace();
             }
@@ -151,22 +167,21 @@ public class MainActivity extends AppCompatActivity implements
                                 configuredNetworks.setMacAddressBySSID(scanResult.SSID, scanResult.BSSID);
 
                                 // Check if user's last known location has been acquired
-                                if (location != null) {
+                                if (isLastLocationKnown()) {
                                     // Save location as additional data
                                     // Note: while the network is on reach the location will be constantly updated,
                                     // but when the network turns out of reach the additional data will store the last
                                     // saved location
 
-                                    configuredNetworks.setLocationBySSID(scanResult.SSID,
-                                            location.getLatitude(), location.getLongitude());
+                                    configuredNetworks.setLocationBySSID(scanResult.SSID, lastLatitude, lastLongitude);
                                 }
 
                             } else { // If network doesn't have additional data
                                 // Check if user's last known location has been acquired
-                                if (location != null) {
+                                if (isLastLocationKnown()) {
                                     // Create additional data for the network with the scanned SSID, Mac Address and the current location
                                     configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
-                                            scanResult.capabilities, "", location.getLatitude(), location.getLongitude());
+                                            scanResult.capabilities, "", lastLatitude, lastLongitude);
                                 } else { // If location has not been acquired create additional data for the network
                                     // with the scanned SSID, Mac Address and the default location (0,0)
                                     configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
@@ -176,10 +191,10 @@ public class MainActivity extends AppCompatActivity implements
 
                         } else { // If network is already configured by Mac Address
                             // Check if user's last known location has been acquired
-                            if (location != null) {
+                            if (isLastLocationKnown()) {
                                 // Save location with mac address
                                 configuredNetworks.setLocationByMacAddress(scanResult.BSSID,
-                                        location.getLatitude(), location.getLongitude());
+                                        lastLatitude, lastLongitude);
                             }
 
                         }
@@ -453,16 +468,15 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_map:
                 // If current location is acquired and there are configured networks,
                 // show all networks locations on a map centralized in the current location
-                if ((location != null) && (!wifiConfiguredNetworks.isEmpty())) {
+                if (isLastLocationKnown() && (!wifiConfiguredNetworks.isEmpty())) {
                     intent = new Intent(this, MapActivity.class);
                     bundle = new Bundle();
-                    bundle.putString(Constants.KEY_SSID, "");
-                    bundle.putDouble(Constants.KEY_LATITUDE, location.getLatitude());
-                    bundle.putDouble(Constants.KEY_LONGITUDE, location.getLongitude());
+                    bundle.putDouble(Constants.KEY_LATITUDE, lastLatitude);
+                    bundle.putDouble(Constants.KEY_LONGITUDE, lastLongitude);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-                    if (location == null) {
+                    if (!isLastLocationKnown()) {
                         Toasts.showMissingInformation(getApplicationContext(),
                                 R.string.toast_no_map_information);
                     } else {
@@ -648,6 +662,14 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
     }
 
+
+    private boolean isLastLocationKnown() {
+        if ((lastLatitude != Constants.DEFAULT_LATITUDE) && (lastLongitude != Constants.DEFAULT_LONGITUDE)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private void resumeApplication() {
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);

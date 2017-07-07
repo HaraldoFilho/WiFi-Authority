@@ -16,14 +16,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.apps.mohb.wifiauthority.fragments.dialogs.WifiDisabledAlertFragment;
 
-
-public class WiFiCheckActivity extends AppCompatActivity implements
-        WifiDisabledAlertFragment.WifiDisabledDialogListener {
+public class WiFiCheckActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
 
@@ -58,20 +54,19 @@ public class WiFiCheckActivity extends AppCompatActivity implements
 
                 case Constants.ACTIVITY_MAIN:
                     // if is disabled show dialog to ask to enable it
-                    DialogFragment dialog = new WifiDisabledAlertFragment();
-                    dialog.setCancelable(false);
-                    dialog.show(getSupportFragmentManager(), "WifiDisabledAlertFragment");
+                    startWiFiDisabledActivity();
                     break;
 
                 case Constants.ACTIVITY_SCAN:
                     wifiManager.setWifiEnabled(true);
                     startScanActivity();
-                    finish();
                     break;
 
             }
 
         }
+
+        finish();
 
     }
 
@@ -85,6 +80,11 @@ public class WiFiCheckActivity extends AppCompatActivity implements
         finish();
     }
 
+    private void startWiFiDisabledActivity() {
+        Intent intent = new Intent(this, WiFiDisabledActivity.class);
+        startActivity(intent);
+    }
+
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -93,21 +93,6 @@ public class WiFiCheckActivity extends AppCompatActivity implements
     private void startScanActivity() {
         Intent intent = new Intent(this, ScanNetworksActivity.class);
         startActivity(intent);
-    }
-
-    // ENABLE WIFI DIALOG
-
-    @Override  // YES
-    public void onAlertWifiDialogPositiveClick(DialogFragment dialog) {
-        wifiManager.setWifiEnabled(true);
-        startMainActivity();
-        finish();
-    }
-
-    @Override // NO
-    public void onAlertWifiDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
-        finish();
     }
 
 }
