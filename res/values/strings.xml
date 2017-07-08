@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.4.1</string>
-    <string name="version_code" translatable="false">38</string>
+    <string name="version_number" translatable="false">0.4.2</string>
+    <string name="version_code" translatable="false">39</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -97,7 +97,7 @@
 
     <!--Toasts-->
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
-    <string name="toast_missing_information">There is still some missing information for this network\nTry again in a few seconds</string>
+    <string name="toast_missing_information">There is still some missing information for this network. Try again in a few seconds</string>
     <string name="toast_no_location_information">There is no location information for this network</string>
     <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds.</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
@@ -109,7 +109,7 @@
     <string name="toast_authentication_failed">Authentication failed</string>
     <string name="toast_obt_ip_address_failed">Failed on obtain IP address</string>
     <string name="toast_no_network_found">No network has been found</string>
-    <string name="toast_no_network_to_display">No network to display.\nTry decreasing minimum levels\non settings</string>
+    <string name="toast_no_network_to_display">No network to display. Try decreasing minimum levels on settings</string>
 
     <!--Layout resources-->
     <string name="layout_net_title">Title</string>

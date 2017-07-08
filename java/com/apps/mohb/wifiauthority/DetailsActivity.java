@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/6/17 10:37 PM
+ *  Last modified : 7/8/17 1:32 AM
  *
  *  -----------------------------------------------------------
  */
@@ -42,7 +42,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private Double longitude;
 
     private Bundle bundle;
-    private GoogleMap mMap;
+    private GoogleMap googleMap;
     private MapView map;
 
     private WifiManager wifiManager;
@@ -59,7 +59,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         wifiInfo = wifiManager.getConnectionInfo();
         configuredNetworks = new ConfiguredNetworks(this);
 
-
+        // Views
         TextView txtNetworkSSID = (TextView) findViewById(R.id.txtNetSSID);
         TextView txtNetworkMac = (TextView) findViewById(R.id.txtNetMac);
         TextView txtNetworkIpAddress = (TextView) findViewById(R.id.txtNetIpAddress);
@@ -76,23 +76,33 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         bundle = getIntent().getExtras();
 
+        // Get SSID and MAC address of the network...
         ssid = bundle.getString(Constants.KEY_SSID);
         mac = bundle.getString(Constants.KEY_BSSID).toUpperCase();
 
+        // ... and show them
         txtNetworkSSID.setText(ssid);
         txtNetworkMac.setText(mac);
 
+        // Set link speed and signal level units to empty in case
+        // of they are not shown because network is not connected
         txtNetworkLinkSpeedUnit.setText("");
         txtNetworkSignalLevelUnit.setText("");
 
+        // Check if the network is connected
         if (ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID()))) {
+            // Show IP address
             txtNetworkIpAddress.setText(getIpAddressString(wifiInfo.getIpAddress()));
+            // Show link speed
             txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
             txtNetworkLinkSpeedUnit.setText(" " + WifiInfo.LINK_SPEED_UNITS);
+            // Show signal level
             txtNetworkSignalLevel.setText(String.valueOf(wifiInfo.getRssi()));
             txtNetworkSignalLevelUnit.setText(" " + getString(R.string.layout_db));
+            // Show frequency
             setNetworkFrequencyText(true, "");
         } else {
+            // There is no information to show
             txtNetworkIpAddress.setText(Constants.NO_INFO);
             txtNetworkLinkSpeed.setText(Constants.NO_INFO);
             txtNetworkSignalLevel.setText(Constants.NO_INFO);
@@ -101,11 +111,14 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
-    private void setNetworkFrequencyText(boolean setValue, String noInfo) {
+    // Show frequency of the network if build version is 21 or higher
+    // as this feature is not available in lower builds
+    private void setNetworkFrequencyText(boolean isActive, String noInfo) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TextView txtNetworkFrequency = (TextView) findViewById(R.id.txtNetFrequency);
             TextView txtNetworkFrequencyUnit = (TextView) findViewById(R.id.txtNetFrequencyUnit);
-            if (setValue) {
+            // Check if it is the current active network
+            if (isActive) {
                 txtNetworkFrequency.setText(String.valueOf(wifiInfo.getFrequency()));
                 txtNetworkFrequencyUnit.setText(" " + WifiInfo.FREQUENCY_UNITS);
             } else {
@@ -116,15 +129,20 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    // The IP address information is an integer representing the bytes corresponding to each ip number
+    // This method gets the IP address to show on a human readable form
     private String getIpAddressString(int ipAddressInteger) {
 
+        // Get the bytes from the integer
         byte[] ipAddressBytes = BigInteger.valueOf(Integer.reverseBytes(ipAddressInteger)).toByteArray();
 
+        // Convert signed integers to signed
         int ip1 = convertToUnsignedInteger(ipAddressBytes[0]);
         int ip2 = convertToUnsignedInteger(ipAddressBytes[1]);
         int ip3 = convertToUnsignedInteger(ipAddressBytes[2]);
         int ip4 = convertToUnsignedInteger(ipAddressBytes[3]);
 
+        // Build the IP address string
         String ipAddress
                 = Integer.toString(ip1) + "."
                 + Integer.toString(ip2) + "."
@@ -135,6 +153,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    // Convert signed integers into unsigned
     private int convertToUnsignedInteger(int signedInteger) {
         return signedInteger & 0xFF;
     }
@@ -160,17 +179,17 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        mMap = googleMap;
+        this.googleMap = googleMap;
 
         latitude = bundle.getDouble(Constants.KEY_LATITUDE);
         longitude = bundle.getDouble(Constants.KEY_LONGITUDE);
 
+        // Check if there is location data and show it on map
         if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
             LatLng networkPosition = new LatLng(latitude, longitude);
-            Marker marker = mMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
+            Marker marker = this.googleMap.addMarker(new MarkerOptions().position(networkPosition));
             marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
-            marker.showInfoWindow();
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_HIGH_ZOOM_LEVEL));
+            this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_DETAILS_ZOOM_LEVEL));
 
         } else { // if no location data, show toast to inform this
             Toasts.showMissingInformation(getApplicationContext(), R.string.toast_no_location_information);

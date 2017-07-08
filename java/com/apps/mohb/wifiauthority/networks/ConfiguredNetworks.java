@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/4/17 11:35 PM
+ *  Last modified : 7/8/17 1:41 AM
  *
  *  -----------------------------------------------------------
  */
@@ -58,6 +58,7 @@ public class ConfiguredNetworks {
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         preferences = context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
         editor = preferences.edit();
+
         try {
             getDataState();
         } catch (IOException e) {
@@ -91,6 +92,9 @@ public class ConfiguredNetworks {
         return false;
 
     }
+
+
+    // GETTERS
 
     public List<NetworkAdditionalData> getConfiguredNetworksData() {
         return networksData;
@@ -148,40 +152,6 @@ public class ConfiguredNetworks {
         return "";
     }
 
-    public boolean setLocationBySSID(String ssid, double latitude, double longitude) {
-
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                data.setLatitude(latitude);
-                data.setLongitude(longitude);
-                saveDataState();
-                return true;
-            }
-            iterator.next();
-        }
-        return false;
-    }
-
-    public boolean setLocationByMacAddress(String bssid, double latitude, double longitude) {
-
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (bssid.matches(data.getMacAddress())) {
-                data.setLatitude(latitude);
-                data.setLongitude(longitude);
-                saveDataState();
-                return true;
-            }
-            iterator.next();
-        }
-        return false;
-    }
-
     public double getLatitudeBySSID(String ssid) {
 
         ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
@@ -225,6 +195,117 @@ public class ConfiguredNetworks {
         return "";
     }
 
+    public WifiConfiguration getConfigurationToAdd(
+            List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (mac.matches(data.getMacAddress())) {
+                ListIterator<WifiConfiguration> cfgIterator = configuredNetworks.listIterator();
+                WifiConfiguration configuration;
+                while (cfgIterator.hasNext()) {
+                    configuration = configuredNetworks.get(cfgIterator.nextIndex());
+                    if (data.getSSID().matches(getDataSSID(configuration.SSID))) {
+                        WifiConfiguration updatedConfiguration = configuration;
+                        updatedConfiguration.SSID = getCfgSSID(getDataSSID(ssid));
+                        updatedConfiguration.status = WifiConfiguration.Status.DISABLED;
+                        updatedConfiguration.preSharedKey = null;
+                        updatedConfiguration.wepKeys[0] = null;
+                        data.setSSID(getDataSSID(ssid));
+                        saveDataState();
+                        return updatedConfiguration;
+                    }
+                    cfgIterator.next();
+                }
+            }
+            iterator.next();
+        }
+        return null;
+
+    }
+
+    public String getPassword(String ssid) {
+
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.getPassword();
+            }
+            iterator.next();
+        }
+        return "";
+
+    }
+
+    public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String ssid)
+            throws NullPointerException {
+
+        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            ScanResult network = wifiScannedNetworks.get(index);
+            String scanSSID = getDataSSID(network.SSID);
+            if (getDataSSID(ssid).matches(scanSSID)) {
+                return network.level;
+            }
+            listIterator.next();
+        }
+        return 0;
+    }
+
+    public int getNetworkSecurity(String security) {
+
+        if (security.contains(Constants.SCAN_WPA)) {
+            return Constants.SET_WPA;
+        } else if (security.contains(Constants.SCAN_EAP)) {
+            return Constants.SET_EAP;
+        } else if (security.contains(Constants.SCAN_WEP)) {
+            return Constants.SET_WEP;
+        } else return Constants.SET_OPEN;
+
+    }
+
+
+    // SETTERS
+
+    public boolean setLocationBySSID(String ssid, double latitude, double longitude) {
+
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                data.setLatitude(latitude);
+                data.setLongitude(longitude);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+    }
+
+    public boolean setLocationByMacAddress(String bssid, double latitude, double longitude) {
+
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (bssid.matches(data.getMacAddress())) {
+                data.setLatitude(latitude);
+                data.setLongitude(longitude);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+    }
+
     public boolean setMacAddressBySSID(String ssid, String mac) {
         ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
         NetworkAdditionalData data;
@@ -256,6 +337,78 @@ public class ConfiguredNetworks {
         return false;
 
     }
+
+    public boolean setPassword(String ssid, String password) {
+        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
+        NetworkAdditionalData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                data.setPassword(password);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
+    public WifiConfiguration setNetworkSecurity(WifiConfiguration configuration, int security, String password) {
+
+        switch (security) {
+
+            case Constants.SET_OPEN:
+                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                break;
+
+            case Constants.SET_WEP:
+                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+                configuration.wepTxKeyIndex = 0;
+                configuration.wepKeys[0] = password;
+                break;
+
+            case Constants.SET_WPA:
+                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+                configuration.preSharedKey = password;
+                break;
+
+            case Constants.SET_EAP:
+                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
+                configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+                configuration.preSharedKey = password;
+                break;
+
+        }
+
+        return configuration;
+
+    }
+
+    public WifiConfiguration setNetworkCiphers(WifiConfiguration configuration, String security) {
+
+        if (security.contains(Constants.CFG_CCMP)) {
+            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        }
+        if (security.contains(Constants.CFG_TKIP)) {
+            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        }
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+
+        return configuration;
+
+    }
+
+
+    // UPDATERS
 
     public boolean updateNetworkDescription(String ssid, String description) {
         ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
@@ -301,67 +454,6 @@ public class ConfiguredNetworks {
 
     }
 
-    public WifiConfiguration getConfigurationToAdd(
-            List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (mac.matches(data.getMacAddress())) {
-                ListIterator<WifiConfiguration> cfgIterator = configuredNetworks.listIterator();
-                WifiConfiguration configuration;
-                while (cfgIterator.hasNext()) {
-                    configuration = configuredNetworks.get(cfgIterator.nextIndex());
-                    if (data.getSSID().matches(getDataSSID(configuration.SSID))) {
-                        WifiConfiguration updatedConfiguration = configuration;
-                        updatedConfiguration.SSID = getCfgSSID(getDataSSID(ssid));
-                        updatedConfiguration.status = WifiConfiguration.Status.DISABLED;
-                        updatedConfiguration.preSharedKey = null;
-                        updatedConfiguration.wepKeys[0] = null;
-                        data.setSSID(getDataSSID(ssid));
-                        saveDataState();
-                        return updatedConfiguration;
-                    }
-                    cfgIterator.next();
-                }
-            }
-            iterator.next();
-        }
-        return null;
-
-    }
-
-    public boolean setPassword(String ssid, String password) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                data.setPassword(password);
-                saveDataState();
-                return true;
-            }
-            iterator.next();
-        }
-        return false;
-
-    }
-
-    public String getPassword(String ssid) {
-
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                return data.getPassword();
-            }
-            iterator.next();
-        }
-        return "";
-
-    }
-
     public void saveDataState() {
         try {
             setDataState(networksData);
@@ -369,6 +461,107 @@ public class ConfiguredNetworks {
             e.printStackTrace();
         }
     }
+
+
+    // CHECKERS
+
+    public boolean isConfiguredBySSID(
+            List<WifiConfiguration> configuredNetworks, String ssid) throws NullPointerException {
+
+        ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            WifiConfiguration network = configuredNetworks.get(index);
+            String ssidConfig = getDataSSID(network.SSID);
+            if (ssidConfig.matches(getDataSSID(ssid))) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+
+    }
+
+    public boolean isConfiguredByMacAddress(String mac) {
+
+        ListIterator<NetworkAdditionalData> listIterator = networksData.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            String macConfig = networksData.get(index).getMacAddress();
+            if (macConfig.matches(mac)) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+
+    }
+
+    public boolean isConnected(List<WifiConfiguration> configuredNetworks, String ssid) throws NullPointerException {
+
+        ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            WifiConfiguration network = configuredNetworks.get(index);
+            String ssidConfig = getDataSSID(network.SSID);
+            if ((ssidConfig.matches(getDataSSID(ssid))) && (network.status == WifiConfiguration.Status.CURRENT)) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+    }
+
+
+    public boolean isAvailable(
+            List<ScanResult> wifiScannedNetworks, String ssid, String mac) throws NullPointerException {
+
+        if (isAvailableBySSID(wifiScannedNetworks, ssid) || isAvailableByMacAddress(wifiScannedNetworks, mac)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isAvailableBySSID(
+            List<ScanResult> wifiScannedNetworks, String ssid) throws NullPointerException {
+
+        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            ScanResult network = wifiScannedNetworks.get(index);
+            String scanSSID = getDataSSID(network.SSID);
+            if (getDataSSID(ssid).matches(scanSSID)) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+    }
+
+    public boolean isAvailableByMacAddress(
+            List<ScanResult> wifiScannedNetworks, String mac) throws NullPointerException {
+
+        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            ScanResult network = wifiScannedNetworks.get(index);
+            String scanMac = network.BSSID;
+            if (mac.matches(scanMac)) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+    }
+
+
+    // JSON
 
     public void setDataState(ArrayList<NetworkAdditionalData> data) throws IOException {
         String jsonData = writeJsonString(data);
@@ -486,184 +679,5 @@ public class ConfiguredNetworks {
                 dataSecurity, dataPassword, dataLatitude, dataLongitude);
         return dataItem;
     }
-
-
-    public boolean isConfiguredBySSID(
-            List<WifiConfiguration> configuredNetworks, String ssid) throws NullPointerException {
-
-        ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            WifiConfiguration network = configuredNetworks.get(index);
-            String ssidConfig = getDataSSID(network.SSID);
-            if (ssidConfig.matches(getDataSSID(ssid))) {
-                return true;
-            }
-            listIterator.next();
-        }
-        return false;
-
-    }
-
-    public boolean isConfiguredByMacAddress(String mac) {
-
-        ListIterator<NetworkAdditionalData> listIterator = networksData.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            String macConfig = networksData.get(index).getMacAddress();
-            if (macConfig.matches(mac)) {
-                return true;
-            }
-            listIterator.next();
-        }
-        return false;
-
-    }
-
-    public boolean isConnected(List<WifiConfiguration> configuredNetworks, String ssid) throws NullPointerException {
-
-        ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            WifiConfiguration network = configuredNetworks.get(index);
-            String ssidConfig = getDataSSID(network.SSID);
-            if ((ssidConfig.matches(getDataSSID(ssid))) && (network.status == WifiConfiguration.Status.CURRENT)) {
-                return true;
-            }
-            listIterator.next();
-        }
-        return false;
-    }
-
-
-    public boolean isAvailable(
-            List<ScanResult> wifiScannedNetworks, String ssid, String mac) throws NullPointerException {
-
-        if (isAvailableBySSID(wifiScannedNetworks, ssid) || isAvailableByMacAddress(wifiScannedNetworks, mac)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isAvailableBySSID(
-            List<ScanResult> wifiScannedNetworks, String ssid) throws NullPointerException {
-
-        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            ScanResult network = wifiScannedNetworks.get(index);
-            String scanSSID = getDataSSID(network.SSID);
-            if (getDataSSID(ssid).matches(scanSSID)) {
-                return true;
-            }
-            listIterator.next();
-        }
-        return false;
-    }
-
-    public boolean isAvailableByMacAddress(
-            List<ScanResult> wifiScannedNetworks, String mac) throws NullPointerException {
-
-        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            ScanResult network = wifiScannedNetworks.get(index);
-            String scanMac = network.BSSID;
-            if (mac.matches(scanMac)) {
-                return true;
-            }
-            listIterator.next();
-        }
-        return false;
-    }
-
-    public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String ssid)
-            throws NullPointerException {
-
-        ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-        while (listIterator.hasNext()) {
-            int index = listIterator.nextIndex();
-            ScanResult network = wifiScannedNetworks.get(index);
-            String scanSSID = getDataSSID(network.SSID);
-            if (getDataSSID(ssid).matches(scanSSID)) {
-                return network.level;
-            }
-            listIterator.next();
-        }
-        return 0;
-    }
-
-    public WifiConfiguration setNetworkSecurity(WifiConfiguration configuration, int security, String password) {
-
-        switch (security) {
-
-            case Constants.SET_OPEN:
-                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-                break;
-
-            case Constants.SET_WEP:
-                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
-                configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-                configuration.wepTxKeyIndex = 0;
-                configuration.wepKeys[0] = password;
-                break;
-
-            case Constants.SET_WPA:
-                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-                configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-                configuration.preSharedKey = password;
-                break;
-
-            case Constants.SET_EAP:
-                configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.IEEE8021X);
-                configuration.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                configuration.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
-                configuration.preSharedKey = password;
-                break;
-
-        }
-
-        return configuration;
-
-    }
-
-    public int getNetworkSecurity(String security) {
-
-        if (security.contains(Constants.SCAN_WPA)) {
-            return Constants.SET_WPA;
-        } else if (security.contains(Constants.SCAN_EAP)) {
-            return Constants.SET_EAP;
-        } else if (security.contains(Constants.SCAN_WEP)) {
-            return Constants.SET_WEP;
-        } else return Constants.SET_OPEN;
-
-    }
-
-    public WifiConfiguration setNetworkCiphers(WifiConfiguration configuration, String security) {
-
-        if (security.contains(Constants.CFG_CCMP)) {
-            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-        }
-        if (security.contains(Constants.CFG_TKIP)) {
-            configuration.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-        }
-        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
-        configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
-
-        return configuration;
-
-    }
-
 
 }

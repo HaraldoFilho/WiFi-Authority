@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/7/17 12:54 AM
+ *  Last modified : 7/8/17 12:17 AM
  *
  *  -----------------------------------------------------------
  */
@@ -23,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -32,16 +33,14 @@ import java.util.ListIterator;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private Bundle bundle;
-
-    private String ssid;
+    private GoogleMap map;
 
     private double latitude;
-    private double longitude;
     private double minLatitude;
-    private double minLongitude;
     private double maxLatitude;
+
+    private double longitude;
+    private double minLongitude;
     private double maxLongitude;
 
 
@@ -54,18 +53,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Set the base minimum values for compare.
+        // These are the maximum values they can have
         minLatitude = Constants.MAX_LATITUDE;
-        maxLatitude = Constants.MIN_LATITUDE;
         minLongitude = Constants.MAX_LONGITUDE;
-        maxLongitude = Constants.MIN_LONGITUDE;
 
-        bundle = getIntent().getExtras();
+        // Set the base maximum values for compare.
+        // These are the minimum values they can have
+        maxLatitude = Constants.MIN_LATITUDE;
+        maxLongitude = Constants.MIN_LONGITUDE;
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
 
         ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(this);
         List<NetworkAdditionalData> networksData = configuredNetworks.getConfiguredNetworksData();
@@ -73,10 +75,14 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         ListIterator iterator = networksData.listIterator();
 
         while (iterator.hasNext()) {
-            ssid = networksData.get(iterator.nextIndex()).getSSID();
+
+            // Get latitude and longitude values for each configured network
             latitude = networksData.get(iterator.nextIndex()).getLatitude();
             longitude = networksData.get(iterator.nextIndex()).getLongitude();
 
+            // Get the minimum and maximum values
+            // for latitude and longitude
+            // of all networks
             if (latitude < minLatitude) {
                 minLatitude = latitude;
             }
@@ -91,50 +97,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             }
 
             if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
+                // Put a marker on the network position with its SSID as label
                 LatLng networkPosition = new LatLng(latitude, longitude);
-                Marker marker = mMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
+                String ssid = networksData.get(iterator.nextIndex()).getSSID();
+                Marker marker = map.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
             }
 
             iterator.next();
+
         }
 
-        double deltaLatitude = maxLatitude - minLatitude;
-        double deltaLongitude = maxLongitude - minLongitude;
+        // Set the area where all networks are visible
+        LatLngBounds allNetworksArea = new LatLngBounds(
+                new LatLng(minLatitude, minLongitude), new LatLng(maxLatitude, maxLongitude));
 
-        double maxDelta;
+        // Set the camera to the greatest possible zoom level that includes all networks
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(allNetworksArea,
+                (int) getResources().getDimension(R.dimen.map_bounds_padding)));
 
-        if (deltaLatitude > deltaLongitude) {
-            maxDelta = deltaLatitude;
-        } else {
-            maxDelta = deltaLongitude;
-        }
-
-        maxDelta = absoluteValue(maxDelta);
-
-        if (maxDelta > Constants.MAX_MAX_DELTA) {
-            maxDelta = Constants.MAX_MAX_DELTA;
-        }
-
-        maxDelta /= Constants.MAP_MAX_ZOOM_LEVEL;
-        maxDelta -= Constants.MAP_MIN_ZOOM_LEVEL;
-
-        maxDelta = absoluteValue(maxDelta);
-
-        int zoomLevel = (int) absoluteValue(
-                (Constants.MAP_MAX_ZOOM_LEVEL - Constants.MAP_MIN_ZOOM_LEVEL) - maxDelta);
-
-        LatLng currentLocation = new LatLng(bundle.getDouble(Constants.KEY_LATITUDE),
-                bundle.getDouble(Constants.KEY_LONGITUDE));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
-
-    }
-
-    private double absoluteValue(double value) {
-        if (value < 0) {
-            value *= -1;
-        }
-        return value;
     }
 
 }

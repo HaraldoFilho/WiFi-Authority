@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/6/17 10:35 PM
+ *  Last modified : 7/8/17 12:53 AM
  *
  *  -----------------------------------------------------------
  */
@@ -77,13 +77,17 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 return;
             }
 
-            // remove duplicated networks from list
+            // remove duplicated networks from list if the show all aps setting is off
             if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+
                 String uniques = "";
                 ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
+
                 while (listIteratorDuplicate.hasNext()) {
+
                     int indexDuplicate = listIteratorDuplicate.nextIndex();
                     String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
+
                     if (uniques.contains(ssid)) {
                         listIteratorDuplicate.next();
                         listIteratorDuplicate.remove();
@@ -91,11 +95,16 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         uniques = uniques.concat("[" + ssid + "]");
                         listIteratorDuplicate.next();
                     }
+
                 }
             }
 
+
+            // Remove security levels according to settings
             ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
+
             while (scanResultListIterator.hasNext()) {
+
                 int index = scanResultListIterator.nextIndex();
                 String ssid = wifiScannedNetworks.get(index).SSID;
                 String capabilities = wifiScannedNetworks.get(index).capabilities;
@@ -104,6 +113,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
                         getResources().getString(R.string.pref_def_security));
 
+                // Set if security is WEP or open
                 boolean isWep = false;
                 boolean isOpen = false;
 
@@ -118,7 +128,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
                 }
 
-                // Get signal levels to remove
+                // Get signal levels to show according to settings
                 minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
                         getResources().getString(R.string.pref_def_signal));
 
@@ -140,9 +150,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
                 }
 
-                int signalLevel = wifiManager.calculateSignalLevel(wifiScannedNetworks.get(index).level, Constants.LEVELS);
+                int signalLevel = wifiManager.calculateSignalLevel(
+                        wifiScannedNetworks.get(index).level, Constants.LEVELS);
 
-                // Remove insecure (if option is activated), low signal levels and hidden networks from list
+                // Remove insecure (if option is on), low signal levels and hidden networks from list
                 if ((minSecurityToShow.matches(Constants.PREF_SECURITY_WPA_EAP) && (isWep || isOpen)
                         || (minSecurityToShow.matches(Constants.PREF_SECURITY_WEP) && (isOpen)))
                         || (signalLevel < minSignalLevel)
@@ -154,30 +165,31 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
             }
 
+            // If there is no network to show according to settings, inform this
             if (wifiScannedNetworks.isEmpty()) {
                 if (minSecurityToShow.matches(Constants.PREF_SECURITY_OPEN)
                         || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
                     Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
                 }
-            }
-
-            // sort list by decreasing order of signal level
-            Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
-                @Override
-                public int compare(ScanResult lhs, ScanResult rhs) {
-                    return wifiManager.compareSignalLevel(rhs.level, lhs.level);
-                }
-            });
-
-
-            if (networksListAdapter == null) {
-                networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
-                networksListView.setAdapter(networksListAdapter);
             } else {
-                // Refresh list
-                networksListAdapter.clear();
-                networksListAdapter.addAll(wifiScannedNetworks);
-                networksListAdapter.notifyDataSetChanged();
+                // sort list by decreasing order of signal level
+                Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
+                    @Override
+                    public int compare(ScanResult lhs, ScanResult rhs) {
+                        return wifiManager.compareSignalLevel(rhs.level, lhs.level);
+                    }
+                });
+
+
+                if (networksListAdapter == null) {
+                    networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
+                    networksListView.setAdapter(networksListAdapter);
+                } else {
+                    // Refresh list
+                    networksListAdapter.clear();
+                    networksListAdapter.addAll(wifiScannedNetworks);
+                    networksListAdapter.notifyDataSetChanged();
+                }
             }
 
         }
@@ -330,8 +342,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             wifiManager.setWifiEnabled(true);
         }
         Toasts.cancelAllToasts();
-        finish();
         super.onBackPressed();
+        finish();
     }
 
     @Override

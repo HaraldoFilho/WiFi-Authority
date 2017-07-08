@@ -16,6 +16,9 @@
     <dimen name="item_elevation">3dp</dimen>
     <dimen name="item_spacing">7dp</dimen>
 
+    <dimen name="button_padding_horizontal">30dp</dimen>
+    <dimen name="button_padding_vertical">20dp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_elevation">15dp</dimen>
 
@@ -29,6 +32,8 @@
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+
+    <dimen name="map_bounds_padding">100dp</dimen>
 
     <dimen name="view_header_height">1dp</dimen>
     <dimen name="view_footer_height">1dp</dimen>

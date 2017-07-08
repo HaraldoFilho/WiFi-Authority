@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : WiFiCheckActivity.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/8/17 12:39 AM
  *
  *  -----------------------------------------------------------
  */
@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 public class WiFiCheckActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,40 +33,27 @@ public class WiFiCheckActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         // check if WiFi is enabled
-        if (wifiManager.isWifiEnabled()) { // if it is enabled set the networks list adapter
+        if (wifiManager.isWifiEnabled()) {
 
+            // Opens the activity that was called
             switch (bundle.getInt(Constants.KEY_ACTIVITY)) {
 
                 case Constants.ACTIVITY_MAIN:
-                    startMainActivity();
+                    intent = new Intent(this, MainActivity.class);
                     break;
 
                 case Constants.ACTIVITY_SCAN:
-                    startScanActivity();
+                    intent = new Intent(this, ScanNetworksActivity.class);
                     break;
 
             }
 
-            finish();
-
-        } else {
-
-            switch (bundle.getInt(Constants.KEY_ACTIVITY)) {
-
-                case Constants.ACTIVITY_MAIN:
-                    // if is disabled show dialog to ask to enable it
-                    startWiFiDisabledActivity();
-                    break;
-
-                case Constants.ACTIVITY_SCAN:
-                    wifiManager.setWifiEnabled(true);
-                    startScanActivity();
-                    break;
-
-            }
-
+        } else { // if is disabled show button to turn it on
+            intent = new Intent(this, WiFiDisabledActivity.class);
         }
 
+        // Call activity and finish this
+        startActivity(intent);
         finish();
 
     }
@@ -75,24 +63,10 @@ public class WiFiCheckActivity extends AppCompatActivity {
         if (!wifiManager.isWifiEnabled()) {
             super.onBackPressed();
         } else {
-            startMainActivity();
+            intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
         finish();
-    }
-
-    private void startWiFiDisabledActivity() {
-        Intent intent = new Intent(this, WiFiDisabledActivity.class);
-        startActivity(intent);
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    private void startScanActivity() {
-        Intent intent = new Intent(this, ScanNetworksActivity.class);
-        startActivity(intent);
     }
 
 }

@@ -1,3 +1,7 @@
+#### **0.4.2**
+- Bugs Fixed.
+- Improvements on user interface.
+
 #### **0.4.1**
 - Fixed bug of negative numbers being displayed on ip addresses of 'Network Details'.
 - Fixed bug of app crashing when clicking on 'help' options menu item of 'Available Networks'.

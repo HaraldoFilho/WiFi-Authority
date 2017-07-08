@@ -37,10 +37,10 @@ public class Toasts {
         context = c;
     }
 
+
     // Toast to notify that there is no location information
     public static void showMissingInformation(Context c, int textId) {
         missingInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
-        missingInformation.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         missingInformation.show();
     }
 
@@ -49,6 +49,7 @@ public class Toasts {
             missingInformation.cancel();
         }
     }
+
 
     // Toast to notify that it is unable to remove network
     public static void showUnableRemoveNetwork(Context c) {
@@ -63,6 +64,7 @@ public class Toasts {
         }
     }
 
+
     // Toast to notify that there is no network found or to display
     public static void showNoNetworkFound(Context c, int textId) {
         noNetworkFound = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
@@ -75,6 +77,7 @@ public class Toasts {
             noNetworkFound.cancel();
         }
     }
+
 
     // Toast to notify that wifi is disabled
     public static void showWiFiDisabled(Context c) {
@@ -89,6 +92,7 @@ public class Toasts {
         }
     }
 
+
     // Toast to notify that network is already configured
     public static void showNetworkIsConfigured(Context c) {
         networkIsConfigured = Toast.makeText((c), R.string.toast_network_is_configured, Toast.LENGTH_SHORT);
@@ -102,6 +106,7 @@ public class Toasts {
         }
     }
 
+
     // Toast to notify a network connection error
     public static void showNetworkConnectionError(Context c, int textId) {
         networkConnectionError = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
@@ -113,6 +118,7 @@ public class Toasts {
             networkConnectionError.cancel();
         }
     }
+
 
     // Toast to notify that is getting Legal Notices text from the internet
     public static void createLegalNotices() {
@@ -135,7 +141,7 @@ public class Toasts {
     }
 
 
-    // Toast to notify that is getting a options_help page from the internet
+    // Toast to notify that is getting an options_help page from the internet
 
     public static void createHelpPage() {
         helpPage = Toast.makeText((context), R.string.toast_get_help_page, Toast.LENGTH_SHORT);

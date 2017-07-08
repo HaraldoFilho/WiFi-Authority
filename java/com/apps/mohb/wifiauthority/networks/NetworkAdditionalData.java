@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkAdditionalData.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/8/17 1:41 AM
  *
  *  -----------------------------------------------------------
  */
@@ -23,10 +23,6 @@ public class NetworkAdditionalData {
     private double latitude;
     private double longitude;
 
-
-    public NetworkAdditionalData() {
-        // empty constructor
-    }
 
     public NetworkAdditionalData(String description, String ssid, String bssid,
                                  String security, String password, double latitude, double longitude) {
