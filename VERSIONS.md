@@ -1,3 +1,6 @@
+#### **0.4.3**
+- Fixed bug of app crashing when opening map.
+
 #### **0.4.2**
 - Bugs Fixed.
 - Improvements on user interface.

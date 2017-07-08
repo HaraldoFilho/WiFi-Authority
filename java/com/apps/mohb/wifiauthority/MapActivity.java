@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/8/17 12:17 AM
+ *  Last modified : 7/8/17 10:10 AM
  *
  *  -----------------------------------------------------------
  */
@@ -14,6 +14,7 @@ package com.apps.mohb.wifiauthority;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.DisplayMetrics;
 
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.apps.mohb.wifiauthority.networks.NetworkAdditionalData;
@@ -109,11 +110,25 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
 
         // Set the area where all networks are visible
-        LatLngBounds allNetworksArea = new LatLngBounds(
-                new LatLng(minLatitude, minLongitude), new LatLng(maxLatitude, maxLongitude));
+        LatLngBounds allNetworksArea;
+
+        // Check if southern values are lower that northern values
+        if((minLatitude < maxLatitude)&&(minLongitude < maxLongitude)) {
+            allNetworksArea = new LatLngBounds(
+                    new LatLng(minLatitude, minLongitude), new LatLng(maxLatitude, maxLongitude));
+        }
+        else {
+            allNetworksArea = new LatLngBounds(
+                    new LatLng(maxLatitude, maxLongitude), new LatLng(minLatitude, minLongitude));
+        }
+
+        // Get the display size to construct map boundaries prior to layout phase
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         // Set the camera to the greatest possible zoom level that includes all networks
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(allNetworksArea,
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(
+                allNetworksArea, displayMetrics.widthPixels, displayMetrics.heightPixels,
                 (int) getResources().getDimension(R.dimen.map_bounds_padding)));
 
     }
