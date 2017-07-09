@@ -177,15 +177,15 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the NetworkNameChangedDialogListener so we can send events to the host
-            mListener = (NetworkNameChangedDialogListener) activity;
+            mListener = (NetworkNameChangedDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement NetworkNameChangedDialogListener");
         }
     }

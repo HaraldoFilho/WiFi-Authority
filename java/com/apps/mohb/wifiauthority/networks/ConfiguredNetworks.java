@@ -34,7 +34,7 @@ import java.util.ListIterator;
 
 public class ConfiguredNetworks {
 
-    private static ArrayList<NetworkAdditionalData> networksData;
+    private static ArrayList<NetworkData> networksData;
     public static NetworkInfo.DetailedState supplicantNetworkState;
     public static NetworkInfo.DetailedState lastSupplicantNetworkState;
     public static String supplicantSSID;
@@ -71,15 +71,15 @@ public class ConfiguredNetworks {
         if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
             password = "";
         }
-        NetworkAdditionalData data = new NetworkAdditionalData(description, getDataSSID(ssid), bssid,
+        NetworkData data = new NetworkData(description, getDataSSID(ssid), bssid,
                 security, password, latitude, longitude);
         networksData.add(data);
         saveDataState();
     }
 
     public boolean removeNetworkData(String ssid) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -96,7 +96,7 @@ public class ConfiguredNetworks {
 
     // GETTERS
 
-    public List<NetworkAdditionalData> getConfiguredNetworksData() {
+    public List<NetworkData> getConfiguredNetworksData() {
         return networksData;
     }
 
@@ -114,8 +114,8 @@ public class ConfiguredNetworks {
     }
 
     public boolean hasNetworkAdditionalData(String ssid) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -127,8 +127,8 @@ public class ConfiguredNetworks {
     }
 
     public String getMacAddressBySSID(String ssid) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -140,8 +140,8 @@ public class ConfiguredNetworks {
     }
 
     public String getNetworkSecurityBySSID(String ssid) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -154,8 +154,8 @@ public class ConfiguredNetworks {
 
     public double getLatitudeBySSID(String ssid) {
 
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -169,8 +169,8 @@ public class ConfiguredNetworks {
 
     public double getLongitudeBySSID(String ssid) {
 
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -183,8 +183,8 @@ public class ConfiguredNetworks {
     }
 
     public String getDescriptionBySSID(String ssid) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -197,8 +197,8 @@ public class ConfiguredNetworks {
 
     public WifiConfiguration getConfigurationToAdd(
             List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (mac.matches(data.getMacAddress())) {
@@ -227,8 +227,8 @@ public class ConfiguredNetworks {
 
     public String getPassword(String ssid) {
 
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -274,8 +274,8 @@ public class ConfiguredNetworks {
 
     public boolean setLocationBySSID(String ssid, double latitude, double longitude) {
 
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -291,8 +291,8 @@ public class ConfiguredNetworks {
 
     public boolean setLocationByMacAddress(String bssid, double latitude, double longitude) {
 
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (bssid.matches(data.getMacAddress())) {
@@ -307,8 +307,8 @@ public class ConfiguredNetworks {
     }
 
     public boolean setMacAddressBySSID(String ssid, String mac) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -323,8 +323,8 @@ public class ConfiguredNetworks {
     }
 
     public boolean setDescriptionBySSID(String ssid, String description) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDescriptionBySSID(ssid).matches(data.getSSID())) {
@@ -339,8 +339,8 @@ public class ConfiguredNetworks {
     }
 
     public boolean setPassword(String ssid, String password) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -411,8 +411,8 @@ public class ConfiguredNetworks {
     // UPDATERS
 
     public boolean updateNetworkDescription(String ssid, String description) {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
@@ -428,8 +428,8 @@ public class ConfiguredNetworks {
 
     public WifiConfiguration updateSSIDbyMacAddress(
             List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
-        ListIterator<NetworkAdditionalData> iterator = networksData.listIterator();
-        NetworkAdditionalData data;
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
 
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
@@ -485,7 +485,7 @@ public class ConfiguredNetworks {
 
     public boolean isConfiguredByMacAddress(String mac) {
 
-        ListIterator<NetworkAdditionalData> listIterator = networksData.listIterator();
+        ListIterator<NetworkData> listIterator = networksData.listIterator();
 
         while (listIterator.hasNext()) {
             int index = listIterator.nextIndex();
@@ -563,7 +563,7 @@ public class ConfiguredNetworks {
 
     // JSON
 
-    public void setDataState(ArrayList<NetworkAdditionalData> data) throws IOException {
+    public void setDataState(ArrayList<NetworkData> data) throws IOException {
         String jsonData = writeJsonString(data);
         editor.putString(Constants.DATA, jsonData);
         editor.commit();
@@ -582,7 +582,7 @@ public class ConfiguredNetworks {
     }
 
     // create a json string of a list of location items
-    private String writeJsonString(ArrayList<NetworkAdditionalData> dataItems) throws IOException {
+    private String writeJsonString(ArrayList<NetworkData> dataItems) throws IOException {
         StringWriter stringWriter = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(stringWriter);
         jsonWriter.setIndent("  ");
@@ -592,16 +592,16 @@ public class ConfiguredNetworks {
     }
 
     // write all locations to json string
-    private void writeDataArrayList(JsonWriter writer, ArrayList<NetworkAdditionalData> dataItems) throws IOException {
+    private void writeDataArrayList(JsonWriter writer, ArrayList<NetworkData> dataItems) throws IOException {
         writer.beginArray();
-        for (NetworkAdditionalData dataItem : dataItems) {
+        for (NetworkData dataItem : dataItems) {
             writeDataItem(writer, dataItem);
         }
         writer.endArray();
     }
 
     // write a single location to json string
-    private void writeDataItem(JsonWriter writer, NetworkAdditionalData dataItem) throws IOException {
+    private void writeDataItem(JsonWriter writer, NetworkData dataItem) throws IOException {
         writer.beginObject();
         writer.name(Constants.JSON_DESCRIPTION).value(dataItem.getDescription());
         writer.name(Constants.JSON_SSID).value(dataItem.getSSID());
@@ -614,7 +614,7 @@ public class ConfiguredNetworks {
     }
 
     // read a json string containing a list of location items
-    private ArrayList<NetworkAdditionalData> readJsonString(String jsonString) throws IOException {
+    private ArrayList<NetworkData> readJsonString(String jsonString) throws IOException {
         JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
         try {
             return readDataArrayList(jsonReader);
@@ -624,8 +624,8 @@ public class ConfiguredNetworks {
     }
 
     // read a list of location items from a json string
-    private ArrayList<NetworkAdditionalData> readDataArrayList(JsonReader jsonReader) throws IOException {
-        ArrayList<NetworkAdditionalData> dataItems = new ArrayList<>();
+    private ArrayList<NetworkData> readDataArrayList(JsonReader jsonReader) throws IOException {
+        ArrayList<NetworkData> dataItems = new ArrayList<>();
         jsonReader.beginArray();
         while (jsonReader.hasNext()) {
             dataItems.add(readDataItem(jsonReader));
@@ -635,7 +635,7 @@ public class ConfiguredNetworks {
     }
 
     // read a single location item from a json string
-    private NetworkAdditionalData readDataItem(JsonReader jsonReader) throws IOException {
+    private NetworkData readDataItem(JsonReader jsonReader) throws IOException {
         String dataDescription = "";
         String dataSSID = "";
         String dataBSSID = "";
@@ -675,7 +675,7 @@ public class ConfiguredNetworks {
 
         }
         jsonReader.endObject();
-        NetworkAdditionalData dataItem = new NetworkAdditionalData(dataDescription, dataSSID, dataBSSID,
+        NetworkData dataItem = new NetworkData(dataDescription, dataSSID, dataBSSID,
                 dataSecurity, dataPassword, dataLatitude, dataLongitude);
         return dataItem;
     }

@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.4.3</string>
-    <string name="version_code" translatable="false">40</string>
+    <string name="version_number" translatable="false">0.4.4</string>
+    <string name="version_code" translatable="false">41</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -50,6 +50,7 @@
     <string name="action_feedback">Feedback</string>
     <string name="action_question">Question</string>
     <string name="action_about_application">about application</string>
+    <string name="action_restore_defaults">Restore defaults</string>
 
     <!--Context menus-->
     <string name="context_edit_description">Edit description</string>
@@ -84,10 +85,12 @@
     <string name="dialog_change_password">Change password</string>
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
+    <string name="alert_title_reset_preferences">Restore defaults?</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
     <string name="alert_message_delete_network">This action can not be undone\n</string>
     <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to delete networks unless they were added by WiFi Authority.\n</string>
     <string name="alert_message_network_ssid_changed">The name (SSID) of the following network has been changed. Due to changes on the policy regarding network management, from Android 6.0 and higher, a network can be updated or removed only if it was added by the same application. But you can re-add the network with the new name by typing its password again:</string>
+    <string name="alert_message_reset_preferences">All settings will be restored to the default values\n</string>
     <string name="alert_button_no">No</string>
     <string name="alert_button_yes">Yes</string>
     <string name="alert_button_not_warn">Do not warn again</string>
@@ -136,9 +139,9 @@
 
     <!--Help pages-->
     <string name="url_website">https://mohb-apps.com/</string>
-    <string name="url_help">wifiauthority-help</string>
     <string name="url_help_main">wifiauthority-help-your-networks</string>
     <string name="url_help_scan">wifiauthority-help-available-networks</string>
+    <string name="url_help_settings">wifiauthority-help-settings</string>
     <string name="url_contact">contact</string>
     <string name="url_bug_report">bug-report</string>
 

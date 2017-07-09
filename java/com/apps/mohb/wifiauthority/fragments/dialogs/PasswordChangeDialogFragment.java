@@ -15,6 +15,7 @@ package com.apps.mohb.wifiauthority.fragments.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -124,15 +125,15 @@ public class PasswordChangeDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the PasswordChangeDialogListener so we can send events to the host
-            mListener = (PasswordChangeDialogListener) activity;
+            mListener = (PasswordChangeDialogListener) context;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement PasswordChangeDialogListener");
         }
     }

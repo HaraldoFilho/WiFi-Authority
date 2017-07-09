@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : SettingsActivity.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/9/17 12:05 PM
  *
  *  -----------------------------------------------------------
  */
@@ -14,6 +14,7 @@ package com.apps.mohb.wifiauthority;
 
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -21,8 +22,13 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
+
+import com.apps.mohb.wifiauthority.fragments.dialogs.PreferencesResetAlertFragment;
 
 
 /**
@@ -36,7 +42,10 @@ import android.view.MenuItem;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends AppCompatPreferenceActivity {
+public class SettingsActivity extends AppCompatActivity implements
+        PreferencesResetAlertFragment.PreferencesResetDialogListener {
+
+    GeneralPreferenceFragment settingsFragment;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -96,7 +105,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
 
         // Create settings fragment which actually contain the settings screen
-        GeneralPreferenceFragment settingsFragment = new GeneralPreferenceFragment();
+        settingsFragment = new GeneralPreferenceFragment();
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, settingsFragment)
                 .commit();
@@ -116,15 +125,40 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_settings, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
+        switch (id) {
+
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            // Reset to defaults
+            case R.id.action_defaults:
+                DialogFragment alertDialog = new PreferencesResetAlertFragment();
+                alertDialog.show(getSupportFragmentManager(), "PreferencesResetAlertFragment");
+                break;
+
+            // Help
+            case R.id.action_help_settings:
+                Intent intent = new Intent(this, HelpActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("url", getString(R.string.url_help_settings));
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
         }
-        return super.onMenuItemSelected(featureId, item);
+
+        return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * This method stops fragment injection in malicious applications.
@@ -158,6 +192,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         }
 
+    }
+
+
+    // RESET TO DEFAULTS DIALOG
+
+    @Override // Yes
+    public void onAlertDialogPositiveClick(DialogFragment dialog) {
+        // Clear settings on memory
+        PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
+        // Set defaults on memory
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        // Update settings screen with the default values
+        getFragmentManager().beginTransaction().detach(settingsFragment);
+        settingsFragment = new GeneralPreferenceFragment();
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, settingsFragment)
+                .commit();
+    }
+
+    @Override // No
+    public void onAlertDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
     }
 
 }

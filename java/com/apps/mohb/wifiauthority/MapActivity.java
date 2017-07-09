@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/8/17 10:10 AM
+ *  Last modified : 7/9/17 12:05 PM
  *
  *  -----------------------------------------------------------
  */
@@ -17,7 +17,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
-import com.apps.mohb.wifiauthority.networks.NetworkAdditionalData;
+import com.apps.mohb.wifiauthority.networks.NetworkData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -71,7 +71,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         map = googleMap;
 
         ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(this);
-        List<NetworkAdditionalData> networksData = configuredNetworks.getConfiguredNetworksData();
+        List<NetworkData> networksData = configuredNetworks.getConfiguredNetworksData();
 
         ListIterator iterator = networksData.listIterator();
 
@@ -112,12 +112,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         // Set the area where all networks are visible
         LatLngBounds allNetworksArea;
 
-        // Check if southern values are lower that northern values
-        if((minLatitude < maxLatitude)&&(minLongitude < maxLongitude)) {
+        // Check if southern values are lower than northern values
+        if ((minLatitude < maxLatitude) && (minLongitude < maxLongitude)) {
             allNetworksArea = new LatLngBounds(
                     new LatLng(minLatitude, minLongitude), new LatLng(maxLatitude, maxLongitude));
-        }
-        else {
+        } else {
             allNetworksArea = new LatLngBounds(
                     new LatLng(maxLatitude, maxLongitude), new LatLng(minLatitude, minLongitude));
         }

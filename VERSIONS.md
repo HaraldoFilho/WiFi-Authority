@@ -1,3 +1,7 @@
+#### **0.4.4**
+- Added option to restore settings to default values.
+- Added settings help page.
+
 #### **0.4.3**
 - Fixed bug of app crashing when opening map.
 

@@ -25,7 +25,6 @@
     <string name="layout_no_play_services_title">Google Play Services não está instalado ou precisa ser atualizado</string>
     <string name="layout_press_back_button">Pressione o botão de voltar para sair</string>
     <string name="info_developer">Desenvolvedor:</string>
-    <string name="url_help">wifiauthority-ajuda</string>
     <string name="url_help_main">wifiauthority-ajuda-suas-redes</string>
     <string name="toast_get_help_page">Carregando página de ajuda da internet...</string>
     <string name="action_material_icons">Atribuição dos ícones</string>
@@ -127,6 +126,9 @@
     <string name="layout_net_signal_level">"Nível do sinal: "</string>
     <string name="layout_net_mac">"Endereço MAC: "</string>
     <string name="button_turn_wifi_on">LIGAR WIFI</string>
-
+    <string name="action_restore_defaults">Restaurar padrões</string>
+    <string name="alert_title_reset_preferences">Restaurar padrões?</string>
+    <string name="alert_message_reset_preferences">Todas as configurações serão restauradas para os valores padrão\n</string>
+    <string name="url_help_settings">wifiauthority-ajuda-configuracoes</string>
 
 </resources>
