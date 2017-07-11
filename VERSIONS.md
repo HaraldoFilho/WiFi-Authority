@@ -1,3 +1,6 @@
+#### **0.4.6**
+- Fixed bugs.
+
 #### **0.4.5**
 - Implemented garbage collector to delete data from networks that were removed by Android system.
 

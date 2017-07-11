@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/10/17 9:43 PM
+ *  Last modified : 7/10/17 11:26 PM
  *
  *  -----------------------------------------------------------
  */
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -95,7 +96,8 @@ public class ConfiguredNetworks {
 
     }
 
-    public void collectGarbage(List<WifiConfiguration> wifiConfiguredNetworks) {
+    public void collectGarbage(List<WifiConfiguration> wifiConfiguredNetworks)
+            throws ConcurrentModificationException {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/10/17 9:44 PM
+ *  Last modified : 7/10/17 11:37 PM
  *
  *  -----------------------------------------------------------
  */
@@ -58,6 +58,7 @@ import com.google.android.gms.location.LocationServices;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -677,7 +678,11 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Remove data from networks that were removed outside application
-        configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
+        try {
+            configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
+        }
 
         // Check if location permissions are granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -787,7 +792,7 @@ public class MainActivity extends AppCompatActivity implements
     // Sort networks by their descriptions
     private void sortByDescription() {
 
-        if (configuredNetworks != null) {
+        if ((wifiConfiguredNetworks != null) && (configuredNetworks != null)) {
             // sort list by ascending order of network description
             Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
 
@@ -805,7 +810,7 @@ public class MainActivity extends AppCompatActivity implements
     // Sort the networks by their names
     private void sortByName() {
 
-        if (configuredNetworks != null) {
+        if (wifiConfiguredNetworks != null) {
             // sort list by ascending order of network name
             Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
                 @Override

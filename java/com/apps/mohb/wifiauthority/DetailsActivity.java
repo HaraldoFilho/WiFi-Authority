@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/8/17 1:32 AM
+ *  Last modified : 7/10/17 11:36 PM
  *
  *  -----------------------------------------------------------
  */
@@ -91,8 +91,16 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Check if the network is connected
         if (ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID()))) {
+            // Get IP address string in the format XXX.XXX.XXX.XXX
+            String ipAddressString;
+            try {
+                ipAddressString = getIpAddressString(wifiInfo.getIpAddress());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                ipAddressString = "";
+                e.printStackTrace();
+            }
             // Show IP address
-            txtNetworkIpAddress.setText(getIpAddressString(wifiInfo.getIpAddress()));
+            txtNetworkIpAddress.setText(ipAddressString);
             // Show link speed
             txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
             txtNetworkLinkSpeedUnit.setText(" " + WifiInfo.LINK_SPEED_UNITS);
@@ -131,7 +139,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     // The IP address information is an integer representing the bytes corresponding to each ip number
     // This method gets the IP address to show on a human readable form
-    private String getIpAddressString(int ipAddressInteger) {
+    private String getIpAddressString(int ipAddressInteger) throws ArrayIndexOutOfBoundsException {
 
         // Get the bytes from the integer
         byte[] ipAddressBytes = BigInteger.valueOf(Integer.reverseBytes(ipAddressInteger)).toByteArray();
