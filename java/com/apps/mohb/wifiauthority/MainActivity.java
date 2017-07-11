@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/6/17 11:46 PM
+ *  Last modified : 7/10/17 9:44 PM
  *
  *  -----------------------------------------------------------
  */
@@ -675,6 +675,9 @@ public class MainActivity extends AppCompatActivity implements
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Remove data from networks that were removed outside application
+        configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
 
         // Check if location permissions are granted
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

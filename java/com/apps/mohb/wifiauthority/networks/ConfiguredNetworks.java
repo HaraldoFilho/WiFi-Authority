@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/8/17 1:41 AM
+ *  Last modified : 7/10/17 9:43 PM
  *
  *  -----------------------------------------------------------
  */
@@ -67,7 +67,9 @@ public class ConfiguredNetworks {
 
     }
 
-    public void addNetworkData(String description, String ssid, String bssid, String security, String password, double latitude, double longitude) {
+
+    public void addNetworkData(String description, String ssid, String bssid,
+                               String security, String password, double latitude, double longitude) {
         if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
             password = "";
         }
@@ -90,6 +92,32 @@ public class ConfiguredNetworks {
             iterator.next();
         }
         return false;
+
+    }
+
+    public void collectGarbage(List<WifiConfiguration> wifiConfiguredNetworks) {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        String ssid;
+        String listOfNetworks = "";
+
+        for (int i = 0; i < wifiConfiguredNetworks.size(); i++) {
+            ssid = wifiConfiguredNetworks.get(i).SSID;
+            listOfNetworks = listOfNetworks.concat(ssid + " ");
+        }
+
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            ssid = data.getSSID();
+            if (!listOfNetworks.contains(ssid)) {
+                networksData.remove(iterator.nextIndex());
+                saveDataState();
+            }
+            if (iterator.hasNext()) {
+                iterator.next();
+            }
+        }
 
     }
 

@@ -1,3 +1,6 @@
+#### **0.4.5**
+- Implemented garbage collector to delete data from networks that were removed by Android system.
+
 #### **0.4.4**
 - Added option to restore settings to default values.
 - Added settings help page.

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/9/17 12:05 PM
+ *  Last modified : 7/10/17 7:11 PM
  *
  *  -----------------------------------------------------------
  */
@@ -81,28 +81,30 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
             latitude = networksData.get(iterator.nextIndex()).getLatitude();
             longitude = networksData.get(iterator.nextIndex()).getLongitude();
 
-            // Get the minimum and maximum values
-            // for latitude and longitude
-            // of all networks
-            if (latitude < minLatitude) {
-                minLatitude = latitude;
-            }
-            if (latitude > maxLatitude) {
-                maxLatitude = latitude;
-            }
-            if (longitude < minLongitude) {
-                minLongitude = longitude;
-            }
-            if (longitude > maxLongitude) {
-                maxLongitude = longitude;
-            }
-
             if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
+
+                // Get the minimum and maximum values
+                // for latitude and longitude
+                // of all networks
+                if (latitude < minLatitude) {
+                    minLatitude = latitude;
+                }
+                if (latitude > maxLatitude) {
+                    maxLatitude = latitude;
+                }
+                if (longitude < minLongitude) {
+                    minLongitude = longitude;
+                }
+                if (longitude > maxLongitude) {
+                    maxLongitude = longitude;
+                }
+
                 // Put a marker on the network position with its SSID as label
                 LatLng networkPosition = new LatLng(latitude, longitude);
                 String ssid = networksData.get(iterator.nextIndex()).getSSID();
                 Marker marker = map.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
+
             }
 
             iterator.next();
