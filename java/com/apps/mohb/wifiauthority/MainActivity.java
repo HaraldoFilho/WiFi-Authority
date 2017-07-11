@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/10/17 11:37 PM
+ *  Last modified : 7/11/17 12:16 AM
  *
  *  -----------------------------------------------------------
  */
@@ -677,10 +677,12 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-        // Remove data from networks that were removed outside application
+        // Delete data from networks that were removed by Android system
         try {
             configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
         } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -772,16 +774,20 @@ public class MainActivity extends AppCompatActivity implements
 
             }
 
-            // Create an list adapter if one was not created yet
-            if (networksListAdapter == null) {
-                networksListAdapter = new ConfiguredNetworksListAdapter(this,
-                        wifiConfiguredNetworks, configuredNetworks);
-                networksListView.setAdapter(networksListAdapter);
-            } else {
-                // Refresh list
-                networksListAdapter.clear();
-                networksListAdapter.addAll(wifiConfiguredNetworks);
-                networksListAdapter.notifyDataSetChanged();
+            try {
+                // Create a list adapter if one was not created yet
+                if (networksListAdapter == null) {
+                    networksListAdapter = new ConfiguredNetworksListAdapter(this,
+                            wifiConfiguredNetworks, configuredNetworks);
+                    networksListView.setAdapter(networksListAdapter);
+                } else {
+                    // Refresh list
+                    networksListAdapter.clear();
+                    networksListAdapter.addAll(wifiConfiguredNetworks);
+                    networksListAdapter.notifyDataSetChanged();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
             wifiManager.setWifiEnabled(true);
