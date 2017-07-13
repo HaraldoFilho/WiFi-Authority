@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/12/17 11:55 PM
+ *  Last modified : 7/13/17 9:34 AM
  *
  *  -----------------------------------------------------------
  */
@@ -123,15 +123,12 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            wifiScannedNetworks = wifiManager.getScanResults();
+
             // If WiFi is enabled, refresh list of networks
             if (wifiManager.isWifiEnabled()) {
                 updateListOfNetworks();
-            } else {
-                return;
             }
-
-            wifiScannedNetworks = wifiManager.getScanResults();
-
 
             // Get the last user's none location. Most of the times
             // this corresponds to user's current location or very near
@@ -343,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (wifiManager.isWifiEnabled()) {
+                if (!wifiManager.isWifiEnabled()) {
                     wifiManager.setWifiEnabled(true);
                 }
                 startScanNetworksActivity();
