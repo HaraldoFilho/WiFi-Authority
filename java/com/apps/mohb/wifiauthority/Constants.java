@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/8/17 12:25 AM
+ *  Last modified : 7/12/17 10:52 PM
  *
  *  -----------------------------------------------------------
  */
@@ -44,7 +44,6 @@ public class Constants {
     public static final String KEY_LONGITUDE    = "LONGITUDE";
     public static final String KEY_OLD_NAME     = "OLD_SSID";
     public static final String KEY_NEW_NAME     = "NEW_SSID";
-    public static final String KEY_ACTIVITY     = "ACTIVITY";
 
     // Network security
     public static final String KEY_NONE_WEP  = "{0}";
@@ -84,10 +83,6 @@ public class Constants {
     // FAB alpha
     public static final float FAB_OPAQUE       = (float) 1.0;
     public static final float FAB_TRANSLUCENT  = (float) 0.8;
-
-    // Caller Activity IDs for WiFiCheckActivity
-    public static final int ACTIVITY_MAIN  = 0;
-    public static final int ACTIVITY_SCAN  = 1;
 
     // Network updated result failed code
     public static final int NETWORK_UPDATE_FAIL  = -1;

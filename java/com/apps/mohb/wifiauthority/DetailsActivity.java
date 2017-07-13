@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/10/17 11:36 PM
+ *  Last modified : 7/12/17 10:51 PM
  *
  *  -----------------------------------------------------------
  */
@@ -13,6 +13,7 @@
 package com.apps.mohb.wifiauthority;
 
 import android.content.Context;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -90,7 +91,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         txtNetworkSignalLevelUnit.setText("");
 
         // Check if the network is connected
-        if (ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID()))) {
+        if (((wifiInfo.getSupplicantState() == SupplicantState.COMPLETED))
+                && (ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID())))) {
             // Get IP address string in the format XXX.XXX.XXX.XXX
             String ipAddressString;
             try {

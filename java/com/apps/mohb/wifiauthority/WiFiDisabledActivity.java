@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : WiFiDisabledActivity.java
- *  Last modified : 7/8/17 12:27 AM
+ *  Last modified : 7/12/17 10:54 PM
  *
  *  -----------------------------------------------------------
  */
@@ -39,12 +39,12 @@ public class WiFiDisabledActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Turn on WiFi and open Main Activity
                 wifiManager.setWifiEnabled(true);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent;
+                intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
 
     }
-
 }

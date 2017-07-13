@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/8/17 12:53 AM
+ *  Last modified : 7/12/17 10:51 PM
  *
  *  -----------------------------------------------------------
  */
@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -80,89 +81,97 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             // remove duplicated networks from list if the show all aps setting is off
             if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
 
-                String uniques = "";
-                ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
+                try {
+                    String uniques = "";
+                    ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
 
-                while (listIteratorDuplicate.hasNext()) {
+                    while (listIteratorDuplicate.hasNext()) {
 
-                    int indexDuplicate = listIteratorDuplicate.nextIndex();
-                    String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
+                        int indexDuplicate = listIteratorDuplicate.nextIndex();
+                        String ssid = wifiScannedNetworks.get(indexDuplicate).SSID;
 
-                    if (uniques.contains(ssid)) {
-                        listIteratorDuplicate.next();
-                        listIteratorDuplicate.remove();
-                    } else {
-                        uniques = uniques.concat("[" + ssid + "]");
-                        listIteratorDuplicate.next();
+                        if (uniques.contains(ssid)) {
+                            listIteratorDuplicate.next();
+                            listIteratorDuplicate.remove();
+                        } else {
+                            uniques = uniques.concat("[" + ssid + "]");
+                            listIteratorDuplicate.next();
+                        }
+
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
 
-            // Remove security levels according to settings
-            ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
+            try {
+                // Remove security levels according to settings
+                ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
 
-            while (scanResultListIterator.hasNext()) {
+                while (scanResultListIterator.hasNext()) {
 
-                int index = scanResultListIterator.nextIndex();
-                String ssid = wifiScannedNetworks.get(index).SSID;
-                String capabilities = wifiScannedNetworks.get(index).capabilities;
+                    int index = scanResultListIterator.nextIndex();
+                    String ssid = wifiScannedNetworks.get(index).SSID;
+                    String capabilities = wifiScannedNetworks.get(index).capabilities;
 
-                // Get security levels to remove
-                minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
-                        getResources().getString(R.string.pref_def_security));
+                    // Get security levels to remove
+                    minSecurityToShow = settings.getString(getResources().getString(R.string.pref_key_security),
+                            getResources().getString(R.string.pref_def_security));
 
-                // Set if security is WEP or open
-                boolean isWep = false;
-                boolean isOpen = false;
+                    // Set if security is WEP or open
+                    boolean isWep = false;
+                    boolean isOpen = false;
 
-                if (capabilities.contains(Constants.SCAN_WEP)) {
-                    isWep = true;
-                } else {
-                    if (!capabilities.contains(Constants.SCAN_EAP)
-                            && !capabilities.contains(Constants.SCAN_WEP)
-                            && !capabilities.contains(Constants.SCAN_WPA)) {
-                        isOpen = true;
+                    if (capabilities.contains(Constants.SCAN_WEP)) {
+                        isWep = true;
+                    } else {
+                        if (!capabilities.contains(Constants.SCAN_EAP)
+                                && !capabilities.contains(Constants.SCAN_WEP)
+                                && !capabilities.contains(Constants.SCAN_WPA)) {
+                            isOpen = true;
+                        }
+
                     }
 
+                    // Get signal levels to show according to settings
+                    minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
+                            getResources().getString(R.string.pref_def_signal));
+
+                    int minSignalLevel;
+
+                    switch (minSignalLevelToShow) {
+
+                        case Constants.PREF_MIN_SIGNAL_HIGH:
+                            minSignalLevel = Constants.LEVEL_HIGH;
+                            break;
+
+                        case Constants.PREF_MIN_SIGNAL_LOW:
+                            minSignalLevel = Constants.LEVEL_LOW;
+                            break;
+
+                        default:
+                            minSignalLevel = Constants.LEVEL_VERY_LOW;
+                            break;
+
+                    }
+
+                    int signalLevel = wifiManager.calculateSignalLevel(
+                            wifiScannedNetworks.get(index).level, Constants.LEVELS);
+
+                    // Remove insecure (if option is on), low signal levels and hidden networks from list
+                    if ((minSecurityToShow.matches(Constants.PREF_SECURITY_WPA_EAP) && (isWep || isOpen)
+                            || (minSecurityToShow.matches(Constants.PREF_SECURITY_WEP) && (isOpen)))
+                            || (signalLevel < minSignalLevel)
+                            || ssid.isEmpty()) {
+                        scanResultListIterator.next();
+                        scanResultListIterator.remove();
+                    } else {
+                        scanResultListIterator.next();
+                    }
                 }
-
-                // Get signal levels to show according to settings
-                minSignalLevelToShow = settings.getString(getResources().getString(R.string.pref_key_signal),
-                        getResources().getString(R.string.pref_def_signal));
-
-                int minSignalLevel;
-
-                switch (minSignalLevelToShow) {
-
-                    case Constants.PREF_MIN_SIGNAL_HIGH:
-                        minSignalLevel = Constants.LEVEL_HIGH;
-                        break;
-
-                    case Constants.PREF_MIN_SIGNAL_LOW:
-                        minSignalLevel = Constants.LEVEL_LOW;
-                        break;
-
-                    default:
-                        minSignalLevel = Constants.LEVEL_VERY_LOW;
-                        break;
-
-                }
-
-                int signalLevel = wifiManager.calculateSignalLevel(
-                        wifiScannedNetworks.get(index).level, Constants.LEVELS);
-
-                // Remove insecure (if option is on), low signal levels and hidden networks from list
-                if ((minSecurityToShow.matches(Constants.PREF_SECURITY_WPA_EAP) && (isWep || isOpen)
-                        || (minSecurityToShow.matches(Constants.PREF_SECURITY_WEP) && (isOpen)))
-                        || (signalLevel < minSignalLevel)
-                        || ssid.isEmpty()) {
-                    scanResultListIterator.next();
-                    scanResultListIterator.remove();
-                } else {
-                    scanResultListIterator.next();
-                }
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
             }
 
             // If there is no network to show according to settings, inform this
@@ -230,39 +239,37 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
                 // This check is necessary due to app is incapable of get list of
                 // scanned networks if WiFi is disabled, generating null pointer exceptions.
-                if (wifiManager.isWifiEnabled()) {
-
-                    // Set default values for these variables
-                    String ssid = "";
-                    String bssid = "";
-                    String capabilities = "";
-
-                    // Get the correct position of clicked item according to Android version
-                    // due to use of header and footer
-                    int correctPosition = getCorrectPosition(position);
-
-                    // Check if position is inside networks list size (not header or footer)
-                    if ((correctPosition >= 0) && (correctPosition < wifiScannedNetworks.size())) {
-                        ssid = wifiScannedNetworks.get(correctPosition).SSID;
-                        bssid = wifiScannedNetworks.get(correctPosition).BSSID;
-                        capabilities = wifiScannedNetworks.get(correctPosition).capabilities;
-                    }
-
-                    // Check if network is not configured yet
-                    if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
-                        DialogFragment dialog = new AddNetworkDialogFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.KEY_SSID, ssid);
-                        bundle.putString(Constants.KEY_BSSID, bssid);
-                        bundle.putString(Constants.KEY_SECURITY, capabilities);
-                        dialog.setArguments(bundle);
-                        dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
-                    } else { // If network is already configured show dialog informing this
-                        Toasts.showNetworkIsConfigured(getApplicationContext());
-                    }
-                } else {
-                    Toasts.showWiFiDisabled(getApplicationContext());
+                if (!wifiManager.isWifiEnabled()) {
                     wifiManager.setWifiEnabled(true);
+                }
+
+                // Set default values for these variables
+                String ssid = "";
+                String bssid = "";
+                String capabilities = "";
+
+                // Get the correct position of clicked item according to Android version
+                // due to use of header and footer
+                int correctPosition = getCorrectPosition(position);
+
+                // Check if position is inside networks list size (not header or footer)
+                if ((correctPosition >= 0) && (correctPosition < wifiScannedNetworks.size())) {
+                    ssid = wifiScannedNetworks.get(correctPosition).SSID;
+                    bssid = wifiScannedNetworks.get(correctPosition).BSSID;
+                    capabilities = wifiScannedNetworks.get(correctPosition).capabilities;
+                }
+
+                // Check if network is not configured yet
+                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
+                    DialogFragment dialog = new AddNetworkDialogFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.KEY_SSID, ssid);
+                    bundle.putString(Constants.KEY_BSSID, bssid);
+                    bundle.putString(Constants.KEY_SECURITY, capabilities);
+                    dialog.setArguments(bundle);
+                    dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
+                } else { // If network is already configured show dialog informing this
+                    Toasts.showNetworkIsConfigured(getApplicationContext());
                 }
             }
         });
@@ -343,7 +350,6 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         }
         Toasts.cancelAllToasts();
         super.onBackPressed();
-        finish();
     }
 
     @Override
