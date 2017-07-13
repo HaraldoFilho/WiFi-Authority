@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/12/17 10:52 PM
+ *  Last modified : 7/12/17 11:42 PM
  *
  *  -----------------------------------------------------------
  */
@@ -79,6 +79,8 @@ public class Constants {
     public static final int LEVEL_HIGH      = 2;
     public static final int LEVEL_LOW       = 1;
     public static final int LEVEL_VERY_LOW  = 0;
+
+    public static final int OUT_OF_REACH    = -1000;
 
     // FAB alpha
     public static final float FAB_OPAQUE       = (float) 1.0;

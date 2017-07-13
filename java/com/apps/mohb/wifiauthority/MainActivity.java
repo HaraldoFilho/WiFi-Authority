@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/12/17 10:54 PM
+ *  Last modified : 7/12/17 11:55 PM
  *
  *  -----------------------------------------------------------
  */
@@ -33,6 +33,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            Log.d("DEBUG_WIFI", "Stated changed!");
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
 
@@ -514,10 +516,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo info) {
         super.onCreateContextMenu(menu, v, info);
 
-        if (!wifiManager.isWifiEnabled()) {
-            wifiManager.setWifiEnabled(true);
-        }
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_main, menu);
 
@@ -531,19 +529,21 @@ public class MainActivity extends AppCompatActivity implements
         itemConnect.setTitle(R.string.context_connect);
         itemConnect.setEnabled(false);
 
-        // Set text according to network state
-        switch (network.status) {
-            // Connected
-            case WifiConfiguration.Status.CURRENT:
-                itemConnect.setTitle(R.string.context_disconnect);
-                break;
-            // Connecting...
-            case WifiConfiguration.Status.ENABLED:
-                itemConnect.setTitle(R.string.context_cancel);
-                break;
-            // Disconnected
-            default:
-                break;
+        if (wifiManager.isWifiEnabled()) {
+            // Set text according to network state
+            switch (network.status) {
+                // Connected
+                case WifiConfiguration.Status.CURRENT:
+                    itemConnect.setTitle(R.string.context_disconnect);
+                    break;
+                // Connecting...
+                case WifiConfiguration.Status.ENABLED:
+                    itemConnect.setTitle(R.string.context_cancel);
+                    break;
+                // Disconnected
+                default:
+                    break;
+            }
         }
 
         // Disable password item if network is open
@@ -566,6 +566,7 @@ public class MainActivity extends AppCompatActivity implements
             listIterator.next();
         }
 
+
     }
 
     @Override
@@ -581,6 +582,9 @@ public class MainActivity extends AppCompatActivity implements
 
             // Connect
             case R.id.connect:
+                if (!wifiManager.isWifiEnabled()) {
+                    wifiManager.setWifiEnabled(true);
+                }
                 // Get network id of the current active network
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 int activeNetworkId = wifiInfo.getNetworkId();
@@ -739,6 +743,48 @@ public class MainActivity extends AppCompatActivity implements
                     } else {
                         sortByName();
                     }
+                    // Sort list by decreasing order of signal level
+                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                        @Override
+                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                            int rhsLevel = Constants.OUT_OF_REACH;
+                            int lhsLevel = Constants.OUT_OF_REACH;
+
+                            wifiScannedNetworks = wifiManager.getScanResults();
+                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+                            while (listIterator.hasNext()) {
+                                int index = listIterator.nextIndex();
+                                ScanResult scanResult = wifiScannedNetworks.get(index);
+                                String ssid = scanResult.SSID;
+                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    rhsLevel = scanResult.level;
+                                }
+                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    lhsLevel = scanResult.level;
+                                }
+                                listIterator.next();
+                            }
+
+                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                        }
+                    });
+
+                    try {
+                        // Move connected network to the beginning of the list
+                        ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
+                        while (listIterator.hasNext()) {
+                            int index = listIterator.nextIndex();
+                            WifiConfiguration wifiConfiguration = wifiConfiguredNetworks.get(index);
+                            if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
+                                wifiConfiguredNetworks.remove(index);
+                                wifiConfiguredNetworks.add(Constants.LIST_HEAD, wifiConfiguration);
+                            }
+                            listIterator.next();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 // By description
@@ -757,22 +803,33 @@ public class MainActivity extends AppCompatActivity implements
 
             }
 
-            try {
-                // Create a list adapter if one was not created yet
-                if (networksListAdapter == null) {
-                    networksListAdapter = new ConfiguredNetworksListAdapter(this,
-                            wifiConfiguredNetworks, configuredNetworks);
-                    networksListView.setAdapter(networksListAdapter);
-                } else {
-                    // Refresh list
-                    networksListAdapter.clear();
-                    networksListAdapter.addAll(wifiConfiguredNetworks);
-                    networksListAdapter.notifyDataSetChanged();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } else {
+            // Get network id of the current active network
+            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            int activeNetworkId = wifiInfo.getNetworkId();
+            // Disconnect and disable the current network
+            wifiManager.disconnect();
+            wifiManager.disableNetwork(activeNetworkId);
+            ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+            ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
         }
+
+        try {
+            // Create a list adapter if one was not created yet
+            if (networksListAdapter == null) {
+                networksListAdapter = new ConfiguredNetworksListAdapter(this,
+                        wifiConfiguredNetworks, configuredNetworks);
+                networksListView.setAdapter(networksListAdapter);
+            } else {
+                // Refresh list
+                networksListAdapter.clear();
+                networksListAdapter.addAll(wifiConfiguredNetworks);
+                networksListAdapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
