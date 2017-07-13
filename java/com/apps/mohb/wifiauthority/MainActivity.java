@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/13/17 9:34 AM
+ *  Last modified : 7/13/17 10:01 AM
  *
  *  -----------------------------------------------------------
  */
@@ -33,7 +33,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -108,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d("DEBUG_WIFI", "Stated changed!");
             // Refresh list of networks when connection state changes
             updateListOfNetworks();
 
@@ -823,8 +821,10 @@ public class MainActivity extends AppCompatActivity implements
                 networksListView.setAdapter(networksListAdapter);
             } else {
                 // Refresh list
-                networksListAdapter.clear();
-                networksListAdapter.addAll(wifiConfiguredNetworks);
+                if (wifiManager.isWifiEnabled()) {
+                    networksListAdapter.clear();
+                    networksListAdapter.addAll(wifiConfiguredNetworks);
+                }
                 networksListAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
