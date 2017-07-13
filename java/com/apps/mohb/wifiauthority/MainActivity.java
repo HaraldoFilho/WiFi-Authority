@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/13/17 10:01 AM
+ *  Last modified : 7/13/17 10:29 AM
  *
  *  -----------------------------------------------------------
  */
@@ -821,10 +821,8 @@ public class MainActivity extends AppCompatActivity implements
                 networksListView.setAdapter(networksListAdapter);
             } else {
                 // Refresh list
-                if (wifiManager.isWifiEnabled()) {
-                    networksListAdapter.clear();
-                    networksListAdapter.addAll(wifiConfiguredNetworks);
-                }
+                networksListAdapter.clear();
+                networksListAdapter.addAll(wifiConfiguredNetworks);
                 networksListAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {

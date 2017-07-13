@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/13/17 10:29 AM
  *
  *  -----------------------------------------------------------
  */
@@ -41,6 +41,7 @@ import java.util.List;
 public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     private WifiManager wifiManager;
+    private List<WifiConfiguration> wifiConfiguredNetworks;
     private List<ScanResult> wifiScannedNetworks;
     private ConfiguredNetworks configuredNetworks;
     private WifiConfiguration configuration;
@@ -50,10 +51,11 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     private String state;
 
-    public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> list,
+    public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> wifiConfigurations,
                                          ConfiguredNetworks configuredNetworks) {
-        super(context, 0, list);
+        super(context, 0, wifiConfigurations);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        wifiConfiguredNetworks = wifiConfigurations;
         wifiScannedNetworks = wifiManager.getScanResults();
         this.configuredNetworks = configuredNetworks;
         try {
@@ -221,7 +223,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                     case OBTAINING_IPADDR:
                         state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
                         ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
-                        if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), ssid)) {
+                        if (configuredNetworks.isConnected(wifiConfiguredNetworks, ssid)) {
                             txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                             state = getContext().getResources().getString(R.string.layout_net_connected);
                             ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
