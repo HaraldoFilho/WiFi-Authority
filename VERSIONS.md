@@ -1,15 +1,18 @@
+#### **0.4.10**
+- Bug fixes.
+
 #### **0.4.9**
 - Improvements on user interface.
-- Bugs fixed.
+- Bug fixes.
 
 #### **0.4.8**
-- Fixed bugs.
+- Bug fixes.
 
 #### **0.4.7**
-- Fixed bugs.
+- Bug fixes.
 
 #### **0.4.6**
-- Fixed bugs.
+- Bug fixes.
 
 #### **0.4.5**
 - Implemented garbage collector to delete data from networks that were removed by Android system.

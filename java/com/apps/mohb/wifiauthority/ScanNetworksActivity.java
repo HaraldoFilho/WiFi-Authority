@@ -71,17 +71,27 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
             progressDialog.cancel();
 
-            wifiScannedNetworks = wifiManager.getScanResults();
-
-            if (wifiScannedNetworks.isEmpty()) {
-                Toasts.showNoNetworkFound(context, R.string.toast_no_network_found);
+            // If WiFi is enabled, refresh list of networks
+            if (!wifiManager.isWifiEnabled()) {
                 return;
             }
+
+            try {
+                wifiScannedNetworks = wifiManager.getScanResults();
+
+                if (wifiScannedNetworks.isEmpty()) {
+                    Toasts.showNoNetworkFound(context, R.string.toast_no_network_found);
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
 
             // remove duplicated networks from list if the show all aps setting is off
             if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
 
-                try {
                     String uniques = "";
                     ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
 
@@ -99,10 +109,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         }
 
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
             try {
@@ -175,29 +185,38 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
 
             // If there is no network to show according to settings, inform this
-            if (wifiScannedNetworks.isEmpty()) {
+            if ((wifiScannedNetworks != null)&&(wifiScannedNetworks.isEmpty())) {
                 if (minSecurityToShow.matches(Constants.PREF_SECURITY_OPEN)
                         || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
                     Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
                 }
             } else {
-                // sort list by decreasing order of signal level
-                Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
-                    @Override
-                    public int compare(ScanResult lhs, ScanResult rhs) {
-                        return wifiManager.compareSignalLevel(rhs.level, lhs.level);
+
+                try {
+                    // sort list by decreasing order of signal level
+                    Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
+                        @Override
+                        public int compare(ScanResult lhs, ScanResult rhs) {
+                            return wifiManager.compareSignalLevel(rhs.level, lhs.level);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    if (networksListAdapter == null) {
+                        networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
+                        networksListView.setAdapter(networksListAdapter);
+                    } else {
+                        // Refresh list
+                        networksListAdapter.clear();
+                        networksListAdapter.addAll(wifiScannedNetworks);
+                        networksListAdapter.notifyDataSetChanged();
                     }
-                });
-
-
-                if (networksListAdapter == null) {
-                    networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
-                    networksListView.setAdapter(networksListAdapter);
-                } else {
-                    // Refresh list
-                    networksListAdapter.clear();
-                    networksListAdapter.addAll(wifiScannedNetworks);
-                    networksListAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 

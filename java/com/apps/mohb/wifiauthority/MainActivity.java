@@ -743,32 +743,36 @@ public class MainActivity extends AppCompatActivity implements
                     } else {
                         sortByName();
                     }
-                    // Sort list by decreasing order of signal level
-                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                        @Override
-                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                            int rhsLevel = Constants.OUT_OF_REACH;
-                            int lhsLevel = Constants.OUT_OF_REACH;
+                    try {
+                        // Sort list by decreasing order of signal level
+                        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                            @Override
+                            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                                int rhsLevel = Constants.OUT_OF_REACH;
+                                int lhsLevel = Constants.OUT_OF_REACH;
 
-                            wifiScannedNetworks = wifiManager.getScanResults();
-                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+                                wifiScannedNetworks = wifiManager.getScanResults();
+                                ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
 
-                            while (listIterator.hasNext()) {
-                                int index = listIterator.nextIndex();
-                                ScanResult scanResult = wifiScannedNetworks.get(index);
-                                String ssid = scanResult.SSID;
-                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    rhsLevel = scanResult.level;
+                                while (listIterator.hasNext()) {
+                                    int index = listIterator.nextIndex();
+                                    ScanResult scanResult = wifiScannedNetworks.get(index);
+                                    String ssid = scanResult.SSID;
+                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        rhsLevel = scanResult.level;
+                                    }
+                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        lhsLevel = scanResult.level;
+                                    }
+                                    listIterator.next();
                                 }
-                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    lhsLevel = scanResult.level;
-                                }
-                                listIterator.next();
+
+                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
                             }
-
-                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
-                        }
-                    });
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                     try {
                         // Move connected network to the beginning of the list
