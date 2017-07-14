@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/13/17 10:29 AM
+ *  Last modified : 7/14/17 12:42 AM
  *
  *  -----------------------------------------------------------
  */
@@ -707,18 +707,25 @@ public class MainActivity extends AppCompatActivity implements
     // Refresh list of networks
     private void updateListOfNetworks() {
 
+
+        try {
+            // Reset the configured networks list
+            if (wifiConfiguredNetworks == null) {
+                wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+            } else if (wifiManager.isWifiEnabled()) {
+                wifiConfiguredNetworks.clear();
+                wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (wifiManager.isWifiEnabled()) {
 
             // Get the state of the current active network
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
             ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
-
-            // Reset the configured networks list
-            if (wifiConfiguredNetworks != null) {
-                wifiConfiguredNetworks.clear();
-            }
-            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
 
             // Get networks list sort mode from settings
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
@@ -817,7 +824,7 @@ public class MainActivity extends AppCompatActivity implements
             // Create a list adapter if one was not created yet
             if (networksListAdapter == null) {
                 networksListAdapter = new ConfiguredNetworksListAdapter(this,
-                        wifiConfiguredNetworks, configuredNetworks);
+                        wifiConfiguredNetworks, configuredNetworks, wifiScannedNetworks);
                 networksListView.setAdapter(networksListAdapter);
             } else {
                 // Refresh list

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/14/17 12:18 AM
  *
  *  -----------------------------------------------------------
  */
@@ -56,23 +56,16 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
         ImageView imgCfg = (ImageView) convertView.findViewById(R.id.imgCfg);
 
-        if (wifiManager.isWifiEnabled()) {
+        // Check if network is already configured
+        if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), result.SSID)) {
+            imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
 
-            // Check if network is already configured
-            if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), result.SSID)) {
-                imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
-
-                // Check if network is connected
-                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
-                    txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                }
-
+            // Check if network is connected
+            if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
             }
 
-        } else {
-            wifiManager.setWifiEnabled(true);
         }
-
 
         // Network security
 

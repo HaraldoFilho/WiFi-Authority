@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/12/17 10:51 PM
+ *  Last modified : 7/14/17 12:49 AM
  *
  *  -----------------------------------------------------------
  */
@@ -21,6 +21,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -63,6 +64,22 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private String minSecurityToShow;
     private String minSignalLevelToShow;
 
+
+    // Inner class to monitor network state changes
+    public class NetworkStateMonitor extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (!wifiManager.isWifiEnabled()) {
+                finish();
+            }
+
+        }
+
+    }
+
+
     // Inner class to receive WiFi scan results
     private class WiFiScanReceiver extends BroadcastReceiver {
 
@@ -70,11 +87,6 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
 
             progressDialog.cancel();
-
-            // If WiFi is enabled, refresh list of networks
-            if (!wifiManager.isWifiEnabled()) {
-                return;
-            }
 
             try {
                 wifiScannedNetworks = wifiManager.getScanResults();
@@ -89,8 +101,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
             try {
 
-            // remove duplicated networks from list if the show all aps setting is off
-            if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+                // remove duplicated networks from list if the show all aps setting is off
+                if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
 
                     String uniques = "";
                     ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
@@ -109,10 +121,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         }
 
                     }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
 
             try {
@@ -185,7 +197,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
 
             // If there is no network to show according to settings, inform this
-            if ((wifiScannedNetworks != null)&&(wifiScannedNetworks.isEmpty())) {
+            if ((wifiScannedNetworks != null) && (wifiScannedNetworks.isEmpty())) {
                 if (minSecurityToShow.matches(Constants.PREF_SECURITY_OPEN)
                         || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
                     Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
@@ -292,6 +304,12 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        // Register a broadcast receiver to monitor changes on network state to update network status
+        BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        this.registerReceiver(wifiStateMonitor, filter);
 
     }
 

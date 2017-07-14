@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 7/13/17 10:29 AM
+ *  Last modified : 7/14/17 12:44 AM
  *
  *  -----------------------------------------------------------
  */
@@ -51,13 +51,14 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     private String state;
 
-    public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> wifiConfigurations,
-                                         ConfiguredNetworks configuredNetworks) {
-        super(context, 0, wifiConfigurations);
+    public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> wifiConfiguredNetworks,
+                                         ConfiguredNetworks configuredNetworks,
+                                         List<ScanResult> wifiScannedNetworks) {
+        super(context, 0, wifiConfiguredNetworks);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        wifiConfiguredNetworks = wifiConfigurations;
-        wifiScannedNetworks = wifiManager.getScanResults();
+        this.wifiConfiguredNetworks = wifiConfiguredNetworks;
         this.configuredNetworks = configuredNetworks;
+        this.wifiScannedNetworks = wifiScannedNetworks;
         try {
             this.configuredNetworks.getDataState();
         } catch (IOException e) {
