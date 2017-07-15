@@ -1,3 +1,6 @@
+#### **0.4.16**
+- Improvements on user interface.
+
 #### **0.4.15**
 - Added alert dialog when wifi was turned off while application is running on "Your Networks".
 - Automatically turn wifi on when it was turned off while application is running on "Available Networks"

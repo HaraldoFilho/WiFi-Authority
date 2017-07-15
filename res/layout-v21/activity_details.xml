@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginLeft="@dimen/item_margin_left"
+            android:layout_marginLeft="@dimen/text_detail_margin_left"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/layout_net_ssid"
             android:textSize="@dimen/text_size_big"

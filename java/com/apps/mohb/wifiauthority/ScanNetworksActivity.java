@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/15/17 2:52 AM
+ *  Last modified : 7/15/17 10:37 AM
  *
  *  -----------------------------------------------------------
  */
@@ -67,7 +67,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private String minSignalLevelToShow;
 
 
-    // Inner class to receive WiFi scan results
+    /*
+         Inner class to receive WiFi scan results
+    */
     private class WiFiScanReceiver extends BroadcastReceiver {
 
         @Override
@@ -367,6 +369,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        // Finished activity so wifi will not be
+        // turned on if application is running
+        // on background
         finish();
     }
 
@@ -375,6 +380,12 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         super.onDestroy();
     }
 
+
+    // CLASS METHODS
+
+    /*
+         Scan for networks on reach
+    */
     private void scanForAvailableNetworks() {
 
         // Shows a dialog window with a spin wheel informing that data is being fetched
@@ -390,7 +401,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
     }
 
-    // List item position correction due to header
+    /*
+         List item position correction due to header
+    */
     private int getCorrectPosition(int position) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             position = position - Constants.LIST_HEADER_POSITION;
@@ -398,6 +411,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         return position;
     }
 
+    /*
+         Update the list of available networks
+    */
     private void updateListOfNetworks(Context context) {
         try {
             if (networksListAdapter == null) {
@@ -414,6 +430,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         }
 
     }
+
 
     // REQUEST PERMISSION DIALOG
 
@@ -463,5 +480,6 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
         }
     }
+
 
 }

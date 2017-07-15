@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/15/17 2:50 AM
+ *  Last modified : 7/15/17 10:59 AM
  *
  *  -----------------------------------------------------------
  */
@@ -92,8 +92,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         txtNetworkLinkSpeedUnit.setText("");
         txtNetworkSignalLevelUnit.setText("");
 
-        // Check if the network is connected
+        // Check if the network is connected or connecting
         if ((ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID())))) {
+
             // Get IP address string in the format XXX.XXX.XXX.XXX
             String ipAddressString;
             try {
@@ -102,100 +103,45 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 ipAddressString = "";
                 e.printStackTrace();
             }
+
             // Show IP address
-            txtNetworkIpAddress.setText(ipAddressString);
+            if (!ipAddressString.matches("")) {
+                txtNetworkIpAddress.setText(ipAddressString);
+            } else {
+                doNotShowView(txtNetworkIpAddressTitle);
+                doNotShowView(txtNetworkIpAddress);
+            }
+
             // Show link speed
-            txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
-            txtNetworkLinkSpeedUnit.setText(" " + WifiInfo.LINK_SPEED_UNITS);
+            if (wifiInfo.getLinkSpeed() > Constants.NO_FREQ_SET) {
+                txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
+                txtNetworkLinkSpeedUnit.setText(" " + WifiInfo.LINK_SPEED_UNITS);
+            } else {
+                doNotShowView(txtNetworkLinkSpeedTitle);
+                doNotShowView(txtNetworkLinkSpeed);
+                doNotShowView(txtNetworkLinkSpeedUnit);
+            }
+
             // Show signal level
             txtNetworkSignalLevel.setText(String.valueOf(wifiInfo.getRssi()));
             txtNetworkSignalLevelUnit.setText(" " + getString(R.string.layout_db));
+
             // Show frequency
             setNetworkFrequencyText(true);
+
         } else {
             // There is no information to show
-            txtNetworkIpAddressTitle.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkIpAddress.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkLinkSpeedTitle.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkLinkSpeed.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkLinkSpeedUnit.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkSignalLevelTitle.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkSignalLevel.setHeight(Constants.HEIGHT_ZERO);
-            txtNetworkSignalLevelUnit.setHeight(Constants.HEIGHT_ZERO);
+            doNotShowView(txtNetworkIpAddressTitle);
+            doNotShowView(txtNetworkIpAddress);
+            doNotShowView(txtNetworkLinkSpeedTitle);
+            doNotShowView(txtNetworkLinkSpeed);
+            doNotShowView(txtNetworkLinkSpeedUnit);
+            doNotShowView(txtNetworkSignalLevelTitle);
+            doNotShowView(txtNetworkSignalLevel);
+            doNotShowView(txtNetworkSignalLevelUnit);
             setNetworkFrequencyText(false);
         }
 
-    }
-
-    // Show frequency of the network if build version is 21 or higher
-    // as this feature is not available in lower builds
-    private void setNetworkFrequencyText(boolean isActive) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            TextView txtNetworkFrequencyTitle = (TextView) findViewById(R.id.txtNetFrequencyTitle);
-            TextView txtNetworkFrequency = (TextView) findViewById(R.id.txtNetFrequency);
-            TextView txtNetworkFrequencyUnit = (TextView) findViewById(R.id.txtNetFrequencyUnit);
-            // Check if it is the current active network
-            if (isActive) {
-                if ((configuredNetworks.getFrequency(ssid) == Constants.NO_FREQ_SET)
-                        || (configuredNetworks.getFrequency(ssid) != wifiInfo.getFrequency())) {
-                    configuredNetworks.setFrequency(ssid, wifiInfo.getFrequency());
-                }
-            }
-            if (configuredNetworks.getFrequency(ssid) > Constants.NO_FREQ_SET) {
-                if (configuredNetworks.getFrequency(ssid) < Constants.FREQ_5GHZ) {
-                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_2p4ghz));
-                } else {
-                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_5ghz));
-                }
-                txtNetworkFrequencyUnit.setText(getResources().getString(R.string.layout_net_freq_unit));
-            } else {
-                txtNetworkFrequencyTitle.setHeight(Constants.HEIGHT_ZERO);
-                txtNetworkFrequency.setHeight(Constants.HEIGHT_ZERO);
-                txtNetworkFrequencyUnit.setHeight(Constants.HEIGHT_ZERO);
-            }
-        }
-    }
-
-    // The IP address information is an integer representing the bytes corresponding to each ip number
-    // This method gets the IP address to show on a human readable form
-
-    private String getIpAddressString(int ipAddressInteger) throws ArrayIndexOutOfBoundsException {
-
-        // Get the bytes from the integer
-        byte[] ipAddressBytes = BigInteger.valueOf(Integer.reverseBytes(ipAddressInteger)).toByteArray();
-
-        // Convert signed integers to signed
-        int ip1 = convertToUnsignedInteger(ipAddressBytes[0]);
-        int ip2 = convertToUnsignedInteger(ipAddressBytes[1]);
-        int ip3 = convertToUnsignedInteger(ipAddressBytes[2]);
-        int ip4 = convertToUnsignedInteger(ipAddressBytes[3]);
-
-        // Build the IP address string
-        String ipAddress
-                = Integer.toString(ip1) + "."
-                + Integer.toString(ip2) + "."
-                + Integer.toString(ip3) + "."
-                + Integer.toString(ip4);
-
-        return ipAddress;
-
-    }
-
-    // Convert signed integers into unsigned
-    private int convertToUnsignedInteger(int signedInteger) {
-        return signedInteger & 0xFF;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        map.onDestroy();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        map.onPause();
     }
 
     @Override
@@ -236,4 +182,91 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         super.onLowMemory();
         map.onLowMemory();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        map.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        map.onDestroy();
+    }
+
+    // CLASS METHODS
+
+    /*
+         Show frequency of the network if build version is 21 or higher
+         as this feature is not available in lower builds
+    */
+    private void setNetworkFrequencyText(boolean isActive) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TextView txtNetworkFrequencyTitle = (TextView) findViewById(R.id.txtNetFrequencyTitle);
+            TextView txtNetworkFrequency = (TextView) findViewById(R.id.txtNetFrequency);
+            TextView txtNetworkFrequencyUnit = (TextView) findViewById(R.id.txtNetFrequencyUnit);
+            // Check if it is the current active network
+            if (isActive) {
+                if ((configuredNetworks.getFrequency(ssid) == Constants.NO_FREQ_SET)
+                        || (configuredNetworks.getFrequency(ssid) != wifiInfo.getFrequency())) {
+                    configuredNetworks.setFrequency(ssid, wifiInfo.getFrequency());
+                }
+            }
+            if (configuredNetworks.getFrequency(ssid) > Constants.NO_FREQ_SET) {
+                if (configuredNetworks.getFrequency(ssid) < Constants.FREQ_5GHZ) {
+                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_2p4ghz));
+                } else {
+                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_5ghz));
+                }
+                txtNetworkFrequencyUnit.setText(getResources().getString(R.string.layout_net_freq_unit));
+            } else {
+                doNotShowView(txtNetworkFrequencyTitle);
+                doNotShowView(txtNetworkFrequency);
+                doNotShowView(txtNetworkFrequencyUnit);
+            }
+        }
+    }
+
+    /*
+         The IP address information is an integer representing the bytes corresponding to each ip number
+         This method gets the IP address to show on a human readable form
+    */
+    private String getIpAddressString(int ipAddressInteger) throws ArrayIndexOutOfBoundsException {
+
+        // Get the bytes from the integer
+        byte[] ipAddressBytes = BigInteger.valueOf(Integer.reverseBytes(ipAddressInteger)).toByteArray();
+
+        // Convert signed integers to signed
+        int ip1 = convertToUnsignedInteger(ipAddressBytes[0]);
+        int ip2 = convertToUnsignedInteger(ipAddressBytes[1]);
+        int ip3 = convertToUnsignedInteger(ipAddressBytes[2]);
+        int ip4 = convertToUnsignedInteger(ipAddressBytes[3]);
+
+        // Build the IP address string
+        String ipAddress
+                = Integer.toString(ip1) + "."
+                + Integer.toString(ip2) + "."
+                + Integer.toString(ip3) + "."
+                + Integer.toString(ip4);
+
+        return ipAddress;
+
+    }
+
+    /*
+         Convert signed integers into unsigned
+    */
+    private int convertToUnsignedInteger(int signedInteger) {
+        return signedInteger & 0xFF;
+    }
+
+    /*
+         Set height of view to 0 to not show it
+    */
+    private void doNotShowView(TextView view) {
+        view.setHeight(Constants.HEIGHT_ZERO);
+    }
+
+
 }

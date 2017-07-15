@@ -12,7 +12,6 @@
 
 package com.apps.mohb.wifiauthority.fragments.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

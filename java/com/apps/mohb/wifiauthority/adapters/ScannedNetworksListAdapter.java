@@ -31,8 +31,9 @@ import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import java.util.List;
 
 
-// Adapter to connect Array List to ListView
-
+/*
+    Adapter to connect Array List to ListView
+*/
 public class ScannedNetworksListAdapter extends ArrayAdapter {
 
     private WifiManager wifiManager;

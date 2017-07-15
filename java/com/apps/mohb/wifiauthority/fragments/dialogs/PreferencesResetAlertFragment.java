@@ -12,7 +12,6 @@
 
 package com.apps.mohb.wifiauthority.fragments.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +25,7 @@ public class PreferencesResetAlertFragment extends DialogFragment {
 
     public interface PreferencesResetDialogListener {
         void onAlertDialogPositiveClick(DialogFragment dialog);
+
         void onAlertDialogNegativeClick(DialogFragment dialog);
     }
 

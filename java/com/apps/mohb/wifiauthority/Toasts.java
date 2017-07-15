@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 7/5/17 9:03 PM
+ *  Last modified : 7/15/17 10:41 AM
  *
  *  -----------------------------------------------------------
  */
@@ -17,7 +17,9 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 
-// This class manages all the toasts in the application
+/*
+    This class manages all the toasts in the application
+*/
 
 public class Toasts {
 
@@ -38,7 +40,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that there is no location information
+    /*
+         Toast to notify that there is no location information
+    */
+
     public static void showMissingInformation(Context c, int textId) {
         missingInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
         missingInformation.show();
@@ -51,7 +56,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that it is unable to remove network
+    /*
+         Toast to notify that it is unable to remove network
+    */
+
     public static void showUnableRemoveNetwork(Context c) {
         unableRemoveNetwork = Toast.makeText((c), R.string.toast_unable_remove_network, Toast.LENGTH_SHORT);
         unableRemoveNetwork.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
@@ -65,7 +73,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that there is no network found or to display
+    /*
+         Toast to notify that there is no network found or to display
+    */
+
     public static void showNoNetworkFound(Context c, int textId) {
         noNetworkFound = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
         noNetworkFound.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
@@ -79,7 +90,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that wifi is disabled
+    /*
+         Toast to notify that wifi is disabled
+    */
+
     public static void showWiFiDisabled(Context c) {
         wifiDisabled = Toast.makeText((c), R.string.toast_wifi_disabled, Toast.LENGTH_SHORT);
         wifiDisabled.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
@@ -93,7 +107,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that network is already configured
+    /*
+         Toast to notify that network is already configured
+    */
+
     public static void showNetworkIsConfigured(Context c) {
         networkIsConfigured = Toast.makeText((c), R.string.toast_network_is_configured, Toast.LENGTH_SHORT);
         networkIsConfigured.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
@@ -107,7 +124,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify a network connection error
+    /*
+         Toast to notify a network connection error
+    */
+
     public static void showNetworkConnectionError(Context c, int textId) {
         networkConnectionError = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
         networkConnectionError.show();
@@ -120,7 +140,10 @@ public class Toasts {
     }
 
 
-    // Toast to notify that is getting Legal Notices text from the internet
+    /*
+         Toast to notify that is getting Legal Notices text from the internet
+    */
+
     public static void createLegalNotices() {
         legalNotices = Toast.makeText((context), "", Toast.LENGTH_SHORT);
         legalNotices.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
@@ -141,7 +164,9 @@ public class Toasts {
     }
 
 
-    // Toast to notify that is getting an options_help page from the internet
+    /*
+         Toast to notify that is getting an options_help page from the internet
+    */
 
     public static void createHelpPage() {
         helpPage = Toast.makeText((context), R.string.toast_get_help_page, Toast.LENGTH_SHORT);
@@ -159,7 +184,9 @@ public class Toasts {
     }
 
 
-    // Cancel all toasts
+    /*
+         Cancel all toasts
+    */
 
     public static void cancelAllToasts() {
         cancelUnableRemoveNetwork();

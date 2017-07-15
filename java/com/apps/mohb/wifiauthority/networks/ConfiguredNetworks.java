@@ -14,6 +14,7 @@ package com.apps.mohb.wifiauthority.networks;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -630,7 +631,7 @@ public class ConfiguredNetworks {
         editor.commit();
     }
 
-    // get bookmarks list from memory through a json string
+    // get a network data list from memory through a json string
     // if list was not saved yet creates a new array list
     public boolean getDataState() throws IOException {
         String jsonData = preferences.getString(Constants.DATA, null);
@@ -642,7 +643,7 @@ public class ConfiguredNetworks {
         }
     }
 
-    // create a json string of a list of location items
+    // create a json string of a list of network data items
     private String writeJsonString(ArrayList<NetworkData> dataItems) throws IOException {
         StringWriter stringWriter = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(stringWriter);
@@ -652,7 +653,7 @@ public class ConfiguredNetworks {
         return stringWriter.toString();
     }
 
-    // write all locations to json string
+    // write all network data to json string
     private void writeDataArrayList(JsonWriter writer, ArrayList<NetworkData> dataItems) throws IOException {
         writer.beginArray();
         for (NetworkData dataItem : dataItems) {
@@ -661,20 +662,21 @@ public class ConfiguredNetworks {
         writer.endArray();
     }
 
-    // write a single location to json string
+    // write a single network data to json string
     private void writeDataItem(JsonWriter writer, NetworkData dataItem) throws IOException {
         writer.beginObject();
         writer.name(Constants.JSON_DESCRIPTION).value(dataItem.getDescription());
         writer.name(Constants.JSON_SSID).value(dataItem.getSSID());
         writer.name(Constants.JSON_BSSID).value(dataItem.getMacAddress());
         writer.name(Constants.JSON_SECURITY).value(dataItem.getSecurity());
+        writer.name(Constants.JSON_FREQUENCY).value(dataItem.getFrequency());
         writer.name(Constants.JSON_PASSWORD).value(dataItem.getPassword());
         writer.name(Constants.JSON_LATITUDE).value(dataItem.getLatitude());
         writer.name(Constants.JSON_LONGITUDE).value(dataItem.getLongitude());
         writer.endObject();
     }
 
-    // read a json string containing a list of location items
+    // read a json string containing a list of network items
     private ArrayList<NetworkData> readJsonString(String jsonString) throws IOException {
         JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
         try {
@@ -684,7 +686,7 @@ public class ConfiguredNetworks {
         }
     }
 
-    // read a list of location items from a json string
+    // read a list of network data items from a json string
     private ArrayList<NetworkData> readDataArrayList(JsonReader jsonReader) throws IOException {
         ArrayList<NetworkData> dataItems = new ArrayList<>();
         jsonReader.beginArray();
@@ -695,12 +697,13 @@ public class ConfiguredNetworks {
         return dataItems;
     }
 
-    // read a single location item from a json string
+    // read a single network data item from a json string
     private NetworkData readDataItem(JsonReader jsonReader) throws IOException {
         String dataDescription = "";
         String dataSSID = "";
         String dataBSSID = "";
         String dataSecurity = "";
+        int dataFrequency = Constants.NO_FREQ_SET;
         String dataPassword = "";
         Double dataLatitude = Constants.DEFAULT_LATITUDE;
         Double dataLongitude = Constants.DEFAULT_LONGITUDE;
@@ -721,6 +724,9 @@ public class ConfiguredNetworks {
                 case Constants.JSON_SECURITY:
                     dataSecurity = jsonReader.nextString();
                     break;
+                case Constants.JSON_FREQUENCY:
+                    dataFrequency = jsonReader.nextInt();
+                    break;
                 case Constants.JSON_PASSWORD:
                     dataPassword = jsonReader.nextString();
                     break;
@@ -738,6 +744,7 @@ public class ConfiguredNetworks {
         jsonReader.endObject();
         NetworkData dataItem = new NetworkData(dataDescription, dataSSID, dataBSSID,
                 dataSecurity, dataPassword, dataLatitude, dataLongitude);
+        dataItem.setFrequency(dataFrequency);
         return dataItem;
     }
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 7/15/17 10:35 AM
  *
  *  -----------------------------------------------------------
  */
@@ -31,7 +31,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 public class AboutActivity extends AppCompatActivity {
 
-    // Class to load Legal Notices text from internet
+    /*
+         Inner Class to load Legal Notices text from internet
+    */
     private class GetLegalNotices extends AsyncTask {
 
         private DialogFragment dialog;
@@ -86,9 +88,6 @@ public class AboutActivity extends AppCompatActivity {
         TextView version = (TextView) findViewById(R.id.textAppVersion);
         version.setText(getString(R.string.version_name) + " " + getString(R.string.version_number));
     }
-
-
-    // OPTIONS MENU
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

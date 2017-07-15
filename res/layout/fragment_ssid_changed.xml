@@ -86,7 +86,7 @@
         android:text="@string/dialog_network_name_changed_connect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dialog_chkbox_margin"
+        android:layout_marginTop="@dimen/dialog_checkbox_margin"
         android:layout_marginLeft="@dimen/dialog_widget_margin"
         android:layout_marginRight="@dimen/dialog_margin"
         android:layout_below="@+id/checkNewPasswd"

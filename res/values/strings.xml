@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.4.15</string>
-    <string name="version_code" translatable="false">52</string>
+    <string name="version_number" translatable="false">0.4.16</string>
+    <string name="version_code" translatable="false">53</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -86,7 +86,7 @@
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
     <string name="alert_title_reset_preferences">Restore defaults?</string>
-    <string name="alert_title_wifi_disabled">WiFi disabled</string>
+    <string name="alert_title_wifi_disabled">WiFi disabled!</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
     <string name="alert_message_delete_network">This action can not be undone\n</string>
     <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to delete networks unless they were added by WiFi Authority.\n</string>

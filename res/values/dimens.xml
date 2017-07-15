@@ -26,12 +26,14 @@
     <dimen name="dialog_text_margin">25dp</dimen>
     <dimen name="dialog_widget_margin">17dp</dimen>
     <dimen name="dialog_spin_margin">12dp</dimen>
-    <dimen name="dialog_chkbox_margin">8dp</dimen>
+    <dimen name="dialog_checkbox_margin">8dp</dimen>
     <dimen name="dialog_tag_width">85sp</dimen>
 
     <dimen name="text_size_big">20sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
+
+    <dimen name="text_detail_margin_left">12dp</dimen>
 
     <dimen name="map_bounds_padding">100dp</dimen>
 

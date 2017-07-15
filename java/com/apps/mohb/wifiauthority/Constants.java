@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/15/17 2:25 AM
+ *  Last modified : 7/15/17 10:15 AM
  *
  *  -----------------------------------------------------------
  */
@@ -29,6 +29,7 @@ public class Constants {
     public static final String JSON_SSID         = "ssid";
     public static final String JSON_BSSID        = "bssid";
     public static final String JSON_SECURITY     = "security";
+    public static final String JSON_FREQUENCY    = "frequency";
     public static final String JSON_PASSWORD     = "password";
     public static final String JSON_LATITUDE     = "latitude";
     public static final String JSON_LONGITUDE    = "longitude";
@@ -39,6 +40,7 @@ public class Constants {
     public static final String KEY_SSID         = "SSID";
     public static final String KEY_BSSID        = "BSSID";
     public static final String KEY_SECURITY     = "SECURITY";
+    public static final String KEY_FREQUENCY    = "FREQUENCY";
     public static final String KEY_PASSWORD     = "PASSWORD";
     public static final String KEY_LATITUDE     = "LATITUDE";
     public static final String KEY_LONGITUDE    = "LONGITUDE";

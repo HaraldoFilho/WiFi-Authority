@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/15/17 2:52 AM
+ *  Last modified : 7/15/17 11:41 AM
  *
  *  -----------------------------------------------------------
  */
@@ -104,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements
     private SharedPreferences settings;
 
 
-    // Inner class to monitor network state changes
+    /*
+         Inner class to monitor network state changes
+    */
     public class NetworkStateMonitor extends BroadcastReceiver {
 
         @Override
@@ -125,7 +127,9 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    // Inner class to receive WiFi scan results
+    /*
+         Inner class to receive WiFi scan results
+    */
     private class WiFiScanReceiver extends BroadcastReceiver {
 
         @Override
@@ -443,6 +447,7 @@ public class MainActivity extends AppCompatActivity implements
         BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(wifiStateMonitor, filter);
 
     }
@@ -637,24 +642,68 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    // List item position correction due to header
-    private int getCorrectPosition(int position) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            position = position - Constants.LIST_HEADER_POSITION;
-        }
-        return position;
+    @Override
+    public void onBackPressed() {
+        Toasts.cancelAllToasts();
+        finish();
     }
 
-    // Check if user's last location has been acquired
-    private boolean isLastLocationKnown() {
-        if ((lastLatitude != Constants.DEFAULT_LATITUDE) && (lastLongitude != Constants.DEFAULT_LONGITUDE)) {
-            return true;
-        } else {
-            return false;
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override // read result of permissions requests
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case Constants.FINE_LOCATION_PERMISSION_REQUEST: {
+                // if permission is granted create list of networks
+                if (grantResults.length > 0
+                        && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
+                    updateListOfNetworks();
+                } else {
+                    finish();
+                }
+                return;
+            }
         }
     }
 
-    // Resume application after being closed
+
+    // GoogleClientApi methods
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        wifiManager.startScan();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
+
+
+    // CLASS METHODS
+
+    /*
+         Resume application after being closed
+    */
     private void resumeApplication() {
 
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -714,21 +763,49 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    /*
+         List item position correction due to header
+    */
+    private int getCorrectPosition(int position) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            position = position - Constants.LIST_HEADER_POSITION;
+        }
+        return position;
+    }
+
+    /*
+         Check if user's last location has been acquired
+    */
+    private boolean isLastLocationKnown() {
+        if ((lastLatitude != Constants.DEFAULT_LATITUDE) && (lastLongitude != Constants.DEFAULT_LONGITUDE)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /*
+         Show WiFi dialog if wifi was disabled while activity is running
+    */
     private void showWifiDisabledAlertDialog() {
         // Show dialog informing that wifi was disabled
         wifiDisabledDialog = new WifiDisabledAlertFragment();
-//            wifiDisabledDialog.setCancelable(false);
         wifiDisabledDialog.show(getSupportFragmentManager(), "WifiDisabledDialogListener");
     }
 
+    /*
+         Start "Available Networks" activity
+    */
     private void startScanNetworksActivity() {
         Intent intent = new Intent(getApplicationContext(), ScanNetworksActivity.class);
         startActivity(intent);
     }
 
-    // Refresh list of networks
+    /*
+         Refresh list of networks
+    */
     private void updateListOfNetworks() {
-
 
         try {
             // Reset the configured networks list
@@ -860,7 +937,9 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    // Sort networks by their descriptions
+    /*
+         Sort networks by their descriptions
+    */
     private void sortByDescription() {
 
         if ((wifiConfiguredNetworks != null) && (configuredNetworks != null)) {
@@ -878,7 +957,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    // Sort the networks by their names
+    /*
+         Sort the networks by their names
+    */
     private void sortByName() {
 
         if (wifiConfiguredNetworks != null) {
@@ -890,63 +971,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             });
         }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        Toasts.cancelAllToasts();
-        finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        googleApiClient.disconnect();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override // read result of permissions requests
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-
-        switch (requestCode) {
-            case Constants.FINE_LOCATION_PERMISSION_REQUEST: {
-                // if permission is granted create list of networks
-                if (grantResults.length > 0
-                        && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
-                    updateListOfNetworks();
-                } else {
-                    finish();
-                }
-                return;
-            }
-        }
-    }
-
-
-    // GoogleClientApi methods
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        wifiManager.startScan();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
     }
 
 
