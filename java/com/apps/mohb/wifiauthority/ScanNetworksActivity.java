@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/14/17 12:49 AM
+ *  Last modified : 7/15/17 2:52 AM
  *
  *  -----------------------------------------------------------
  */
@@ -21,7 +21,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.ConnectivityManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -53,31 +52,19 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
     private WifiManager wifiManager;
     private List<ScanResult> wifiScannedNetworks;
+    private ConfiguredNetworks configuredNetworks;
+    private WiFiScanReceiver wiFiScanReceiver;
+    private ScannedNetworksListAdapter networksListAdapter;
     private ListView networksListView;
     private View listHeader;
     private View listFooter;
-    private ScannedNetworksListAdapter networksListAdapter;
-    private WiFiScanReceiver wiFiScanReceiver;
-    private ConfiguredNetworks configuredNetworks;
+
     private ProgressDialog progressDialog;
+    private DialogFragment wifiDisabledDialog;
+
     private SharedPreferences settings;
     private String minSecurityToShow;
     private String minSignalLevelToShow;
-
-
-    // Inner class to monitor network state changes
-    public class NetworkStateMonitor extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (!wifiManager.isWifiEnabled()) {
-                finish();
-            }
-
-        }
-
-    }
 
 
     // Inner class to receive WiFi scan results
@@ -87,6 +74,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
 
             progressDialog.cancel();
+
+            if (!wifiManager.isWifiEnabled()) {
+                wifiManager.setWifiEnabled(true);
+            }
 
             try {
                 wifiScannedNetworks = wifiManager.getScanResults();
@@ -217,20 +208,9 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
 
 
-                try {
-                    if (networksListAdapter == null) {
-                        networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
-                        networksListView.setAdapter(networksListAdapter);
-                    } else {
-                        // Refresh list
-                        networksListAdapter.clear();
-                        networksListAdapter.addAll(wifiScannedNetworks);
-                        networksListAdapter.notifyDataSetChanged();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
+
+            updateListOfNetworks(context);
 
         }
 
@@ -290,26 +270,24 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                     capabilities = wifiScannedNetworks.get(correctPosition).capabilities;
                 }
 
-                // Check if network is not configured yet
-                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
-                    DialogFragment dialog = new AddNetworkDialogFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KEY_SSID, ssid);
-                    bundle.putString(Constants.KEY_BSSID, bssid);
-                    bundle.putString(Constants.KEY_SECURITY, capabilities);
-                    dialog.setArguments(bundle);
-                    dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
-                } else { // If network is already configured show dialog informing this
-                    Toasts.showNetworkIsConfigured(getApplicationContext());
+                try {
+                    // Check if network is not configured yet
+                    if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
+                        DialogFragment dialog = new AddNetworkDialogFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.KEY_SSID, ssid);
+                        bundle.putString(Constants.KEY_BSSID, bssid);
+                        bundle.putString(Constants.KEY_SECURITY, capabilities);
+                        dialog.setArguments(bundle);
+                        dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
+                    } else { // If network is already configured show dialog informing this
+                        Toasts.showNetworkIsConfigured(getApplicationContext());
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
         });
-
-        // Register a broadcast receiver to monitor changes on network state to update network status
-        BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-        this.registerReceiver(wifiStateMonitor, filter);
 
     }
 
@@ -382,11 +360,14 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if (!wifiManager.isWifiEnabled()) {
-            wifiManager.setWifiEnabled(true);
-        }
         Toasts.cancelAllToasts();
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 
     @Override
@@ -417,6 +398,22 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         return position;
     }
 
+    private void updateListOfNetworks(Context context) {
+        try {
+            if (networksListAdapter == null) {
+                networksListAdapter = new ScannedNetworksListAdapter(context, wifiScannedNetworks);
+                networksListView.setAdapter(networksListAdapter);
+            } else {
+                // Refresh list
+                networksListAdapter.clear();
+                networksListAdapter.addAll(wifiScannedNetworks);
+                networksListAdapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     // REQUEST PERMISSION DIALOG
 
@@ -466,6 +463,5 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
         }
     }
-
 
 }

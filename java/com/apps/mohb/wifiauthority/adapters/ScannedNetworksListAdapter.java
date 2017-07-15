@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 7/14/17 12:18 AM
+ *  Last modified : 7/14/17 11:36 PM
  *
  *  -----------------------------------------------------------
  */
@@ -13,6 +13,7 @@
 package com.apps.mohb.wifiauthority.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.support.v4.content.ContextCompat;
@@ -56,67 +57,73 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
         ImageView imgCfg = (ImageView) convertView.findViewById(R.id.imgCfg);
 
-        // Check if network is already configured
-        if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), result.SSID)) {
-            imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
+        try {
+            // Check if network is already configured
+            if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
 
-            // Check if network is connected
-            if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
-                txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                // Check if network is connected
+                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                    txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                }
+
             }
 
-        }
+            // Network security
 
-        // Network security
+            TextView txtScanNetworkSecurity = (TextView) convertView.findViewById(R.id.txtScanNetSecurity);
+            String capabilities = result.capabilities;
 
-        TextView txtScanNetworkSecurity = (TextView) convertView.findViewById(R.id.txtScanNetSecurity);
-        String capabilities = result.capabilities;
+            ImageView imgLocker = (ImageView) convertView.findViewById(R.id.imgLocker);
 
-        ImageView imgLocker = (ImageView) convertView.findViewById(R.id.imgLocker);
-
-        if (capabilities.contains(Constants.SCAN_WPA)) {
-            txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_WPA));
-            imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_enhanced_encryption_green_24dp));
-        } else if (capabilities.contains(Constants.SCAN_EAP)) {
-            txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_EAP));
-            imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_enhanced_encryption_green_24dp));
-        } else if (capabilities.contains(Constants.SCAN_WEP)) {
-            txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_WEP));
-            imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_encryption_yellow_24dp));
-        } else {
-            txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_deactivated));
-            imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_no_encryption_red_24dp));
-        }
+            if (capabilities.contains(Constants.SCAN_WPA)) {
+                txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_WPA));
+                imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_enhanced_encryption_green_24dp));
+            } else if (capabilities.contains(Constants.SCAN_EAP)) {
+                txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_EAP));
+                imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_enhanced_encryption_green_24dp));
+            } else if (capabilities.contains(Constants.SCAN_WEP)) {
+                txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_WEP));
+                imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_encryption_yellow_24dp));
+            } else {
+                txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_deactivated));
+                imgLocker.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_no_encryption_red_24dp));
+            }
 
 
-        // Network signal level
+            // Network signal level
 
-        ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFi);
+            ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFi);
 
-        TextView txtScanNetworkSignal = (TextView) convertView.findViewById(R.id.txtScanNetSignal);
-        txtScanNetworkSignal.setText(String.valueOf(result.level));
+            TextView txtScanNetworkSignal = (TextView) convertView.findViewById(R.id.txtScanNetSignal);
+            txtScanNetworkSignal.setText(String.valueOf(result.level));
 
-        switch (wifiManager.calculateSignalLevel(result.level, Constants.LEVELS)) {
+            switch (wifiManager.calculateSignalLevel(result.level, Constants.LEVELS)) {
 
-            case Constants.LEVEL_HIGH:
-                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_wifi_high_green_24dp));
-                break;
+                case Constants.LEVEL_HIGH:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_high_green_24dp));
+                    break;
 
-            case Constants.LEVEL_LOW:
-                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_wifi_mid_yellow_24dp));
-                break;
+                case Constants.LEVEL_LOW:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_mid_yellow_24dp));
+                    break;
 
-            case Constants.LEVEL_VERY_LOW:
-                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_wifi_low_red_24dp));
-                break;
+                case Constants.LEVEL_VERY_LOW:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_low_red_24dp));
+                    break;
 
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
 
         return convertView;

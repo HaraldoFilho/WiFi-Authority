@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/14/17 12:42 AM
+ *  Last modified : 7/15/17 2:52 AM
  *
  *  -----------------------------------------------------------
  */
@@ -50,6 +50,7 @@ import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkDeleteAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkManagementPolicyAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkNameChangedDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PasswordChangeDialogFragment;
+import com.apps.mohb.wifiauthority.fragments.dialogs.WifiDisabledAlertFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements
         DescriptionEditDialogFragment.DescriptionEditDialogListener,
         AddNetworkDialogFragment.AddNetworkDialogListener,
         NetworkDeleteAlertFragment.NetworkDeleteDialogListener,
+        WifiDisabledAlertFragment.WifiDisabledDialogListener,
         NetworkNameChangedDialogFragment.NetworkNameChangedDialogListener,
         PasswordChangeDialogFragment.PasswordChangeDialogListener,
         LocationPermissionsAlertFragment.LocationPermissionsDialogListener,
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     private View listHeader;
     private View listFooter;
     private FloatingActionButton fab;
+    private DialogFragment wifiDisabledDialog;
 
     private ConfiguredNetworksListAdapter networksListAdapter;
     private AdapterView.AdapterContextMenuInfo menuInfo;
@@ -107,9 +110,16 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            // Refresh list of networks when connection state changes
-            updateListOfNetworks();
-
+            if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
+                try {
+                    showWifiDisabledAlertDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (wifiManager.isWifiEnabled()) {
+                updateListOfNetworks();
+            }
         }
 
     }
@@ -696,8 +706,20 @@ public class MainActivity extends AppCompatActivity implements
         // Set that Network Name Changed Dialog was not already been opened
         networkNameChangedDialogOpened = false;
 
+        wifiDisabledDialog = null;
+
+        if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
+            showWifiDisabledAlertDialog();
+        }
+
     }
 
+    private void showWifiDisabledAlertDialog() {
+        // Show dialog informing that wifi was disabled
+        wifiDisabledDialog = new WifiDisabledAlertFragment();
+//            wifiDisabledDialog.setCancelable(false);
+        wifiDisabledDialog.show(getSupportFragmentManager(), "WifiDisabledDialogListener");
+    }
 
     private void startScanNetworksActivity() {
         Intent intent = new Intent(getApplicationContext(), ScanNetworksActivity.class);
@@ -710,12 +732,11 @@ public class MainActivity extends AppCompatActivity implements
 
         try {
             // Reset the configured networks list
-            if (wifiConfiguredNetworks == null) {
-                wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
-            } else if (wifiManager.isWifiEnabled()) {
+            if (wifiConfiguredNetworks != null) {
                 wifiConfiguredNetworks.clear();
-                wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
             }
+            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1049,5 +1070,18 @@ public class MainActivity extends AppCompatActivity implements
         dialog.getDialog().cancel();
     }
 
+
+    // WIFI DISABLED ALERT DIALOG
+
+    @Override
+    public void onAlertWifiDisabledDialogPositiveClick(DialogFragment dialog) {
+        wifiDisabledDialog = null;
+        wifiManager.setWifiEnabled(true);
+    }
+
+    @Override
+    public void onAlertWifiDisabledDialogNegativeClick(DialogFragment dialog) {
+        finish();
+    }
 
 }

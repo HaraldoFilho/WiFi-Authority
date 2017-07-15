@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/12/17 10:51 PM
+ *  Last modified : 7/15/17 2:50 AM
  *
  *  -----------------------------------------------------------
  */
@@ -13,7 +13,6 @@
 package com.apps.mohb.wifiauthority;
 
 import android.content.Context;
-import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -63,9 +62,12 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         // Views
         TextView txtNetworkSSID = (TextView) findViewById(R.id.txtNetSSID);
         TextView txtNetworkMac = (TextView) findViewById(R.id.txtNetMac);
+        TextView txtNetworkIpAddressTitle = (TextView) findViewById(R.id.txtNetIpAddressTitle);
         TextView txtNetworkIpAddress = (TextView) findViewById(R.id.txtNetIpAddress);
+        TextView txtNetworkLinkSpeedTitle = (TextView) findViewById(R.id.txtNetSpeedTitle);
         TextView txtNetworkLinkSpeed = (TextView) findViewById(R.id.txtNetSpeed);
         TextView txtNetworkLinkSpeedUnit = (TextView) findViewById(R.id.txtNetSpeedUnit);
+        TextView txtNetworkSignalLevelTitle = (TextView) findViewById(R.id.txtNetSignalLevelTitle);
         TextView txtNetworkSignalLevel = (TextView) findViewById(R.id.txtNetSignalLevel);
         TextView txtNetworkSignalLevelUnit = (TextView) findViewById(R.id.txtNetSignalLevelUnit);
 
@@ -91,8 +93,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         txtNetworkSignalLevelUnit.setText("");
 
         // Check if the network is connected
-        if (((wifiInfo.getSupplicantState() == SupplicantState.COMPLETED))
-                && (ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID())))) {
+        if ((ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID())))) {
             // Get IP address string in the format XXX.XXX.XXX.XXX
             String ipAddressString;
             try {
@@ -110,37 +111,54 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             txtNetworkSignalLevel.setText(String.valueOf(wifiInfo.getRssi()));
             txtNetworkSignalLevelUnit.setText(" " + getString(R.string.layout_db));
             // Show frequency
-            setNetworkFrequencyText(true, "");
+            setNetworkFrequencyText(true);
         } else {
             // There is no information to show
-            txtNetworkIpAddress.setText(Constants.NO_INFO);
-            txtNetworkLinkSpeed.setText(Constants.NO_INFO);
-            txtNetworkSignalLevel.setText(Constants.NO_INFO);
-            setNetworkFrequencyText(false, Constants.NO_INFO);
+            txtNetworkIpAddressTitle.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkIpAddress.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkLinkSpeedTitle.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkLinkSpeed.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkLinkSpeedUnit.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkSignalLevelTitle.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkSignalLevel.setHeight(Constants.HEIGHT_ZERO);
+            txtNetworkSignalLevelUnit.setHeight(Constants.HEIGHT_ZERO);
+            setNetworkFrequencyText(false);
         }
 
     }
 
     // Show frequency of the network if build version is 21 or higher
     // as this feature is not available in lower builds
-    private void setNetworkFrequencyText(boolean isActive, String noInfo) {
+    private void setNetworkFrequencyText(boolean isActive) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            TextView txtNetworkFrequencyTitle = (TextView) findViewById(R.id.txtNetFrequencyTitle);
             TextView txtNetworkFrequency = (TextView) findViewById(R.id.txtNetFrequency);
             TextView txtNetworkFrequencyUnit = (TextView) findViewById(R.id.txtNetFrequencyUnit);
             // Check if it is the current active network
             if (isActive) {
-                txtNetworkFrequency.setText(String.valueOf(wifiInfo.getFrequency()));
-                txtNetworkFrequencyUnit.setText(" " + WifiInfo.FREQUENCY_UNITS);
+                if ((configuredNetworks.getFrequency(ssid) == Constants.NO_FREQ_SET)
+                        || (configuredNetworks.getFrequency(ssid) != wifiInfo.getFrequency())) {
+                    configuredNetworks.setFrequency(ssid, wifiInfo.getFrequency());
+                }
+            }
+            if (configuredNetworks.getFrequency(ssid) > Constants.NO_FREQ_SET) {
+                if (configuredNetworks.getFrequency(ssid) < Constants.FREQ_5GHZ) {
+                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_2p4ghz));
+                } else {
+                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_5ghz));
+                }
+                txtNetworkFrequencyUnit.setText(getResources().getString(R.string.layout_net_freq_unit));
             } else {
-                txtNetworkFrequency.setText(noInfo);
-                txtNetworkFrequencyUnit.setText("");
-
+                txtNetworkFrequencyTitle.setHeight(Constants.HEIGHT_ZERO);
+                txtNetworkFrequency.setHeight(Constants.HEIGHT_ZERO);
+                txtNetworkFrequencyUnit.setHeight(Constants.HEIGHT_ZERO);
             }
         }
     }
 
     // The IP address information is an integer representing the bytes corresponding to each ip number
     // This method gets the IP address to show on a human readable form
+
     private String getIpAddressString(int ipAddressInteger) throws ArrayIndexOutOfBoundsException {
 
         // Get the bytes from the integer

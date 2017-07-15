@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 7/12/17 11:42 PM
+ *  Last modified : 7/15/17 2:25 AM
  *
  *  -----------------------------------------------------------
  */
@@ -82,6 +82,11 @@ public class Constants {
 
     public static final int OUT_OF_REACH    = -1000;
 
+    // Network frequency
+    public static final int FREQ_5GHZ   = 5000;
+    public static final int HEIGHT_ZERO = 0;
+    public static final int NO_FREQ_SET = 0;
+
     // FAB alpha
     public static final float FAB_OPAQUE       = (float) 1.0;
     public static final float FAB_TRANSLUCENT  = (float) 0.8;
@@ -116,7 +121,5 @@ public class Constants {
     public static final String PREF_MIN_SIGNAL_HIGH      = "3";
     public static final String PREF_MIN_SIGNAL_LOW       = "2";
     public static final String PREF_MIN_SIGNAL_VERY_LOW  = "1";
-
-    public static final String NO_INFO  = "-";
 
 }

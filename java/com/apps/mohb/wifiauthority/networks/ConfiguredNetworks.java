@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/11/17 12:13 AM
+ *  Last modified : 7/15/17 2:25 AM
  *
  *  -----------------------------------------------------------
  */
@@ -270,6 +270,21 @@ public class ConfiguredNetworks {
 
     }
 
+    public int getFrequency(String ssid) {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.getFrequency();
+            }
+            iterator.next();
+        }
+        return Constants.NO_FREQ_SET;
+
+    }
+
     public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String ssid)
             throws NullPointerException {
 
@@ -359,6 +374,22 @@ public class ConfiguredNetworks {
             data = networksData.get(iterator.nextIndex());
             if (getDescriptionBySSID(ssid).matches(data.getSSID())) {
                 data.setDescription(description);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
+    public boolean setFrequency(String ssid, int frequency) {
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                data.setFrequency(frequency);
                 saveDataState();
                 return true;
             }

@@ -130,5 +130,10 @@
     <string name="alert_title_reset_preferences">Restaurar padrões?</string>
     <string name="alert_message_reset_preferences">Todas as configurações serão restauradas para os valores padrão\n</string>
     <string name="url_help_settings">wifiauthority-ajuda-configuracoes</string>
+    <string name="alert_message_wifi_disabled">O WiFi foi desabilitado. Você deseja liga-lo novamente?</string>
+    <string name="alert_title_wifi_disabled">WiFi desabilitado</string>
+    <string name="alert_button_close_app">Não, feche o aplicativo</string>
+    <string name="layout_net_freq_2p4ghz">2,4GHz</string>
+    <string name="layout_net_freq_5ghz">5GHz</string>
 
 </resources>
