@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkNameChangedDialogFragment.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 8/6/17 11:37 AM
  *
  *  -----------------------------------------------------------
  */
@@ -58,6 +58,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
     private String mac;
     private String oldSSID;
     private String newSSID;
+    private boolean isHidden;
     private String description;
     private String security;
 
@@ -95,6 +96,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
             mac = bundle.getString(Constants.KEY_BSSID);
             oldSSID = configuredNetworks.getDataSSID(bundle.getString(Constants.KEY_OLD_NAME));
             newSSID = configuredNetworks.getDataSSID(bundle.getString(Constants.KEY_NEW_NAME));
+            isHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
             description = bundle.getString(Constants.KEY_DESCRIPTION);
             security = bundle.getString(Constants.KEY_SECURITY);
 
@@ -132,7 +134,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                     wifiManager.saveConfiguration();
 
                     configuredNetworks.removeNetworkData(oldSSID);
-                    configuredNetworks.addNetworkData(description, newSSID, mac, security, "",
+                    configuredNetworks.addNetworkData(description, newSSID, isHidden, mac, security, "",
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {

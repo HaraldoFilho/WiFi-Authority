@@ -1,3 +1,7 @@
+#### **0.4.17**
+- Implemented automatic reconfiguration of hidden status of a network.
+- Fixed bugs and crashes.
+
 #### **0.4.16**
 - Improvements on user interface.
 

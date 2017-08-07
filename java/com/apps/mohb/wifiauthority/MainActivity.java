@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 7/15/17 11:41 AM
+ *  Last modified : 8/7/17 5:06 PM
  *
  *  -----------------------------------------------------------
  */
@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements
     private SharedPreferences showNetworkManagementPolicyWarnPref;
     private boolean networkNameChangedDialogOpened;
     private String ssid;
+    private boolean isHidden;
 
     private SharedPreferences settings;
 
@@ -161,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements
                 e.printStackTrace();
             }
 
-
             try {
                 // Iterates over the list of the scanned networks to save the mac addresses
                 // and location of configured networks that are on reach
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements
 
                     // Check if network is configured using its ssid
                     if (configuredNetworks.isConfiguredBySSID(wifiConfiguredNetworks, scanResult.SSID)) {
-                        // Check if the network is configured using its mac address
+                        // Check if the network is not configured using its mac address
                         if (!configuredNetworks.isConfiguredByMacAddress(scanResult.BSSID)) {
                             // Check if network already has additional data
                             if (configuredNetworks.hasNetworkAdditionalData(scanResult.SSID)) {
@@ -192,11 +192,11 @@ public class MainActivity extends AppCompatActivity implements
                                 // Check if user's last known location has been acquired
                                 if (isLastLocationKnown()) {
                                     // Create additional data for the network with the scanned SSID, Mac Address and the current location
-                                    configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
+                                    configuredNetworks.addNetworkData("", scanResult.SSID, false, scanResult.BSSID,
                                             scanResult.capabilities, "", lastLatitude, lastLongitude);
                                 } else { // If location has not been acquired create additional data for the network
                                     // with the scanned SSID, Mac Address and the default location (0,0)
-                                    configuredNetworks.addNetworkData("", scanResult.SSID, scanResult.BSSID,
+                                    configuredNetworks.addNetworkData("", scanResult.SSID, false, scanResult.BSSID,
                                             scanResult.capabilities, "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                                 }
                             }
@@ -211,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements
 
                         }
                     }
-
 
                     scanListIterator.next();
 
@@ -249,53 +248,95 @@ public class MainActivity extends AppCompatActivity implements
 
                         ScanResult scanResult = wifiScannedNetworks.get(scanResultListIterator.nextIndex());
 
+                        if (scanResult.SSID.isEmpty()) {
+                            isHidden = true;
+                        } else {
+                            isHidden = false;
+                        }
+
                         SharedPreferences settings
                                 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
                         // Check if ssid reconfiguration setting is on ...
                         if (settings.getBoolean(Constants.PREF_KEY_RECONFIG, true)
-                                // ... if Mac Address of configured network matches Mac Address of scanned network...
-                                && (configuredNetworks.getMacAddressBySSID(ssid).matches(scanResult.BSSID))
-                                // ... if network is not hidden...
-                                && (!scanResult.SSID.isEmpty())
-                                // ... and if SSID of the network has been changed
-                                && (!ssid.matches(configuredNetworks.getCfgSSID(scanResult.SSID)))) {
+                                // ... and if Mac Address of configured network matches Mac Address of scanned network
+                                && (configuredNetworks.getMacAddressBySSID(ssid).matches(scanResult.BSSID))) {
 
-                            // Updates the SSID of the configured network
-                            WifiConfiguration configuration = configuredNetworks
-                                    .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, scanResult.SSID);
+                            // If network is not hidden...
+                            if (!isHidden) {
+                                // ... and if SSID of the network has changed
+                                if (!ssid.matches(configuredNetworks.getCfgSSID(scanResult.SSID))) {
 
-                            int updateResult = wifiManager.updateNetwork(configuration);
+                                    // Updates the SSID of the configured network
+                                    WifiConfiguration configuration = configuredNetworks
+                                            .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, scanResult.SSID);
 
-                            // Check if update has failed and the name changed dialog is not opened
-                            if ((updateResult == Constants.NETWORK_UPDATE_FAIL) && (!networkNameChangedDialogOpened)) {
+                                    /// Set as not hidden in case hidden status was changed on router
+                                    configuration.hiddenSSID = false;
+                                    configuredNetworks.setHidden(configuration.SSID, false);
 
-                                // Check if network is not hidden
-                                if (!scanResult.SSID.isEmpty()) {
-                                    /**
-                                     Opens name changed dialog with the following data of the changed network:
-                                     - Description
-                                     - Old name (SSID)
-                                     - New name (SSID)
-                                     - Security
-                                     **/
-                                    DialogFragment networkNameChangedDialog = new NetworkNameChangedDialogFragment();
+                                    // Update network with new configuration
+                                    int updateResult = wifiManager.updateNetwork(configuration);
 
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(Constants.KEY_DESCRIPTION,
-                                            configuredNetworks.getDescriptionBySSID(ssid));
-                                    bundle.putString(Constants.KEY_OLD_NAME, ssid);
-                                    bundle.putString(Constants.KEY_NEW_NAME, scanResult.SSID);
-                                    bundle.putString(Constants.KEY_SECURITY, scanResult.capabilities);
-                                    bundle.putString(Constants.KEY_BSSID, scanResult.BSSID); // send also the Mac Address
+                                    // Check if update has failed and the name changed dialog is not opened
+                                    if ((updateResult == Constants.NETWORK_UPDATE_FAIL) && (!networkNameChangedDialogOpened)) {
 
-                                    networkNameChangedDialog.setArguments(bundle);
-                                    networkNameChangedDialog.show(getSupportFragmentManager(),
-                                            "NetworkNameChangedDialogFragment");
-                                    // Register that dialog is opened
-                                    networkNameChangedDialogOpened = true;
+                                        // Check if network is not hidden
+                                        if (!scanResult.SSID.isEmpty()) {
+                                            /**
+                                             Opens name changed dialog with the following data of the changed network:
+                                             - Description
+                                             - Old name (SSID)
+                                             - New name (SSID)
+                                             - Security
+                                             **/
+                                            DialogFragment networkNameChangedDialog = new NetworkNameChangedDialogFragment();
+
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString(Constants.KEY_DESCRIPTION,
+                                                    configuredNetworks.getDescriptionBySSID(ssid));
+                                            bundle.putString(Constants.KEY_OLD_NAME, ssid);
+                                            bundle.putString(Constants.KEY_NEW_NAME, scanResult.SSID);
+                                            bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
+                                            bundle.putString(Constants.KEY_SECURITY, scanResult.capabilities);
+                                            bundle.putString(Constants.KEY_BSSID, scanResult.BSSID); // send also the Mac Address
+
+                                            networkNameChangedDialog.setArguments(bundle);
+                                            networkNameChangedDialog.show(getSupportFragmentManager(),
+                                                    "NetworkNameChangedDialogFragment");
+                                            // Register that dialog is opened
+                                            networkNameChangedDialogOpened = true;
+
+                                        }
+                                    }
+
+                                } else { // If SSID has not changed...
+
+                                    // ... get the configuration of the network
+                                    WifiConfiguration configuration = configuredNetworks
+                                            .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, ssid);
+
+                                    // Only updates hidden status if nerwork is not connected or connecting as
+                                    // in these situations the SSID of a configured network is recognized on scan
+                                    if (configuration.status == WifiConfiguration.Status.DISABLED) {
+                                        configuration.hiddenSSID = false;
+                                        configuredNetworks.setHidden(ssid, false);
+                                        wifiManager.updateNetwork(configuration);
+                                    }
 
                                 }
+
+                            } else { // If SSID is hidden...
+
+                                // ...get configuration of the network
+                                WifiConfiguration configuration = configuredNetworks
+                                        .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, ssid);
+
+                                // Update hidden status of the network
+                                configuration.hiddenSSID = true;
+                                configuredNetworks.setHidden(ssid, true);
+                                wifiManager.updateNetwork(configuration);
+
                             }
 
                         } else {
@@ -313,6 +354,7 @@ public class MainActivity extends AppCompatActivity implements
                     wifiConfigurationListIterator.next();
 
                 }
+
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -535,8 +577,7 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) itemConnect.getMenuInfo();
         WifiConfiguration network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
 
-        // Disable connect item clicks and set text to connect by default
-        itemConnect.setTitle(R.string.context_connect);
+        // Disable connect item clicks
         itemConnect.setEnabled(false);
 
         if (wifiManager.isWifiEnabled()) {
@@ -551,7 +592,8 @@ public class MainActivity extends AppCompatActivity implements
                     itemConnect.setTitle(R.string.context_cancel);
                     break;
                 // Disconnected
-                default:
+                case WifiConfiguration.Status.DISABLED:
+                    itemConnect.setTitle(R.string.context_connect);
                     break;
             }
         }
@@ -560,7 +602,6 @@ public class MainActivity extends AppCompatActivity implements
         if ((network.wepKeys[0] == null) && (network.preSharedKey == null)) {
             itemPassword.setEnabled(false);
         }
-
 
         List<ScanResult> wifiScannedNetworks = wifiManager.getScanResults();
 
@@ -585,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements
 
         network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
         ssid = network.SSID;
+        isHidden = network.hiddenSSID;
 
         Bundle bundle;
 
@@ -625,6 +667,7 @@ public class MainActivity extends AppCompatActivity implements
                 bundle = new Bundle();
                 bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
                 bundle.putString(Constants.KEY_SSID, ssid);
+                bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
                 bundle.putString(Constants.KEY_SECURITY, network.allowedKeyManagement.toString());
                 dialogPassword.setArguments(bundle);
                 dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
@@ -807,16 +850,13 @@ public class MainActivity extends AppCompatActivity implements
     */
     private void updateListOfNetworks() {
 
-        try {
-            // Reset the configured networks list
-            if (wifiConfiguredNetworks != null) {
-                wifiConfiguredNetworks.clear();
-            }
-            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Reset the configured networks list
+        if (wifiConfiguredNetworks != null) {
+            wifiConfiguredNetworks.clear();
         }
+        wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+
+        wifiScannedNetworks = wifiManager.getScanResults();
 
         if (wifiManager.isWifiEnabled()) {
 
@@ -843,36 +883,31 @@ public class MainActivity extends AppCompatActivity implements
                     } else {
                         sortByName();
                     }
-                    try {
-                        // Sort list by decreasing order of signal level
-                        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                            @Override
-                            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                                int rhsLevel = Constants.OUT_OF_REACH;
-                                int lhsLevel = Constants.OUT_OF_REACH;
+                    // Sort list by decreasing order of signal level
+                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                        @Override
+                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                            int rhsLevel = Constants.OUT_OF_REACH;
+                            int lhsLevel = Constants.OUT_OF_REACH;
 
-                                wifiScannedNetworks = wifiManager.getScanResults();
-                                ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
 
-                                while (listIterator.hasNext()) {
-                                    int index = listIterator.nextIndex();
-                                    ScanResult scanResult = wifiScannedNetworks.get(index);
-                                    String ssid = scanResult.SSID;
-                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                        rhsLevel = scanResult.level;
-                                    }
-                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                        lhsLevel = scanResult.level;
-                                    }
-                                    listIterator.next();
+                            while (listIterator.hasNext()) {
+                                int index = listIterator.nextIndex();
+                                ScanResult scanResult = wifiScannedNetworks.get(index);
+                                String ssid = scanResult.SSID;
+                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    rhsLevel = scanResult.level;
                                 }
-
-                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    lhsLevel = scanResult.level;
+                                }
+                                listIterator.next();
                             }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+
+                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                        }
+                    });
 
                     try {
                         // Move connected network to the beginning of the list
@@ -918,20 +953,16 @@ public class MainActivity extends AppCompatActivity implements
             ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
         }
 
-        try {
-            // Create a list adapter if one was not created yet
-            if (networksListAdapter == null) {
-                networksListAdapter = new ConfiguredNetworksListAdapter(this,
-                        wifiConfiguredNetworks, configuredNetworks, wifiScannedNetworks);
-                networksListView.setAdapter(networksListAdapter);
-            } else {
-                // Refresh list
-                networksListAdapter.clear();
-                networksListAdapter.addAll(wifiConfiguredNetworks);
-                networksListAdapter.notifyDataSetChanged();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Create a list adapter if one was not created yet
+        if (networksListAdapter == null) {
+            networksListAdapter = new ConfiguredNetworksListAdapter(this,
+                    wifiConfiguredNetworks, configuredNetworks, wifiScannedNetworks);
+            networksListView.setAdapter(networksListAdapter);
+        } else {
+            // Refresh list
+            networksListAdapter.clear();
+            networksListAdapter.addAll(wifiConfiguredNetworks);
+            networksListAdapter.notifyDataSetChanged();
         }
 
 
@@ -998,6 +1029,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onPasswordChangeDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
     }
+
 
     // NETWORK DELETE DIALOG
 

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 7/14/17 12:44 AM
+ *  Last modified : 8/7/17 12:21 AM
  *
  *  -----------------------------------------------------------
  */
@@ -104,6 +104,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             txtNetworkDescription.setText(description);
         }
 
+
         // Network security
 
         TextView txtNetworkSecurity = (TextView) convertView.findViewById(R.id.txtNetSecurity);
@@ -146,119 +147,112 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         }
 
-        try {
 
-            // Network signal level
+        // Network signal level
 
-            ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
+        ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
 
+        if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+
+            switch (wifiManager.calculateSignalLevel(
+                    configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
+
+                case Constants.LEVEL_HIGH:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_high_green_24dp));
+                    break;
+
+                case Constants.LEVEL_LOW:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_mid_yellow_24dp));
+                    break;
+
+                case Constants.LEVEL_VERY_LOW:
+                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                            R.drawable.ic_wifi_low_red_24dp));
+                    break;
+
+            }
+
+        } else {
+            imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_signal_wifi_unavailable_red_24dp));
+        }
+
+
+        // Network state
+
+        TextView txtNetworkState = (TextView) convertView.findViewById(R.id.txtNetStatus);
+        txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
+
+        if (ssid.matches(configuredNetworks.getDataSSID(ConfiguredNetworks.supplicantSSID))) {
+
+            switch (ConfiguredNetworks.supplicantNetworkState) {
+
+                case DISCONNECTED:
+                    wifiManager.disableNetwork(configuration.networkId);
+
+                    switch (ConfiguredNetworks.lastSupplicantNetworkState) {
+                        case AUTHENTICATING:
+                            Toasts.showNetworkConnectionError(getContext(), R.string.toast_authentication_failed);
+                            break;
+                        case OBTAINING_IPADDR:
+                            Toasts.showNetworkConnectionError(getContext(), R.string.toast_obt_ip_address_failed);
+                            break;
+                        default:
+                            break;
+                    }
+                    state = getContext().getResources().getString(R.string.net_state_disconnected);
+                    ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+                    break;
+
+                case SCANNING:
+                    state = getContext().getResources().getString(R.string.net_state_scannig);
+                    ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.SCANNING;
+                    break;
+
+                case CONNECTING:
+                    state = getContext().getResources().getString(R.string.net_state_connecting);
+                    ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTING;
+                    break;
+
+                case AUTHENTICATING:
+                    state = getContext().getResources().getString(R.string.net_state_authenticating);
+                    ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.AUTHENTICATING;
+                    break;
+
+                case OBTAINING_IPADDR:
+                    state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
+                    ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
+                    if (configuredNetworks.isConnected(wifiConfiguredNetworks, ssid)) {
+                        txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                        state = getContext().getResources().getString(R.string.layout_net_connected);
+                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            txtNetworkState.setText(state);
+        } else {
             if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
-
-                switch (wifiManager.calculateSignalLevel(
-                        configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
-
-                    case Constants.LEVEL_HIGH:
-                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                                R.drawable.ic_wifi_high_green_24dp));
-                        break;
-
-                    case Constants.LEVEL_LOW:
-                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                                R.drawable.ic_wifi_mid_yellow_24dp));
-                        break;
-
-                    case Constants.LEVEL_VERY_LOW:
-                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                                R.drawable.ic_wifi_low_red_24dp));
-                        break;
-
-                }
-
+                txtNetworkState.setText(R.string.layout_net_disconnected);
             } else {
-                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_signal_wifi_unavailable_red_24dp));
+                txtNetworkState.setText(R.string.layout_net_out_of_reach);
             }
+        }
 
 
-            // Network state
+        // Hidden network
 
-            TextView txtNetworkState = (TextView) convertView.findViewById(R.id.txtNetStatus);
-            txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
+        ImageView imgHidden = (ImageView) convertView.findViewById(R.id.imgHidden);
 
-            if (ssid.matches(configuredNetworks.getDataSSID(ConfiguredNetworks.supplicantSSID))) {
-
-                switch (ConfiguredNetworks.supplicantNetworkState) {
-
-                    case DISCONNECTED:
-                        wifiManager.disableNetwork(configuration.networkId);
-
-                        switch (ConfiguredNetworks.lastSupplicantNetworkState) {
-                            case AUTHENTICATING:
-                                Toasts.showNetworkConnectionError(getContext(), R.string.toast_authentication_failed);
-                                break;
-                            case OBTAINING_IPADDR:
-                                Toasts.showNetworkConnectionError(getContext(), R.string.toast_obt_ip_address_failed);
-                                break;
-                            default:
-                                break;
-                        }
-                        state = getContext().getResources().getString(R.string.net_state_disconnected);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-                        break;
-
-                    case SCANNING:
-                        state = getContext().getResources().getString(R.string.net_state_scannig);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.SCANNING;
-                        break;
-
-                    case CONNECTING:
-                        state = getContext().getResources().getString(R.string.net_state_connecting);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTING;
-                        break;
-
-                    case AUTHENTICATING:
-                        state = getContext().getResources().getString(R.string.net_state_authenticating);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.AUTHENTICATING;
-                        break;
-
-                    case OBTAINING_IPADDR:
-                        state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
-                        if (configuredNetworks.isConnected(wifiConfiguredNetworks, ssid)) {
-                            txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                            state = getContext().getResources().getString(R.string.layout_net_connected);
-                            ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-                txtNetworkState.setText(state);
-            } else {
-                if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
-                    txtNetworkState.setText(R.string.layout_net_disconnected);
-                } else {
-                    txtNetworkState.setText(R.string.layout_net_out_of_reach);
-                }
-            }
-
-
-            // Hidden network
-
-            ImageView imgHidden = (ImageView) convertView.findViewById(R.id.imgHidden);
-
-            if (configuration.hiddenSSID) {
-                imgHidden.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                        R.drawable.ic_visibility_off_grey_24dp));
-            } else {
-                imgHidden.setImageDrawable(null);
-            }
-
-
-        } catch (NullPointerException e) {
-            wifiManager.setWifiEnabled(true);
-            e.printStackTrace();
+        if (configuredNetworks.isHidden(ssid)) {
+            imgHidden.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                    R.drawable.ic_visibility_off_grey_24dp));
+        } else {
+            imgHidden.setImageDrawable(null);
         }
 
         return convertView;

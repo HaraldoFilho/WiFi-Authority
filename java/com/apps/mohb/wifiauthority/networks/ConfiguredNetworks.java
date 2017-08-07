@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 7/15/17 2:25 AM
+ *  Last modified : 8/7/17 4:49 PM
  *
  *  -----------------------------------------------------------
  */
@@ -14,7 +14,6 @@ package com.apps.mohb.wifiauthority.networks;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
@@ -70,12 +69,12 @@ public class ConfiguredNetworks {
     }
 
 
-    public void addNetworkData(String description, String ssid, String bssid,
+    public void addNetworkData(String description, String ssid, boolean hidden, String bssid,
                                String security, String password, double latitude, double longitude) {
         if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
             password = "";
         }
-        NetworkData data = new NetworkData(description, getDataSSID(ssid), bssid,
+        NetworkData data = new NetworkData(description, getDataSSID(ssid), hidden, bssid,
                 security, password, latitude, longitude);
         networksData.add(data);
         saveDataState();
@@ -256,6 +255,21 @@ public class ConfiguredNetworks {
 
     }
 
+    public boolean isHidden(String ssid) {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.isHidden();
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
     public String getPassword(String ssid) {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
@@ -375,6 +389,22 @@ public class ConfiguredNetworks {
             data = networksData.get(iterator.nextIndex());
             if (getDescriptionBySSID(ssid).matches(data.getSSID())) {
                 data.setDescription(description);
+                saveDataState();
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+
+    }
+
+    public boolean setHidden(String ssid, boolean hidden) {
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                data.setHidden(hidden);
                 saveDataState();
                 return true;
             }
@@ -667,6 +697,7 @@ public class ConfiguredNetworks {
         writer.beginObject();
         writer.name(Constants.JSON_DESCRIPTION).value(dataItem.getDescription());
         writer.name(Constants.JSON_SSID).value(dataItem.getSSID());
+        writer.name(Constants.JSON_HIDDEN).value(dataItem.isHidden());
         writer.name(Constants.JSON_BSSID).value(dataItem.getMacAddress());
         writer.name(Constants.JSON_SECURITY).value(dataItem.getSecurity());
         writer.name(Constants.JSON_FREQUENCY).value(dataItem.getFrequency());
@@ -701,6 +732,7 @@ public class ConfiguredNetworks {
     private NetworkData readDataItem(JsonReader jsonReader) throws IOException {
         String dataDescription = "";
         String dataSSID = "";
+        boolean dataHidden = false;
         String dataBSSID = "";
         String dataSecurity = "";
         int dataFrequency = Constants.NO_FREQ_SET;
@@ -717,6 +749,9 @@ public class ConfiguredNetworks {
                     break;
                 case Constants.JSON_SSID:
                     dataSSID = jsonReader.nextString();
+                    break;
+                case Constants.JSON_HIDDEN:
+                    dataHidden = jsonReader.nextBoolean();
                     break;
                 case Constants.JSON_BSSID:
                     dataBSSID = jsonReader.nextString();
@@ -742,7 +777,7 @@ public class ConfiguredNetworks {
 
         }
         jsonReader.endObject();
-        NetworkData dataItem = new NetworkData(dataDescription, dataSSID, dataBSSID,
+        NetworkData dataItem = new NetworkData(dataDescription, dataSSID, dataHidden, dataBSSID,
                 dataSecurity, dataPassword, dataLatitude, dataLongitude);
         dataItem.setFrequency(dataFrequency);
         return dataItem;

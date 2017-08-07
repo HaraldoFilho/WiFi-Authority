@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : PasswordChangeDialogFragment.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 8/7/17 4:49 PM
  *
  *  -----------------------------------------------------------
  */
@@ -46,6 +46,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
     private EditText networkPasswd;
     private int networkId;
     private String networkSSID;
+    private boolean networkIsHidden;
     private String networkSecurity;
     private LayoutInflater inflater;
     private CheckBox checkPasswdVisible;
@@ -66,6 +67,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
         bundle = this.getArguments();
         networkId = bundle.getInt(Constants.KEY_NETWORK_ID);
         networkSSID = bundle.getString(Constants.KEY_SSID);
+        networkIsHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
         networkSecurity = bundle.getString(Constants.KEY_SECURITY);
 
         networkPasswd = (EditText) view.findViewById(R.id.txtChangePasswd);
@@ -77,7 +79,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData("", networkSSID, networkPasswd.getText().toString(), "", "",
+                    configuredNetworks.addNetworkData("", networkSSID, networkIsHidden, networkPasswd.getText().toString(), "", "",
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 wifiConfiguration.networkId = networkId;

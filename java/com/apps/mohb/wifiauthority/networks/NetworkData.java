@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkData.java
- *  Last modified : 7/15/17 2:28 AM
+ *  Last modified : 8/6/17 11:02 AM
  *
  *  -----------------------------------------------------------
  */
@@ -19,6 +19,7 @@ public class NetworkData {
 
     private String description;
     private String ssid;
+    private boolean hidden;
     private String mac;
     private String security;
     private int frequency;
@@ -27,10 +28,11 @@ public class NetworkData {
     private double longitude;
 
 
-    public NetworkData(String description, String ssid, String bssid,
+    public NetworkData(String description, String ssid, boolean hidden, String bssid,
                        String security, String password, double latitude, double longitude) {
         this.description = description;
         this.ssid = ssid;
+        this.hidden = hidden;
         this.mac = bssid;
         this.security = security;
         this.frequency = Constants.NO_FREQ_SET;
@@ -40,12 +42,19 @@ public class NetworkData {
 
     }
 
+
+    // SETTERS
+
     public void setDescription(String description) {
         this.description = description;
     }
 
     public void setSSID(String ssid) {
         this.ssid = ssid;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public void setMacAddress(String mac) {
@@ -76,12 +85,19 @@ public class NetworkData {
         this.longitude = longitude;
     }
 
+
+    // GETTERS
+
     public String getDescription() {
         return description;
     }
 
     public String getSSID() {
         return ssid;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public String getMacAddress() {

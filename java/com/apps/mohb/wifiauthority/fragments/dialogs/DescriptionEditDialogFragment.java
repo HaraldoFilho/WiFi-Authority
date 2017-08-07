@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DescriptionEditDialogFragment.java
- *  Last modified : 7/4/17 12:56 AM
+ *  Last modified : 8/6/17 11:36 AM
  *
  *  -----------------------------------------------------------
  */
@@ -39,6 +39,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
     private ConfiguredNetworks configuredNetworks;
     private EditText text;
     private String networkSSID;
+    private boolean isHidden;
     private LayoutInflater inflater;
     private Bundle bundle;
     View view;
@@ -51,6 +52,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
 
         bundle = this.getArguments();
         networkSSID = bundle.getString(Constants.KEY_SSID);
+        isHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
 
         configuredNetworks = new ConfiguredNetworks(getContext());
 
@@ -66,7 +68,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData(text.getText().toString(), networkSSID, "", "", "",
+                    configuredNetworks.addNetworkData(text.getText().toString(), networkSSID, isHidden, "", "", "",
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 configuredNetworks.updateNetworkDescription(networkSSID, text.getText().toString());

@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 7/15/17 10:42 AM
+ *  Last modified : 8/6/17 11:02 AM
  *
  *  -----------------------------------------------------------
  */
@@ -55,6 +55,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
     private ConfiguredNetworks configuredNetworks;
 
     String ssid;
+    boolean hidden = false;
     String security = "";
     String password = "";
 
@@ -98,13 +99,12 @@ public class AddNetworkDialogFragment extends DialogFragment {
                 checkPasswdVisible.setEnabled(false);
             }
             networkSecurity.setEnabled(false);
-
             wifiConfiguration = configuredNetworks.setNetworkCiphers(wifiConfiguration, security);
-
             builder.setTitle(R.string.dialog_add_network_title);
         } else {
-            builder.setTitle(R.string.dialog_add_hidden_network_title);
+            hidden = true;
             wifiConfiguration.hiddenSSID = true;
+            builder.setTitle(R.string.dialog_add_hidden_network_title);
         }
 
 
@@ -137,7 +137,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     String description = networkDescription.getText().toString();
 
                     if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
-                        configuredNetworks.addNetworkData(description, ssid, bssid, security, password,
+                        configuredNetworks.addNetworkData(description, ssid, hidden, bssid, security, password,
                                 Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     } else {
                         configuredNetworks.updateNetworkDescription(ssid, description);
