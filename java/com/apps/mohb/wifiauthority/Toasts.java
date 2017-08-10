@@ -25,6 +25,7 @@ public class Toasts {
 
     private static Toast unableRemoveNetwork;
     private static Toast missingInformation;
+    private static Toast invalidPassword;
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
@@ -103,6 +104,23 @@ public class Toasts {
     public static void cancelWiFiDisabled() {
         if (wifiDisabled != null) {
             wifiDisabled.cancel();
+        }
+    }
+
+
+    /*
+         Toast to notify to type a valid password
+    */
+
+    public static void showInvalidPassword(Context c) {
+        invalidPassword = Toast.makeText((c), R.string.toast_invalid_password, Toast.LENGTH_SHORT);
+        invalidPassword.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        invalidPassword.show();
+    }
+
+    public static void cancelInvalidPassword() {
+        if (invalidPassword != null) {
+            invalidPassword.cancel();
         }
     }
 
@@ -190,6 +208,7 @@ public class Toasts {
 
     public static void cancelAllToasts() {
         cancelUnableRemoveNetwork();
+        cancelInvalidPassword();
         cancelNetworkIsConfigured();
         cancelNetworkConnectionError();
         cancelNoNetworkFound();

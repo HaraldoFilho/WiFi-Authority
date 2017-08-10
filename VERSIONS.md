@@ -1,3 +1,9 @@
+#### **0.5.0**
+- Added option to save passwords inside application.
+- Added option to restore all network configurations in case they were deleted outside application.
+- Improvements on user interface.
+- Bug fixes.
+
 #### **0.4.17**
 - Implemented automatic reconfiguration of hidden status of a network.
 - Fixed bugs and crashes.

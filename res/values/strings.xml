@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.4.17</string>
-    <string name="version_code" translatable="false">54</string>
+    <string name="version_number" translatable="false">0.5.0</string>
+    <string name="version_code" translatable="false">55</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -86,12 +86,14 @@
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
     <string name="alert_title_reset_preferences">Restore defaults?</string>
+    <string name="alert_title_restore_networks">Restore networks?</string>
     <string name="alert_title_wifi_disabled">WiFi disabled!</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
     <string name="alert_message_delete_network">This action can not be undone\n</string>
     <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to delete networks unless they were added by WiFi Authority.\n</string>
     <string name="alert_message_network_ssid_changed">The name (SSID) of the following network has been changed. Due to changes on the policy regarding network management, from Android 6.0 and higher, a network can be updated or removed only if it was added by the same application. But you can re-add the network with the new name by typing its password again:</string>
     <string name="alert_message_reset_preferences">All settings will be restored to the default values\n</string>
+    <string name="alert_message_restore_networks">All network configurations were removed. Do you want to restore them?\n</string>
     <string name="alert_message_wifi_disabled">WiFi was disabled. Do you want to turn it on again?</string>
     <string name="alert_button_no">No</string>
     <string name="alert_button_yes">Yes</string>
@@ -107,6 +109,7 @@
     <string name="toast_no_location_information">There is no location information for this network</string>
     <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds.</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
+    <string name="toast_invalid_password">Please, type a valid password</string>
     <string name="toast_network_is_configured">This network is already configured</string>
     <string name="toast_wifi_disabled">WiFi is turned off, turning it on...</string>
     <string name="toast_get_legal_notices">Loading legal notices text...</string>

@@ -28,6 +28,7 @@ import android.widget.EditText;
 
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
+import com.apps.mohb.wifiauthority.Toasts;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 
 
@@ -72,34 +73,43 @@ public class PasswordChangeDialogFragment extends DialogFragment {
 
         networkPasswd = (EditText) view.findViewById(R.id.txtChangePasswd);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
         builder.setTitle(R.string.dialog_change_password);
 
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData("", networkSSID, networkIsHidden, networkPasswd.getText().toString(), "", "",
-                            Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
-                }
-                wifiConfiguration.networkId = networkId;
 
-                String password = "\"" + networkPasswd.getText().toString() + "\"";
+                String password = configuredNetworks.getCfgPassword(networkPasswd.getText().toString());
 
-                if (networkSecurity.contains(Constants.KEY_NONE_WEP)) {
-                    wifiConfiguration.wepKeys[0] = password;
+                if (password.length() >= Constants.DUMMY_PASSWORD.length()) {
+
+                    if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
+                        configuredNetworks.addNetworkData("", networkSSID, networkIsHidden, networkPasswd.getText().toString(), "", "",
+                                Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                    }
+                    wifiConfiguration.networkId = networkId;
+
+
+                    if (networkSecurity.contains(Constants.KEY_NONE_WEP)) {
+                        wifiConfiguration.wepKeys[0] = password;
+                    } else {
+                        wifiConfiguration.preSharedKey = password;
+                    }
+
+                    wifiManager.disconnect();
+                    wifiManager.updateNetwork(wifiConfiguration);
+                    wifiManager.enableNetwork(networkId, true);
+                    wifiManager.reconnect();
+
+                    configuredNetworks.setPassword(networkSSID, networkPasswd.getText().toString());
+                    configuredNetworks.saveDataState();
+                    mListener.onPasswordChangeDialogPositiveClick(PasswordChangeDialogFragment.this);
+
                 } else {
-                    wifiConfiguration.preSharedKey = password;
+                    Toasts.showInvalidPassword(getContext());
                 }
 
-                wifiManager.disconnect();
-                wifiManager.updateNetwork(wifiConfiguration);
-                wifiManager.enableNetwork(networkId, true);
-                wifiManager.reconnect();
-
-                configuredNetworks.setPassword(networkSSID, networkPasswd.getText().toString());
-                configuredNetworks.saveDataState();
-                mListener.onPasswordChangeDialogPositiveClick(PasswordChangeDialogFragment.this);
             }
         })
                 .setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {

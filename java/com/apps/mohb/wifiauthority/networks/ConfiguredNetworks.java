@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -115,11 +116,33 @@ public class ConfiguredNetworks {
             if (!listOfNetworks.contains(ssid)) {
                 networksData.remove(iterator.nextIndex());
                 saveDataState();
+                collectGarbage(wifiConfiguredNetworks);
             }
-            if (iterator.hasNext()) {
+            else {
                 iterator.next();
             }
         }
+
+    }
+
+    public void addNetworkConfiguration(Context context, String ssid, boolean isHidden, String security, String password) {
+
+        WifiConfiguration wifiConfiguration = new WifiConfiguration();
+
+        wifiConfiguration = setNetworkCiphers(wifiConfiguration, security);
+        if (isHidden) {
+            wifiConfiguration.hiddenSSID = true;
+        }
+        wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
+        wifiConfiguration.SSID = getCfgSSID(ssid);
+        wifiConfiguration.priority = 40;
+        wifiConfiguration = setNetworkSecurity(wifiConfiguration, getNetworkSecurity(security), getCfgPassword(password));
+
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        int netId =  wifiManager.addNetwork(wifiConfiguration);
+
+        wifiManager.disableNetwork(netId);
 
     }
 
@@ -141,6 +164,10 @@ public class ConfiguredNetworks {
     public String getCfgSSID(String ssid) {
         String cfgSSID = "\"" + ssid + "\"";
         return cfgSSID;
+    }
+
+    public String getCfgPassword(String password) {
+        return "\"" + password + "\"";
     }
 
     public boolean hasNetworkAdditionalData(String ssid) {
@@ -436,6 +463,9 @@ public class ConfiguredNetworks {
         while (iterator.hasNext()) {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
+                if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
+                    password = "";
+                }
                 data.setPassword(password);
                 saveDataState();
                 return true;
@@ -496,6 +526,17 @@ public class ConfiguredNetworks {
         configuration.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
 
         return configuration;
+
+    }
+
+    public boolean hasNetworksData() {
+
+        if (!networksData.isEmpty()) {
+            return true;
+        }
+        else {
+            return false;
+        }
 
     }
 

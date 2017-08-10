@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 8/6/17 11:02 AM
+ *  Last modified : 8/10/17 1:05 AM
  *
  *  -----------------------------------------------------------
  */
@@ -113,38 +113,44 @@ public class AddNetworkDialogFragment extends DialogFragment {
                 mListener.onAddNetworkDialogPositiveClick(AddNetworkDialogFragment.this);
 
                 ssid = networkName.getText().toString();
-                password = "\"" + networkPasswd.getText().toString() + "\"";
+                password = networkPasswd.getText().toString();
 
-                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
+                if (password.length() >= Constants.DUMMY_PASSWORD.length() || !networkPasswd.isEnabled()) {
 
-                    wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
-                    wifiConfiguration.SSID = configuredNetworks.getCfgSSID(ssid);
-                    wifiConfiguration.priority = 40;
+                    if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
 
-                    wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
-                            networkSecurity.getSelectedItemPosition(), password);
+                        wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
+                        wifiConfiguration.SSID = configuredNetworks.getCfgSSID(ssid);
+                        wifiConfiguration.priority = 40;
 
-                    wifiManager.disconnect();
-                    int netId = wifiManager.addNetwork(wifiConfiguration);
-                    wifiManager.enableNetwork(netId, true);
-                    wifiManager.reconnect();
+                        wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
+                                networkSecurity.getSelectedItemPosition(), configuredNetworks.getCfgPassword(password));
 
-                    String bssid = "";
-                    if (bundle != null) {
-                        bssid = bundle.getString(Constants.KEY_BSSID);
-                    }
+                        wifiManager.disconnect();
+                        int netId = wifiManager.addNetwork(wifiConfiguration);
+                        wifiManager.enableNetwork(netId, true);
+                        wifiManager.reconnect();
 
-                    String description = networkDescription.getText().toString();
+                        String bssid = "";
+                        if (bundle != null) {
+                            bssid = bundle.getString(Constants.KEY_BSSID);
+                        }
 
-                    if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
-                        configuredNetworks.addNetworkData(description, ssid, hidden, bssid, security, password,
-                                Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                        String description = networkDescription.getText().toString();
+
+                        if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
+                            configuredNetworks.addNetworkData(description, ssid, hidden, bssid, security, password,
+                                    Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                        } else {
+                            configuredNetworks.updateNetworkDescription(ssid, description);
+                        }
+                        configuredNetworks.saveDataState();
                     } else {
-                        configuredNetworks.updateNetworkDescription(ssid, description);
+                        Toasts.showNetworkIsConfigured(getContext());
                     }
-                    configuredNetworks.saveDataState();
+
                 } else {
-                    Toasts.showNetworkIsConfigured(getContext());
+                    Toasts.showInvalidPassword(getContext());
                 }
 
             }

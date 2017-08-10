@@ -50,8 +50,10 @@ import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkDeleteAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkManagementPolicyAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.NetworkNameChangedDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PasswordChangeDialogFragment;
+import com.apps.mohb.wifiauthority.fragments.dialogs.RestoreNetworksAlertFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.WifiDisabledAlertFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
+import com.apps.mohb.wifiauthority.networks.NetworkData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements
         PasswordChangeDialogFragment.PasswordChangeDialogListener,
         LocationPermissionsAlertFragment.LocationPermissionsDialogListener,
         NetworkManagementPolicyAlertFragment.NetworkManagementPolicyDialogListener,
+        RestoreNetworksAlertFragment.RestoreNetworksListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
@@ -628,34 +631,21 @@ public class MainActivity extends AppCompatActivity implements
         ssid = network.SSID;
         isHidden = network.hiddenSSID;
 
-        Bundle bundle;
-
         switch (item.getItemId()) {
 
             // Connect
             case R.id.connect:
-                if (!wifiManager.isWifiEnabled()) {
-                    wifiManager.setWifiEnabled(true);
-                }
-                // Get network id of the current active network
-                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-                int activeNetworkId = wifiInfo.getNetworkId();
-                // Disconnect and disable the current network
-                wifiManager.disconnect();
-                wifiManager.disableNetwork(activeNetworkId);
-                ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-                ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-                // Check if it is trying to connect to a different network
-                if (network.networkId != activeNetworkId) {
-                    // Enable and connect to the new network
-                    wifiManager.enableNetwork(network.networkId, true);
+                if (configuredNetworks.getPassword(ssid).matches(Constants.DUMMY_PASSWORD)) {
+                    showChangePasswordDialog(network, ssid, isHidden);
+                } else {
+                    connectToNetwork(wifiManager, network);
                 }
                 return true;
 
             // Edit Description
             case R.id.editDescription:
                 DialogFragment dialogEdit = new DescriptionEditDialogFragment();
-                bundle = new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString(Constants.KEY_SSID, ssid);
                 dialogEdit.setArguments(bundle);
                 dialogEdit.show(getSupportFragmentManager(), "DescriptionEditDialogFragment");
@@ -663,14 +653,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // Change password
             case R.id.changePassword:
-                DialogFragment dialogPassword = new PasswordChangeDialogFragment();
-                bundle = new Bundle();
-                bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
-                bundle.putString(Constants.KEY_SSID, ssid);
-                bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
-                bundle.putString(Constants.KEY_SECURITY, network.allowedKeyManagement.toString());
-                dialogPassword.setArguments(bundle);
-                dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
+                showChangePasswordDialog(network, ssid, isHidden);
                 return true;
 
             // Delete
@@ -683,6 +666,41 @@ public class MainActivity extends AppCompatActivity implements
                 return super.onContextItemSelected(item);
 
         }
+    }
+
+
+    private void connectToNetwork(WifiManager wifiManager, WifiConfiguration network) {
+
+        if (!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+        }
+        // Get network id of the current active network
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int activeNetworkId = wifiInfo.getNetworkId();
+        // Disconnect and disable the current network
+        wifiManager.disconnect();
+        wifiManager.disableNetwork(activeNetworkId);
+        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+        ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+        // Check if it is trying to connect to a different network
+        if (network.networkId != activeNetworkId) {
+            // Enable and connect to the new network
+            wifiManager.enableNetwork(network.networkId, true);
+        }
+
+    }
+
+    private void showChangePasswordDialog(WifiConfiguration network, String ssid, boolean isHidden) {
+
+        DialogFragment dialogPassword = new PasswordChangeDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
+        bundle.putString(Constants.KEY_SSID, ssid);
+        bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
+        bundle.putString(Constants.KEY_SECURITY, network.allowedKeyManagement.toString());
+        dialogPassword.setArguments(bundle);
+        dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
+
     }
 
     @Override
@@ -761,13 +779,19 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-        // Delete data from networks that were removed by Android system
-        try {
-            configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
-        } catch (ConcurrentModificationException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        if ((configuredNetworks.hasNetworksData()) && (wifiManager.getConfiguredNetworks().isEmpty())) {
+            // Show dialog to restore networks
+            DialogFragment restoreNetworksDialog = new RestoreNetworksAlertFragment();
+            restoreNetworksDialog.show(getSupportFragmentManager(), "RestoreNetworksDialogListener");
+        } else {
+            // Delete data from networks that were removed by Android system
+            try {
+                configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
+            } catch (ConcurrentModificationException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         // Check if location permissions are granted
@@ -1123,6 +1147,48 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // Cancel
     public void onAddNetworkDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
+    }
+
+
+    // RESTORE NETWORKS DIALOG
+
+    @Override // Yes
+    public void onAlertDialogPositiveClick(DialogFragment dialog) {
+
+        List<NetworkData> networksData = configuredNetworks.getConfiguredNetworksData();
+        ListIterator<NetworkData> listIterator = networksData.listIterator();
+
+        while (listIterator.hasNext()) {
+
+            int index = listIterator.nextIndex();
+            NetworkData data = networksData.get(index);
+
+            // If no password is stored and network is not open set a dummy password
+            if (data.getPassword().isEmpty()
+                    && configuredNetworks.getNetworkSecurity(data.getSecurity()) != Constants.SET_OPEN) {
+                data.setPassword(Constants.DUMMY_PASSWORD);
+            }
+            configuredNetworks.addNetworkConfiguration(this, data.getSSID(), data.isHidden(),
+                    data.getSecurity(), data.getPassword());
+
+            listIterator.next();
+
+        }
+
+        configuredNetworks.saveDataState();
+
+        updateListOfNetworks();
+
+    }
+
+    @Override // No
+    public void onAlertDialogNegativeClick(DialogFragment dialog) {
+        try {
+            configuredNetworks.collectGarbage(wifiConfiguredNetworks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         dialog.getDialog().cancel();
     }
 

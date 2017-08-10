@@ -67,6 +67,8 @@ public class Constants {
     public static final String CFG_CCMP = "CCMP";
     public static final String CFG_TKIP = "TKIP";
 
+    public static final String DUMMY_PASSWORD = "--------";
+
     // Lists
     public static final int LIST_HEAD = 0;
     public static final int LIST_HEADER_POSITION = 1;

@@ -33,6 +33,14 @@
             android:summaryOff="@string/pref_reconfig_summ_off"
             android:defaultValue="@string/pref_def_reconfig" />
 
+        <!--Password storage-->
+        <CheckBoxPreference
+            android:key="@string/pref_key_store_password"
+            android:title="@string/pref_title_store_password"
+            android:summaryOn="@string/pref_store_password_summ_on"
+            android:summaryOff="@string/pref_store_password_summ_off"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -69,20 +77,5 @@
 
     </PreferenceCategory>
 
-    <!--
-        <PreferenceCategory
-            android:title="@string/pref_group_security"
-            android:key="@string/pref_group_security_settings">
-
-        &lt;!&ndash;Password storage&ndash;&gt;
-        <CheckBoxPreference
-            android:key="@string/pref_key_store_password"
-            android:title="@string/pref_title_store_password"
-            android:summaryOn="@string/pref_store_password_summ_on"
-            android:summaryOff="@string/pref_store_password_summ_off"
-            android:defaultValue="false" />
-
-        </PreferenceCategory>
-    -->
 
 </PreferenceScreen>

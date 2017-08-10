@@ -135,5 +135,8 @@
     <string name="alert_button_close_app">Não, feche o aplicativo</string>
     <string name="layout_net_freq_2p4ghz">2,4</string>
     <string name="layout_net_freq_5ghz">5</string>
+    <string name="toast_invalid_password">Por favor, digite uma senha válida</string>
+    <string name="alert_message_restore_networks">Todas as configurações de rede foram excluídas. Você deseja restaurá-las?\n</string>
+    <string name="alert_title_restore_networks">Restaurar redes?</string>
 
 </resources>
