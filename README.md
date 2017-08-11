@@ -4,14 +4,17 @@
 
 **_WiFi Authority_** is a Wi-Fi networks management application for Android™ on which you can:
 
-- List all Wi-Fi networks configured on the device
-- Give a description for each configured network
-- View all networks available at your current location
+- List all WiFi networks configured on the device with multiple sort options
+- View all networks available at your current location with multiple filter options
 - Add new networks to the device
 - Delete networks from device
-- Automatically reconfigure name changes on networks
-- View the locations of the configured networks in a map
-- View the Wi-Fi connection status
+- Give a description for each configured network
+- View detailed information, including the location, of a configured network
+- View all configured networks on a map
+- View the WiFi connection status
+- Automatically reconfigure name and hidden status changes on networks
+- Automatically restore networks removed outside the application
+- Store password inside application so it can be restored
 
 ### Project Info
 
