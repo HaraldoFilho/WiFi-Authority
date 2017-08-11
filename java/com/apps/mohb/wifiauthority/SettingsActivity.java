@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : SettingsActivity.java
- *  Last modified : 7/9/17 12:05 PM
+ *  Last modified : 8/10/17 10:56 PM
  *
  *  -----------------------------------------------------------
  */
@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.apps.mohb.wifiauthority.fragments.dialogs.PreferencesResetAlertFragment;
+import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 
 
 /**
@@ -52,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity implements
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
@@ -73,8 +75,11 @@ public class SettingsActivity extends AppCompatActivity implements
                 // simple string representation.
                 preference.setSummary(stringValue);
             }
+
             return true;
+
         }
+
     };
 
 
@@ -175,6 +180,7 @@ public class SettingsActivity extends AppCompatActivity implements
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -190,6 +196,26 @@ public class SettingsActivity extends AppCompatActivity implements
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_security)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_signal)));
 
+            setPreferenceClickListener(findPreference(Constants.PREF_KEY_STORE_PASSWORD));
+
+        }
+
+        // Listen to changes on store passwords setting
+        private Preference.OnPreferenceClickListener preferenceClickListener
+                = new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // If store password settings option was disabled clear all passwords
+                if (!preference.getSharedPreferences().getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
+                    ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(getActivity().getApplicationContext());
+                    configuredNetworks.clearAllPasswords();
+                }
+                return true;
+            }
+        };
+
+        private void setPreferenceClickListener(Preference preference) {
+            preference.setOnPreferenceClickListener(preferenceClickListener);
         }
 
     }

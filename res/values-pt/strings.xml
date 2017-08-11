@@ -96,7 +96,6 @@
     <string name="title_activity_settings">Configurações</string>
     <string name="pref_group_available_networks">REDES DISPONÍVEIS</string>
     <string name="pref_group_your_networks">SUAS REDES</string>
-    <string name="pref_group_security">SEGURANÇA</string>
     <string name="pref_store_password_summ_off">Senha não é armazenada no aplicativo</string>
     <string name="pref_store_password_summ_on">Senha é armazenada no aplicativo</string>
     <string name="pref_title_store_password">Armazenar senha</string>
@@ -138,5 +137,9 @@
     <string name="toast_invalid_password">Por favor, digite uma senha válida</string>
     <string name="alert_message_restore_networks">Todas as configurações de rede foram excluídas. Você deseja restaurá-las?\n</string>
     <string name="alert_title_restore_networks">Restaurar redes?</string>
+    <string name="alert_button_tell_more">Saber mais</string>
+    <string name="pref_restore_networks_summ_off">Não restaurando as redes</string>
+    <string name="pref_restore_networks_summ_on">Restaurando redes automaticamente</string>
+    <string name="pref_title_restore_networks">Restaurar redes excluídas</string>
 
 </resources>

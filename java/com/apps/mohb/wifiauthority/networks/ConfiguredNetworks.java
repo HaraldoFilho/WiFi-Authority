@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 8/7/17 4:49 PM
+ *  Last modified : 8/10/17 11:27 PM
  *
  *  -----------------------------------------------------------
  */
@@ -117,12 +117,55 @@ public class ConfiguredNetworks {
                 networksData.remove(iterator.nextIndex());
                 saveDataState();
                 collectGarbage(wifiConfiguredNetworks);
-            }
-            else {
+            } else {
                 iterator.next();
             }
         }
 
+    }
+
+    public void restoreRemovedNetworks(Context context, List<WifiConfiguration> wifiConfiguredNetworks)
+            throws ConcurrentModificationException, NullPointerException {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        String ssid;
+        String listOfNetworks = "";
+
+        for (int i = 0; i < wifiConfiguredNetworks.size(); i++) {
+            ssid = wifiConfiguredNetworks.get(i).SSID;
+            listOfNetworks = listOfNetworks.concat(ssid + " ");
+        }
+
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            ssid = data.getSSID();
+            if (!listOfNetworks.contains(ssid)) {
+                // If no password is stored and network is not open set a dummy password
+                if (data.getPassword().isEmpty()
+                        && getNetworkSecurity(data.getSecurity()) != Constants.SET_OPEN) {
+                    data.setPassword(Constants.DUMMY_PASSWORD);
+                }
+                addNetworkConfiguration(context, data.getSSID(), data.isHidden(), data.getSecurity(), data.getPassword());
+                // If store password settings option is disabled clear password
+                if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
+                    data.setPassword("");
+                }
+                saveDataState();
+            }
+            iterator.next();
+        }
+
+    }
+
+    public void clearAllPasswords() {
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        while (iterator.hasNext()) {
+            NetworkData data = networksData.get(iterator.nextIndex());
+            data.setPassword("");
+            iterator.next();
+        }
+        saveDataState();
     }
 
     public void addNetworkConfiguration(Context context, String ssid, boolean isHidden, String security, String password) {
@@ -130,6 +173,7 @@ public class ConfiguredNetworks {
         WifiConfiguration wifiConfiguration = new WifiConfiguration();
 
         wifiConfiguration = setNetworkCiphers(wifiConfiguration, security);
+
         if (isHidden) {
             wifiConfiguration.hiddenSSID = true;
         }
@@ -140,7 +184,7 @@ public class ConfiguredNetworks {
 
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 
-        int netId =  wifiManager.addNetwork(wifiConfiguration);
+        int netId = wifiManager.addNetwork(wifiConfiguration);
 
         wifiManager.disableNetwork(netId);
 
@@ -196,19 +240,6 @@ public class ConfiguredNetworks {
         return "";
     }
 
-    public String getNetworkSecurityBySSID(String ssid) {
-        ListIterator<NetworkData> iterator = networksData.listIterator();
-        NetworkData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                return data.getSecurity();
-            }
-            iterator.next();
-        }
-        return "";
-    }
-
     public double getLatitudeBySSID(String ssid) {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
@@ -250,36 +281,6 @@ public class ConfiguredNetworks {
             iterator.next();
         }
         return "";
-    }
-
-    public WifiConfiguration getConfigurationToAdd(
-            List<WifiConfiguration> configuredNetworks, String mac, String ssid) throws NullPointerException {
-        ListIterator<NetworkData> iterator = networksData.listIterator();
-        NetworkData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (mac.matches(data.getMacAddress())) {
-                ListIterator<WifiConfiguration> cfgIterator = configuredNetworks.listIterator();
-                WifiConfiguration configuration;
-                while (cfgIterator.hasNext()) {
-                    configuration = configuredNetworks.get(cfgIterator.nextIndex());
-                    if (data.getSSID().matches(getDataSSID(configuration.SSID))) {
-                        WifiConfiguration updatedConfiguration = configuration;
-                        updatedConfiguration.SSID = getCfgSSID(getDataSSID(ssid));
-                        updatedConfiguration.status = WifiConfiguration.Status.DISABLED;
-                        updatedConfiguration.preSharedKey = null;
-                        updatedConfiguration.wepKeys[0] = null;
-                        data.setSSID(getDataSSID(ssid));
-                        saveDataState();
-                        return updatedConfiguration;
-                    }
-                    cfgIterator.next();
-                }
-            }
-            iterator.next();
-        }
-        return null;
-
     }
 
     public boolean isHidden(String ssid) {
@@ -533,8 +534,7 @@ public class ConfiguredNetworks {
 
         if (!networksData.isEmpty()) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
 

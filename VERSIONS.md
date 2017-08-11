@@ -1,3 +1,10 @@
+#### **0.6.0**
+- Added settings option to automatic restore networks removed outside application.
+- Clear all passwords from networks data when store password settings option is disabled.
+- Added button to open help page on a note explaining in more detail the changes on network management policies.
+- Minor improvements on user interface.
+- Bug fixes.
+
 #### **0.5.0**
 - Added option to save passwords inside application.
 - Added option to restore all network configurations in case they were deleted outside application.

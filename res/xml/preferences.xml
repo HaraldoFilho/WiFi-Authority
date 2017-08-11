@@ -41,6 +41,14 @@
             android:summaryOff="@string/pref_store_password_summ_off"
             android:defaultValue="false" />
 
+        <!--Restore network configurations-->
+        <CheckBoxPreference
+            android:key="@string/pref_key_restore_networks"
+            android:title="@string/pref_title_restore_networks"
+            android:summaryOn="@string/pref_restore_networks_summ_on"
+            android:summaryOff="@string/pref_restore_networks_summ_off"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

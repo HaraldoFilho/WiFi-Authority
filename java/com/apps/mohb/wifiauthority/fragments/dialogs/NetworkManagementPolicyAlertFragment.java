@@ -27,6 +27,8 @@ public class NetworkManagementPolicyAlertFragment extends DialogFragment {
         void onAlertNetworkManagementPolicyDialogPositiveClick(DialogFragment dialog);
 
         void onAlertNetworkManagementPolicyDialogNeutralClick(DialogFragment dialog);
+
+        void onAlertNetworkManagementPolicyDialogNegativeClick(DialogFragment dialog);
     }
 
     private NetworkManagementPolicyDialogListener mListener;
@@ -42,10 +44,15 @@ public class NetworkManagementPolicyAlertFragment extends DialogFragment {
                         mListener.onAlertNetworkManagementPolicyDialogPositiveClick(NetworkManagementPolicyAlertFragment.this);
                     }
                 })
-                .setNeutralButton(R.string.alert_button_not_warn, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.alert_button_tell_more, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mListener.onAlertNetworkManagementPolicyDialogNeutralClick(NetworkManagementPolicyAlertFragment.this);
+                    }
+                })
+                .setNegativeButton(R.string.alert_button_not_warn, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mListener.onAlertNetworkManagementPolicyDialogNeutralClick(NetworkManagementPolicyAlertFragment.this);
+                        mListener.onAlertNetworkManagementPolicyDialogNegativeClick(NetworkManagementPolicyAlertFragment.this);
                     }
                 });
 

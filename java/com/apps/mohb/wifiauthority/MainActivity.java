@@ -61,7 +61,6 @@ import com.google.android.gms.location.LocationServices;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -779,18 +778,28 @@ public class MainActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
+        // If all networks were removed outside application...
         if ((configuredNetworks.hasNetworksData()) && (wifiManager.getConfiguredNetworks().isEmpty())) {
-            // Show dialog to restore networks
+            // ...show dialog to restore them
             DialogFragment restoreNetworksDialog = new RestoreNetworksAlertFragment();
             restoreNetworksDialog.show(getSupportFragmentManager(), "RestoreNetworksDialogListener");
         } else {
-            // Delete data from networks that were removed by Android system
-            try {
-                configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
-            } catch (ConcurrentModificationException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+
+            // If restore networks settings option is enabled...
+            if (settings.getBoolean(Constants.PREF_KEY_RESTORE_NETWORKS, false)) {
+                // ...restore networks that were removed outside application
+                try {
+                    configuredNetworks.restoreRemovedNetworks(getApplicationContext(), wifiManager.getConfiguredNetworks());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Delete data from networks that were removed by Android system
+                try {
+                    configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -897,43 +906,44 @@ public class MainActivity extends AppCompatActivity implements
             String header = settings.getString(getResources().getString(R.string.pref_key_header),
                     getResources().getString(R.string.pref_def_header));
 
-            switch (sort) {
+            try {
+                switch (sort) {
 
-                // Automatic
-                case Constants.PREF_SORT_AUTO:
-                    // Sorts according to title display mode preference
-                    if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
-                        sortByDescription();
-                    } else {
-                        sortByName();
-                    }
-                    // Sort list by decreasing order of signal level
-                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                        @Override
-                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-                            int rhsLevel = Constants.OUT_OF_REACH;
-                            int lhsLevel = Constants.OUT_OF_REACH;
-
-                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-                            while (listIterator.hasNext()) {
-                                int index = listIterator.nextIndex();
-                                ScanResult scanResult = wifiScannedNetworks.get(index);
-                                String ssid = scanResult.SSID;
-                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    rhsLevel = scanResult.level;
-                                }
-                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    lhsLevel = scanResult.level;
-                                }
-                                listIterator.next();
-                            }
-
-                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                    // Automatic
+                    case Constants.PREF_SORT_AUTO:
+                        // Sorts according to title display mode preference
+                        if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
+                            sortByDescription();
+                        } else {
+                            sortByName();
                         }
-                    });
+                        // Sort list by decreasing order of signal level
+                        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                            @Override
+                            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
 
-                    try {
+                                int rhsLevel = Constants.OUT_OF_REACH;
+                                int lhsLevel = Constants.OUT_OF_REACH;
+
+                                ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+                                while (listIterator.hasNext()) {
+                                    int index = listIterator.nextIndex();
+                                    ScanResult scanResult = wifiScannedNetworks.get(index);
+                                    String ssid = scanResult.SSID;
+                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        rhsLevel = scanResult.level;
+                                    }
+                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        lhsLevel = scanResult.level;
+                                    }
+                                    listIterator.next();
+                                }
+
+                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                            }
+                        });
+
                         // Move connected network to the beginning of the list
                         ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
                         while (listIterator.hasNext()) {
@@ -945,25 +955,25 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             listIterator.next();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                        break;
 
-                // By description
-                case Constants.PREF_SORT_DESCRIPTION:
-                    sortByDescription();
-                    break;
+                    // By description
+                    case Constants.PREF_SORT_DESCRIPTION:
+                        sortByDescription();
+                        break;
 
-                // By network name
-                case Constants.PREF_SORT_NAME:
-                    sortByName();
-                    break;
+                    // By network name
+                    case Constants.PREF_SORT_NAME:
+                        sortByName();
+                        break;
 
-                // Unsorted
-                default:
-                    break;
+                    // Unsorted
+                    default:
+                        break;
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         } else {
@@ -1129,8 +1139,18 @@ public class MainActivity extends AppCompatActivity implements
         dialog.getDialog().cancel();
     }
 
-    @Override // Do not show again
+    @Override // Tell me more
     public void onAlertNetworkManagementPolicyDialogNeutralClick(DialogFragment dialog) {
+        // Open help page explaining change on network management policy
+        Intent intent = new Intent(this, HelpActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("url", getString(R.string.url_help_main) + getString(R.string.url_help_note_tag));
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override // Do not show again
+    public void onAlertNetworkManagementPolicyDialogNegativeClick(DialogFragment dialog) {
         showNetworkManagementPolicyWarnPref.edit().putBoolean(Constants.NET_MNG_POLICY_WARN, false).commit();
     }
 
@@ -1169,9 +1189,14 @@ public class MainActivity extends AppCompatActivity implements
                     && configuredNetworks.getNetworkSecurity(data.getSecurity()) != Constants.SET_OPEN) {
                 data.setPassword(Constants.DUMMY_PASSWORD);
             }
+            // Add network configuration
             configuredNetworks.addNetworkConfiguration(this, data.getSSID(), data.isHidden(),
                     data.getSecurity(), data.getPassword());
 
+            // If store password settings option is disabled clear password
+            if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
+                data.setPassword("");
+            }
             listIterator.next();
 
         }

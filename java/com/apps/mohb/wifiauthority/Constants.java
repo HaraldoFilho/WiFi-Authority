@@ -42,8 +42,6 @@ public class Constants {
     public static final String KEY_HIDDEN = "HIDDEN";
     public static final String KEY_BSSID = "BSSID";
     public static final String KEY_SECURITY = "SECURITY";
-    public static final String KEY_FREQUENCY = "FREQUENCY";
-    public static final String KEY_PASSWORD = "PASSWORD";
     public static final String KEY_LATITUDE = "LATITUDE";
     public static final String KEY_LONGITUDE = "LONGITUDE";
     public static final String KEY_OLD_NAME = "OLD_SSID";
@@ -118,6 +116,7 @@ public class Constants {
 
     public static final String PREF_KEY_RECONFIG = "SSID_RECONFIG";
     public static final String PREF_KEY_STORE_PASSWORD = "STORE_PASSWORD";
+    public static final String PREF_KEY_RESTORE_NETWORKS = "RESTORE NETWORKS";
     public static final String PREF_KEY_SHOW_ALL_APS = "SHOW_ALL_APS";
 
     public static final String PREF_SECURITY_WPA_EAP = "3";

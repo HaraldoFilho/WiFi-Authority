@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.5.0</string>
-    <string name="version_code" translatable="false">55</string>
+    <string name="version_number" translatable="false">0.6.0</string>
+    <string name="version_code" translatable="false">56</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -98,6 +98,7 @@
     <string name="alert_button_no">No</string>
     <string name="alert_button_yes">Yes</string>
     <string name="alert_button_not_warn">Do not warn again</string>
+    <string name="alert_button_tell_more">Tell me more</string>
     <string name="alert_button_close_app">No, close application</string>
 
     <!-- Progress dialogs -->
@@ -149,6 +150,7 @@
     <!--Help pages-->
     <string name="url_website">https://mohb-apps.com/</string>
     <string name="url_help_main">wifiauthority-help-your-networks</string>
+    <string name="url_help_note_tag" translatable="false">#note</string>
     <string name="url_help_scan">wifiauthority-help-available-networks</string>
     <string name="url_help_settings">wifiauthority-help-settings</string>
     <string name="url_contact">contact</string>
@@ -194,6 +196,20 @@
     <string name="pref_reconfig_summ_off">Don not reconfigure if name changes</string>
     <string name="pref_def_reconfig" translatable="false">true</string>
 
+    <!-- Store password -->
+    <string name="pref_key_store_password" translatable="false">STORE_PASSWORD</string>
+    <string name="pref_title_store_password">Store password</string>
+    <string name="pref_store_password_summ_on">Password is stored in application</string>
+    <string name="pref_store_password_summ_off">Password is not stored in application</string>
+    <string name="pref_def_store_password" translatable="false">false</string>
+
+    <!-- Restore network configurations -->
+    <string name="pref_key_restore_networks" translatable="false">RESTORE NETWORKS</string>
+    <string name="pref_title_restore_networks">Restore removed networks</string>
+    <string name="pref_restore_networks_summ_on">Automatic restoring networks</string>
+    <string name="pref_restore_networks_summ_off">Not restoring networks</string>
+    <string name="pref_def_restore_networks" translatable="false">false</string>
+
     <!-- AVAILABLE NETWORKS group -->
     <string name="pref_group_available_networks_settings" translatable="false">AVAILABLE_NETS_KEY</string>
     <string name="pref_group_available_networks">AVAILABLE NETWORKS</string>
@@ -214,16 +230,5 @@
     <string name="pref_show_all_summ_on">Showing all access points</string>
     <string name="pref_show_all_summ_off">Hiding duplicate access points</string>
     <string name="pref_def_show_all" translatable="false">false</string>
-
-    <!-- SECURITY GROUP -->
-    <string name="pref_group_security_settings" translatable="false">SECURITY_KEY</string>
-    <string name="pref_group_security">SECURITY</string>
-
-    <!-- Store password -->
-    <string name="pref_key_store_password" translatable="false">STORE_PASSWORD</string>
-    <string name="pref_title_store_password">Store password</string>
-    <string name="pref_store_password_summ_on">Password is stored in application</string>
-    <string name="pref_store_password_summ_off">Password is not stored in application</string>
-    <string name="pref_def_store_password" translatable="false">false</string>
 
 </resources>
