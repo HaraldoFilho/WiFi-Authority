@@ -1,3 +1,6 @@
+#### **0.6.1**
+- Bug fixes.
+
 #### **0.6.0**
 - Added settings option to automatic restore networks removed outside application.
 - Clear all passwords from networks data when store password settings option is disabled.

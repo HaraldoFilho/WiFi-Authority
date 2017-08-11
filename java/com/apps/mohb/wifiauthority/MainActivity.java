@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/7/17 5:06 PM
+ *  Last modified : 8/11/17 8:32 AM
  *
  *  -----------------------------------------------------------
  */
@@ -123,7 +123,11 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             if (wifiManager.isWifiEnabled()) {
-                updateListOfNetworks();
+                try {
+                    updateListOfNetworks();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -142,7 +146,11 @@ public class MainActivity extends AppCompatActivity implements
 
             // If WiFi is enabled, refresh list of networks
             if (wifiManager.isWifiEnabled()) {
-                updateListOfNetworks();
+                try {
+                    updateListOfNetworks();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
 
             // Get the last user's none location. Most of the times
@@ -505,7 +513,77 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        resumeApplication();
+        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
+        // Get configured networks additional data
+        try {
+            if (configuredNetworks == null) {
+                configuredNetworks = new ConfiguredNetworks(this);
+            }
+            configuredNetworks.getDataState();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // If all networks were removed outside application...
+        try {
+            if ((configuredNetworks.hasNetworksData()) && (wifiManager.getConfiguredNetworks().isEmpty())) {
+                // ...show dialog to restore them
+                DialogFragment restoreNetworksDialog = new RestoreNetworksAlertFragment();
+                restoreNetworksDialog.show(getSupportFragmentManager(), "RestoreNetworksDialogListener");
+            } else {
+
+                // If restore networks settings option is enabled...
+                if (settings.getBoolean(Constants.PREF_KEY_RESTORE_NETWORKS, false)) {
+                    // ...restore networks that were removed outside application
+                    configuredNetworks.restoreRemovedNetworks(getApplicationContext(), wifiManager.getConfiguredNetworks());
+                } else {
+                    // Delete data from networks that were removed by Android system
+                    configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Check if location permissions are granted
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            if (wifiManager.isWifiEnabled()) {
+                try {
+                    updateListOfNetworks();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                // If GoogleApiClient is connected start scanning for available networks
+                if (googleApiClient.isConnected()) {
+                    wifiManager.startScan();
+                }
+            }
+        } else {
+            // Check if user already denied permission request
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show dialog informing that location permissions are required to app properly work
+                DialogFragment dialog = new LocationPermissionsAlertFragment();
+                dialog.show(getSupportFragmentManager(), "LocationPermissionsAlertFragment");
+            } else {
+                // Request permissions
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        Constants.FINE_LOCATION_PERMISSION_REQUEST);
+            }
+        }
+
+        // Set that Network Name Changed Dialog was not already been opened
+        networkNameChangedDialogOpened = false;
+
+        wifiDisabledDialog = null;
+
+        if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
+            showWifiDisabledAlertDialog();
+        }
+
     }
 
     @Override
@@ -733,7 +811,11 @@ public class MainActivity extends AppCompatActivity implements
                 // if permission is granted create list of networks
                 if (grantResults.length > 0
                         && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
-                    updateListOfNetworks();
+                    try {
+                        updateListOfNetworks();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     finish();
                 }
@@ -760,84 +842,6 @@ public class MainActivity extends AppCompatActivity implements
 
 
     // CLASS METHODS
-
-    /*
-         Resume application after being closed
-    */
-    private void resumeApplication() {
-
-        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-
-        // Get configured networks additional data
-        try {
-            if (configuredNetworks == null) {
-                configuredNetworks = new ConfiguredNetworks(this);
-            }
-            configuredNetworks.getDataState();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // If all networks were removed outside application...
-        if ((configuredNetworks.hasNetworksData()) && (wifiManager.getConfiguredNetworks().isEmpty())) {
-            // ...show dialog to restore them
-            DialogFragment restoreNetworksDialog = new RestoreNetworksAlertFragment();
-            restoreNetworksDialog.show(getSupportFragmentManager(), "RestoreNetworksDialogListener");
-        } else {
-
-            // If restore networks settings option is enabled...
-            if (settings.getBoolean(Constants.PREF_KEY_RESTORE_NETWORKS, false)) {
-                // ...restore networks that were removed outside application
-                try {
-                    configuredNetworks.restoreRemovedNetworks(getApplicationContext(), wifiManager.getConfiguredNetworks());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // Delete data from networks that were removed by Android system
-                try {
-                    configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // Check if location permissions are granted
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            if (wifiManager.isWifiEnabled()) {
-                updateListOfNetworks();
-                // If GoogleApiClient is connected start scanning for available networks
-                if (googleApiClient.isConnected()) {
-                    wifiManager.startScan();
-                }
-            }
-        } else {
-            // Check if user already denied permission request
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show dialog informing that location permissions are required to app properly work
-                DialogFragment dialog = new LocationPermissionsAlertFragment();
-                dialog.show(getSupportFragmentManager(), "LocationPermissionsAlertFragment");
-            } else {
-                // Request permissions
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        Constants.FINE_LOCATION_PERMISSION_REQUEST);
-            }
-        }
-
-        // Set that Network Name Changed Dialog was not already been opened
-        networkNameChangedDialogOpened = false;
-
-        wifiDisabledDialog = null;
-
-        if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
-            showWifiDisabledAlertDialog();
-        }
-
-    }
 
     /*
          List item position correction due to header
@@ -881,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements
     /*
          Refresh list of networks
     */
-    private void updateListOfNetworks() {
+    private void updateListOfNetworks() throws NullPointerException {
 
         // Reset the configured networks list
         if (wifiConfiguredNetworks != null) {
@@ -906,74 +910,70 @@ public class MainActivity extends AppCompatActivity implements
             String header = settings.getString(getResources().getString(R.string.pref_key_header),
                     getResources().getString(R.string.pref_def_header));
 
-            try {
-                switch (sort) {
+            switch (sort) {
 
-                    // Automatic
-                    case Constants.PREF_SORT_AUTO:
-                        // Sorts according to title display mode preference
-                        if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
-                            sortByDescription();
-                        } else {
-                            sortByName();
-                        }
-                        // Sort list by decreasing order of signal level
-                        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                            @Override
-                            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
-
-                                int rhsLevel = Constants.OUT_OF_REACH;
-                                int lhsLevel = Constants.OUT_OF_REACH;
-
-                                ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-                                while (listIterator.hasNext()) {
-                                    int index = listIterator.nextIndex();
-                                    ScanResult scanResult = wifiScannedNetworks.get(index);
-                                    String ssid = scanResult.SSID;
-                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                        rhsLevel = scanResult.level;
-                                    }
-                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                        lhsLevel = scanResult.level;
-                                    }
-                                    listIterator.next();
-                                }
-
-                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
-                            }
-                        });
-
-                        // Move connected network to the beginning of the list
-                        ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
-                        while (listIterator.hasNext()) {
-                            int index = listIterator.nextIndex();
-                            WifiConfiguration wifiConfiguration = wifiConfiguredNetworks.get(index);
-                            if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
-                                wifiConfiguredNetworks.remove(index);
-                                wifiConfiguredNetworks.add(Constants.LIST_HEAD, wifiConfiguration);
-                            }
-                            listIterator.next();
-                        }
-                        break;
-
-                    // By description
-                    case Constants.PREF_SORT_DESCRIPTION:
+                // Automatic
+                case Constants.PREF_SORT_AUTO:
+                    // Sorts according to title display mode preference
+                    if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
                         sortByDescription();
-                        break;
-
-                    // By network name
-                    case Constants.PREF_SORT_NAME:
+                    } else {
                         sortByName();
-                        break;
+                    }
+                    // Sort list by decreasing order of signal level
+                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                        @Override
+                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
 
-                    // Unsorted
-                    default:
-                        break;
+                            int rhsLevel = Constants.OUT_OF_REACH;
+                            int lhsLevel = Constants.OUT_OF_REACH;
 
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+
+                            while (listIterator.hasNext()) {
+                                int index = listIterator.nextIndex();
+                                ScanResult scanResult = wifiScannedNetworks.get(index);
+                                String ssid = scanResult.SSID;
+                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    rhsLevel = scanResult.level;
+                                }
+                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    lhsLevel = scanResult.level;
+                                }
+                                listIterator.next();
+                            }
+
+                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                        }
+                    });
+
+                    // Move connected network to the beginning of the list
+                    ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
+                    while (listIterator.hasNext()) {
+                        int index = listIterator.nextIndex();
+                        WifiConfiguration wifiConfiguration = wifiConfiguredNetworks.get(index);
+                        if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
+                            wifiConfiguredNetworks.remove(index);
+                            wifiConfiguredNetworks.add(Constants.LIST_HEAD, wifiConfiguration);
+                        }
+                        listIterator.next();
+                    }
+                    break;
+
+                // By description
+                case Constants.PREF_SORT_DESCRIPTION:
+                    sortByDescription();
+                    break;
+
+                // By network name
+                case Constants.PREF_SORT_NAME:
+                    sortByName();
+                    break;
+
+                // Unsorted
+                default:
+                    break;
+
             }
 
         } else {
@@ -1043,7 +1043,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // OK
     public void onDescriptionEditDialogPositiveClick(DialogFragment dialog) {
-        updateListOfNetworks();
+        try {
+            updateListOfNetworks();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override // Cancel
@@ -1056,7 +1060,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPasswordChangeDialogPositiveClick(DialogFragment dialog) {
-        updateListOfNetworks();
+        try {
+            updateListOfNetworks();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -1074,7 +1082,11 @@ public class MainActivity extends AppCompatActivity implements
         if (wifiManager.removeNetwork(network.networkId)) {
             wifiConfiguredNetworks.remove(network);
             wifiManager.saveConfiguration();
-            updateListOfNetworks();
+            try {
+                updateListOfNetworks();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             configuredNetworks.removeNetworkData(network.SSID);
         } else {
             // If version is Marshmallow (6.x) or higher show dialog explaining new networks manage,ent policy
@@ -1203,7 +1215,11 @@ public class MainActivity extends AppCompatActivity implements
 
         configuredNetworks.saveDataState();
 
-        updateListOfNetworks();
+        try {
+            updateListOfNetworks();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
     }
 
