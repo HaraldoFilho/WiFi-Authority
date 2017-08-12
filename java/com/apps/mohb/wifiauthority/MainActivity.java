@@ -498,6 +498,13 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (settings.getBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false)) {
+            settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false).commit();
+            Intent intent = new Intent(this, ScanNetworksActivity.class);
+            startActivity(intent);
+        }
+
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         // Get configured networks additional data

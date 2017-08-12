@@ -131,7 +131,7 @@
     <string name="url_help_settings">wifiauthority-ajuda-configuracoes</string>
     <string name="alert_message_wifi_disabled">O WiFi foi desabilitado. Você deseja liga-lo novamente?</string>
     <string name="alert_title_wifi_disabled">WiFi desabilitado!</string>
-    <string name="alert_button_close_app">Não, feche o aplicativo</string>
+    <string name="alert_button_close_app">Não, fechar o aplicativo</string>
     <string name="layout_net_freq_2p4ghz">2,4</string>
     <string name="layout_net_freq_5ghz">5</string>
     <string name="toast_invalid_password">Por favor, digite uma senha válida</string>

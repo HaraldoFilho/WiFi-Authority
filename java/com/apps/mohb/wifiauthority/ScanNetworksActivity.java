@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 8/12/17 12:46 AM
+ *  Last modified : 8/12/17 1:51 AM
  *
  *  -----------------------------------------------------------
  */
@@ -340,6 +340,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
             // Settings
             case R.id.action_scan_settings:
+                settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, true).commit();
                 intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;

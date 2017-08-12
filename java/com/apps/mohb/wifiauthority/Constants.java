@@ -79,11 +79,10 @@ public class Constants {
     public static final int TOAST_Y_OFFSET = 0;
 
     // Networks signal levels
-    public static final int LEVELS = 4;
-    public static final int LEVEL_HIGH = 3;
-    public static final int LEVEL_LOW = 2;
-    public static final int LEVEL_VERY_LOW = 1;
-    public static final int LEVEL_OUT_OF_REACH = 0;
+    public static final int LEVELS = 3;
+    public static final int LEVEL_HIGH = 2;
+    public static final int LEVEL_LOW = 1;
+    public static final int LEVEL_VERY_LOW = 0;
 
     public static final int OUT_OF_REACH = -1000;
 
@@ -119,6 +118,7 @@ public class Constants {
     public static final String PREF_KEY_STORE_PASSWORD = "STORE_PASSWORD";
     public static final String PREF_KEY_RESTORE_NETWORKS = "RESTORE NETWORKS";
     public static final String PREF_KEY_SHOW_ALL_APS = "SHOW_ALL_APS";
+    public static final String PREF_KEY_SCAN_ACTIVITY = "SCAN_ACTIVITY";
 
     public static final String PREF_SECURITY_WPA_EAP = "3";
     public static final String PREF_SECURITY_WEP = "2";
