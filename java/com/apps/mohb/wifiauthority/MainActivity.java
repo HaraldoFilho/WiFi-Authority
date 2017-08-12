@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/11/17 8:32 AM
+ *  Last modified : 8/11/17 8:38 PM
  *
  *  -----------------------------------------------------------
  */
@@ -123,11 +123,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
             if (wifiManager.isWifiEnabled()) {
-                try {
-                    updateListOfNetworks();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+                updateListOfNetworks();
             }
         }
 
@@ -146,11 +142,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // If WiFi is enabled, refresh list of networks
             if (wifiManager.isWifiEnabled()) {
-                try {
-                    updateListOfNetworks();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+                updateListOfNetworks();
             }
 
             // Get the last user's none location. Most of the times
@@ -550,11 +542,7 @@ public class MainActivity extends AppCompatActivity implements
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             if (wifiManager.isWifiEnabled()) {
-                try {
-                    updateListOfNetworks();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+                updateListOfNetworks();
                 // If GoogleApiClient is connected start scanning for available networks
                 if (googleApiClient.isConnected()) {
                     wifiManager.startScan();
@@ -811,11 +799,7 @@ public class MainActivity extends AppCompatActivity implements
                 // if permission is granted create list of networks
                 if (grantResults.length > 0
                         && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
-                    try {
-                        updateListOfNetworks();
-                    } catch (NullPointerException e) {
-                        e.printStackTrace();
-                    }
+                    updateListOfNetworks();
                 } else {
                     finish();
                 }
@@ -864,7 +848,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     /*
          Show WiFi dialog if wifi was disabled while activity is running
     */
@@ -885,7 +868,7 @@ public class MainActivity extends AppCompatActivity implements
     /*
          Refresh list of networks
     */
-    private void updateListOfNetworks() throws NullPointerException {
+    private void updateListOfNetworks() {
 
         // Reset the configured networks list
         if (wifiConfiguredNetworks != null) {
@@ -928,35 +911,42 @@ public class MainActivity extends AppCompatActivity implements
                             int rhsLevel = Constants.OUT_OF_REACH;
                             int lhsLevel = Constants.OUT_OF_REACH;
 
-                            ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
-
-                            while (listIterator.hasNext()) {
-                                int index = listIterator.nextIndex();
-                                ScanResult scanResult = wifiScannedNetworks.get(index);
-                                String ssid = scanResult.SSID;
-                                if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    rhsLevel = scanResult.level;
+                            try {
+                                ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
+                                while (listIterator.hasNext()) {
+                                    int index = listIterator.nextIndex();
+                                    ScanResult scanResult = wifiScannedNetworks.get(index);
+                                    String ssid = scanResult.SSID;
+                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        rhsLevel = scanResult.level;
+                                    }
+                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                        lhsLevel = scanResult.level;
+                                    }
+                                    listIterator.next();
                                 }
-                                if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
-                                    lhsLevel = scanResult.level;
-                                }
-                                listIterator.next();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
                             return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
                         }
                     });
 
-                    // Move connected network to the beginning of the list
-                    ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
-                    while (listIterator.hasNext()) {
-                        int index = listIterator.nextIndex();
-                        WifiConfiguration wifiConfiguration = wifiConfiguredNetworks.get(index);
-                        if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
-                            wifiConfiguredNetworks.remove(index);
-                            wifiConfiguredNetworks.add(Constants.LIST_HEAD, wifiConfiguration);
+                    try {
+                        // Move connected network to the beginning of the list
+                        ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
+                        while (listIterator.hasNext()) {
+                            int index = listIterator.nextIndex();
+                            WifiConfiguration wifiConfiguration = wifiConfiguredNetworks.get(index);
+                            if (wifiConfiguration.status == WifiConfiguration.Status.CURRENT) {
+                                wifiConfiguredNetworks.remove(index);
+                                wifiConfiguredNetworks.add(Constants.LIST_HEAD, wifiConfiguration);
+                            }
+                            listIterator.next();
                         }
-                        listIterator.next();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
 
@@ -998,7 +988,6 @@ public class MainActivity extends AppCompatActivity implements
             networksListAdapter.addAll(wifiConfiguredNetworks);
             networksListAdapter.notifyDataSetChanged();
         }
-
 
     }
 
@@ -1043,11 +1032,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // OK
     public void onDescriptionEditDialogPositiveClick(DialogFragment dialog) {
-        try {
-            updateListOfNetworks();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        updateListOfNetworks();
     }
 
     @Override // Cancel
@@ -1060,11 +1045,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPasswordChangeDialogPositiveClick(DialogFragment dialog) {
-        try {
-            updateListOfNetworks();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        updateListOfNetworks();
     }
 
     @Override
@@ -1082,11 +1063,7 @@ public class MainActivity extends AppCompatActivity implements
         if (wifiManager.removeNetwork(network.networkId)) {
             wifiConfiguredNetworks.remove(network);
             wifiManager.saveConfiguration();
-            try {
-                updateListOfNetworks();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+            updateListOfNetworks();
             configuredNetworks.removeNetworkData(network.SSID);
         } else {
             // If version is Marshmallow (6.x) or higher show dialog explaining new networks manage,ent policy
@@ -1215,11 +1192,7 @@ public class MainActivity extends AppCompatActivity implements
 
         configuredNetworks.saveDataState();
 
-        try {
-            updateListOfNetworks();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        updateListOfNetworks();
 
     }
 

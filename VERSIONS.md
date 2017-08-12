@@ -1,3 +1,6 @@
+#### **0.6.2**
+- Fixed crashes when app is opened with a network connected.
+
 #### **0.6.1**
 - Bug fixes.
 
