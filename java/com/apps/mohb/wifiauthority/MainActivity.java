@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/11/17 8:38 PM
+ *  Last modified : 8/11/17 10:49 PM
  *
  *  -----------------------------------------------------------
  */
@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements
     private SharedPreferences showNetworkManagementPolicyWarnPref;
     private boolean networkNameChangedDialogOpened;
     private String ssid;
-    private boolean isHidden;
 
     private SharedPreferences settings;
 
@@ -243,18 +242,19 @@ public class MainActivity extends AppCompatActivity implements
 
                     ssid = wifiConfiguration.SSID;
 
+                    // If network is not connected update hidden status to false
+                    // This is due to network ssid being recognized when network is
+                    // connected even if it is hidden.
+                    if (wifiConfiguration.status != WifiConfiguration.Status.CURRENT) {
+                        configuredNetworks.setHidden(ssid, false);
+                    }
+
                     // ... and on each configured network, iterates over the list of scanned networks results
                     ListIterator<ScanResult> scanResultListIterator = wifiScannedNetworks.listIterator();
 
                     while (scanResultListIterator.hasNext()) {
 
                         ScanResult scanResult = wifiScannedNetworks.get(scanResultListIterator.nextIndex());
-
-                        if (scanResult.SSID.isEmpty()) {
-                            isHidden = true;
-                        } else {
-                            isHidden = false;
-                        }
 
                         SharedPreferences settings
                                 = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -264,18 +264,23 @@ public class MainActivity extends AppCompatActivity implements
                                 // ... and if Mac Address of configured network matches Mac Address of scanned network
                                 && (configuredNetworks.getMacAddressBySSID(ssid).matches(scanResult.BSSID))) {
 
+                            // If ssid is not broadcast set network to hidden
+                            if (scanResult.SSID.isEmpty()) {
+                                configuredNetworks.setHidden(ssid, true);
+                            }
+
                             // If network is not hidden...
-                            if (!isHidden) {
+                            if (!configuredNetworks.isHidden(ssid)) {
+
+                                // Updates the SSID of the configured network
+                                WifiConfiguration configuration = configuredNetworks
+                                        .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, scanResult.SSID);
+
+                                /// Set as not hidden in case hidden status was changed on router
+                                configuration.hiddenSSID = false;
+
                                 // ... and if SSID of the network has changed
                                 if (!ssid.matches(configuredNetworks.getCfgSSID(scanResult.SSID))) {
-
-                                    // Updates the SSID of the configured network
-                                    WifiConfiguration configuration = configuredNetworks
-                                            .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, scanResult.SSID);
-
-                                    /// Set as not hidden in case hidden status was changed on router
-                                    configuration.hiddenSSID = false;
-                                    configuredNetworks.setHidden(configuration.SSID, false);
 
                                     // Update network with new configuration
                                     int updateResult = wifiManager.updateNetwork(configuration);
@@ -299,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements
                                                     configuredNetworks.getDescriptionBySSID(ssid));
                                             bundle.putString(Constants.KEY_OLD_NAME, ssid);
                                             bundle.putString(Constants.KEY_NEW_NAME, scanResult.SSID);
-                                            bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
+                                            bundle.putBoolean(Constants.KEY_HIDDEN, false);
                                             bundle.putString(Constants.KEY_SECURITY, scanResult.capabilities);
                                             bundle.putString(Constants.KEY_BSSID, scanResult.BSSID); // send also the Mac Address
 
@@ -312,21 +317,9 @@ public class MainActivity extends AppCompatActivity implements
                                         }
                                     }
 
-                                } else { // If SSID has not changed...
-
-                                    // ... get the configuration of the network
-                                    WifiConfiguration configuration = configuredNetworks
-                                            .updateSSIDbyMacAddress(wifiConfiguredNetworks, scanResult.BSSID, ssid);
-
-                                    // Only updates hidden status if nerwork is not connected or connecting as
-                                    // in these situations the SSID of a configured network is recognized on scan
-                                    if (configuration.status == WifiConfiguration.Status.DISABLED) {
-                                        configuration.hiddenSSID = false;
-                                        configuredNetworks.setHidden(ssid, false);
-                                        wifiManager.updateNetwork(configuration);
-                                    }
-
                                 }
+
+                                wifiManager.updateNetwork(configuration);
 
                             } else { // If SSID is hidden...
 
@@ -336,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements
 
                                 // Update hidden status of the network
                                 configuration.hiddenSSID = true;
-                                configuredNetworks.setHidden(ssid, true);
                                 wifiManager.updateNetwork(configuration);
 
                             }
@@ -694,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements
 
         network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
         ssid = network.SSID;
-        isHidden = network.hiddenSSID;
+        boolean isHidden = network.hiddenSSID;
 
         switch (item.getItemId()) {
 

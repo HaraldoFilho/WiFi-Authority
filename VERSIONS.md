@@ -1,3 +1,6 @@
+#### **0.6.3**
+- Fixed intermittent behaviour of hidden network status icon showing incorrect information.
+
 #### **0.6.2**
 - Fixed crashes when app is opened with a network connected.
 
