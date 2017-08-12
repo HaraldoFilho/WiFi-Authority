@@ -152,31 +152,28 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
 
-        if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+        switch (wifiManager.calculateSignalLevel(
+                configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
 
-            switch (wifiManager.calculateSignalLevel(
-                    configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
+            case Constants.LEVEL_HIGH:
+                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_wifi_high_green_24dp));
+                break;
 
-                case Constants.LEVEL_HIGH:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_high_green_24dp));
-                    break;
+            case Constants.LEVEL_LOW:
+                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_wifi_mid_yellow_24dp));
+                break;
 
-                case Constants.LEVEL_LOW:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_mid_yellow_24dp));
-                    break;
+            case Constants.LEVEL_VERY_LOW:
+                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_wifi_low_red_24dp));
+                break;
+            case Constants.LEVEL_OUT_OF_REACH:
+                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_signal_wifi_out_of_reach_red_24dp));
+                break;
 
-                case Constants.LEVEL_VERY_LOW:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_low_red_24dp));
-                    break;
-
-            }
-
-        } else {
-            imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_signal_wifi_unavailable_red_24dp));
         }
 
 

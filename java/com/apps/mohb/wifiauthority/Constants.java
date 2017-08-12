@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 8/7/17 4:49 PM
+ *  Last modified : 8/12/17 12:32 AM
  *
  *  -----------------------------------------------------------
  */
@@ -79,10 +79,11 @@ public class Constants {
     public static final int TOAST_Y_OFFSET = 0;
 
     // Networks signal levels
-    public static final int LEVELS = 3;
-    public static final int LEVEL_HIGH = 2;
-    public static final int LEVEL_LOW = 1;
-    public static final int LEVEL_VERY_LOW = 0;
+    public static final int LEVELS = 4;
+    public static final int LEVEL_HIGH = 3;
+    public static final int LEVEL_LOW = 2;
+    public static final int LEVEL_VERY_LOW = 1;
+    public static final int LEVEL_OUT_OF_REACH = 0;
 
     public static final int OUT_OF_REACH = -1000;
 

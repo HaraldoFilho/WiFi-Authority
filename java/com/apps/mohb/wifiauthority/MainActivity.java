@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/11/17 10:49 PM
+ *  Last modified : 8/12/17 12:24 AM
  *
  *  -----------------------------------------------------------
  */
@@ -61,6 +61,7 @@ import com.google.android.gms.location.LocationServices;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -885,25 +886,25 @@ public class MainActivity extends AppCompatActivity implements
             String header = settings.getString(getResources().getString(R.string.pref_key_header),
                     getResources().getString(R.string.pref_def_header));
 
-            switch (sort) {
+            try {
+                switch (sort) {
 
-                // Automatic
-                case Constants.PREF_SORT_AUTO:
-                    // Sorts according to title display mode preference
-                    if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
-                        sortByDescription();
-                    } else {
-                        sortByName();
-                    }
-                    // Sort list by decreasing order of signal level
-                    Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
-                        @Override
-                        public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
+                    // Automatic
+                    case Constants.PREF_SORT_AUTO:
+                        // Sorts according to title display mode preference
+                        if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
+                            sortByDescription();
+                        } else {
+                            sortByName();
+                        }
+                        // Sort list by decreasing order of signal level
+                        Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
+                            @Override
+                            public int compare(WifiConfiguration lhs, WifiConfiguration rhs) {
 
-                            int rhsLevel = Constants.OUT_OF_REACH;
-                            int lhsLevel = Constants.OUT_OF_REACH;
+                                int rhsLevel = Constants.OUT_OF_REACH;
+                                int lhsLevel = Constants.OUT_OF_REACH;
 
-                            try {
                                 ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
                                 while (listIterator.hasNext()) {
                                     int index = listIterator.nextIndex();
@@ -917,15 +918,10 @@ public class MainActivity extends AppCompatActivity implements
                                     }
                                     listIterator.next();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+
+                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
                             }
-
-                            return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
-                        }
-                    });
-
-                    try {
+                        });
                         // Move connected network to the beginning of the list
                         ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
                         while (listIterator.hasNext()) {
@@ -937,25 +933,25 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             listIterator.next();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                        break;
 
-                // By description
-                case Constants.PREF_SORT_DESCRIPTION:
-                    sortByDescription();
-                    break;
+                    // By description
+                    case Constants.PREF_SORT_DESCRIPTION:
+                        sortByDescription();
+                        break;
 
-                // By network name
-                case Constants.PREF_SORT_NAME:
-                    sortByName();
-                    break;
+                    // By network name
+                    case Constants.PREF_SORT_NAME:
+                        sortByName();
+                        break;
 
-                // Unsorted
-                default:
-                    break;
+                    // Unsorted
+                    default:
+                        break;
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         } else {
@@ -975,10 +971,14 @@ public class MainActivity extends AppCompatActivity implements
                     wifiConfiguredNetworks, configuredNetworks, wifiScannedNetworks);
             networksListView.setAdapter(networksListAdapter);
         } else {
-            // Refresh list
-            networksListAdapter.clear();
-            networksListAdapter.addAll(wifiConfiguredNetworks);
-            networksListAdapter.notifyDataSetChanged();
+            try {
+                // Refresh list
+                networksListAdapter.clear();
+                networksListAdapter.addAll(wifiConfiguredNetworks);
+                networksListAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -986,7 +986,7 @@ public class MainActivity extends AppCompatActivity implements
     /*
          Sort networks by their descriptions
     */
-    private void sortByDescription() {
+    private void sortByDescription() throws NullPointerException, ConcurrentModificationException {
 
         if ((wifiConfiguredNetworks != null) && (configuredNetworks != null)) {
             // sort list by ascending order of network description
@@ -1006,7 +1006,7 @@ public class MainActivity extends AppCompatActivity implements
     /*
          Sort the networks by their names
     */
-    private void sortByName() {
+    private void sortByName() throws NullPointerException, ConcurrentModificationException {
 
         if (wifiConfiguredNetworks != null) {
             // sort list by ascending order of network name

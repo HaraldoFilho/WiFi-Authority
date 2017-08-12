@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScanNetworksActivity.java
- *  Last modified : 7/15/17 10:37 AM
+ *  Last modified : 8/12/17 12:46 AM
  *
  *  -----------------------------------------------------------
  */
@@ -60,7 +60,6 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private View listFooter;
 
     private ProgressDialog progressDialog;
-    private DialogFragment wifiDisabledDialog;
 
     private SharedPreferences settings;
     private String minSecurityToShow;

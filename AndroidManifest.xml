@@ -71,10 +71,6 @@
             android:parentActivityName=".AboutActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".WiFiCheckActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/WiFiCheckTheme" />
-        <activity
             android:name=".MapActivity"
             android:label="@string/title_activity_map"
             android:parentActivityName=".MainActivity" />
