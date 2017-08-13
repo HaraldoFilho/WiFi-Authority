@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 public class Toasts {
 
+    private static Toast unableAddNetwork;
     private static Toast unableRemoveNetwork;
     private static Toast missingInformation;
     private static Toast invalidPassword;
@@ -56,6 +57,22 @@ public class Toasts {
         }
     }
 
+
+    /*
+         Toast to notify that it is unable to add network
+    */
+
+    public static void showUnableAddNetwork(Context c) {
+        unableAddNetwork = Toast.makeText((c), R.string.toast_unable_add_network, Toast.LENGTH_LONG);
+        unableAddNetwork.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        unableAddNetwork.show();
+    }
+
+    public static void cancelUnableAddNetwork() {
+        if (unableAddNetwork != null) {
+            unableAddNetwork.cancel();
+        }
+    }
 
     /*
          Toast to notify that it is unable to remove network
@@ -207,6 +224,7 @@ public class Toasts {
     */
 
     public static void cancelAllToasts() {
+        cancelUnableAddNetwork();
         cancelUnableRemoveNetwork();
         cancelInvalidPassword();
         cancelNetworkIsConfigured();

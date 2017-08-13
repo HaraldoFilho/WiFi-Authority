@@ -128,6 +128,9 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
                         wifiManager.disconnect();
                         int netId = wifiManager.addNetwork(wifiConfiguration);
+                        if(netId < 0) {
+                            Toasts.showUnableAddNetwork(getContext());
+                        }
                         wifiManager.enableNetwork(netId, true);
                         wifiManager.reconnect();
 

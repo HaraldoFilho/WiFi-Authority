@@ -78,8 +78,8 @@
     <string name="alert_message_network_ssid_changed">O nome (SSID) da seguinte rede foi alterado. Devido a mudanças na política de gerenciamento de redes a partir do Android 6.0, uma rede só pode ser alterada ou removida se foi adicionada pela mesmo aplicativo. Mas você pode adicionar a rede com o novo nome digitando novamente a sua senha:</string>
     <string name="title_activity_map">Mapa</string>
     <string name="menu_map">Mapa</string>
-    <string name="toast_no_location_information">Não há nenhuma informação de local para esta rede</string>
-    <string name="toast_no_map_information">Não há nenhuma informação do local atual ainda. Tente novamente em alguns segundos.</string>
+    <string name="toast_no_location_information">Não há informação de local para esta rede</string>
+    <string name="toast_no_map_information">Não há informação do local atual ainda. Tente novamente em alguns segundos</string>
     <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
     <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>
     <string name="info_website">mohb-apps.com.br</string>
@@ -141,5 +141,6 @@
     <string name="pref_restore_networks_summ_off">Não restaurando as redes</string>
     <string name="pref_restore_networks_summ_on">Restaurando redes automaticamente</string>
     <string name="pref_title_restore_networks">Restaurar redes excluídas</string>
+    <string name="toast_unable_add_network">Não foi possível adicionar a rede. Por favor, verifique se todas as informações da rede estão corretas e tente novamente</string>
 
 </resources>
