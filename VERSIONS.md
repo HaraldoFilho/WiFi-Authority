@@ -1,3 +1,7 @@
+#### **0.6.7**
+- Bug fixes.
+- Improvements on user interface.
+
 #### **0.6.6**
 - Added toast to inform that a network could not be added.
 

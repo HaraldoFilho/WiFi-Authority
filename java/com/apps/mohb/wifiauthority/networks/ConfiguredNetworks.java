@@ -214,19 +214,6 @@ public class ConfiguredNetworks {
         return "\"" + password + "\"";
     }
 
-    public boolean hasNetworkAdditionalData(String ssid) {
-        ListIterator<NetworkData> iterator = networksData.listIterator();
-        NetworkData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                return true;
-            }
-            iterator.next();
-        }
-        return false;
-    }
-
     public String getMacAddressBySSID(String ssid) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
@@ -283,21 +270,6 @@ public class ConfiguredNetworks {
         return "";
     }
 
-    public boolean isHidden(String ssid) {
-
-        ListIterator<NetworkData> iterator = networksData.listIterator();
-        NetworkData data;
-        while (iterator.hasNext()) {
-            data = networksData.get(iterator.nextIndex());
-            if (getDataSSID(ssid).matches(data.getSSID())) {
-                return data.isHidden();
-            }
-            iterator.next();
-        }
-        return false;
-
-    }
-
     public String getPassword(String ssid) {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
@@ -328,7 +300,7 @@ public class ConfiguredNetworks {
 
     }
 
-    public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String ssid)
+    public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String mac)
             throws NullPointerException {
 
         ListIterator<ScanResult> listIterator = wifiScannedNetworks.listIterator();
@@ -336,8 +308,8 @@ public class ConfiguredNetworks {
         while (listIterator.hasNext()) {
             int index = listIterator.nextIndex();
             ScanResult network = wifiScannedNetworks.get(index);
-            String scanSSID = getDataSSID(network.SSID);
-            if (getDataSSID(ssid).matches(scanSSID)) {
+            String bssid = network.BSSID;
+            if (mac.matches(bssid)) {
                 return network.level;
             }
             listIterator.next();
@@ -530,16 +502,6 @@ public class ConfiguredNetworks {
 
     }
 
-    public boolean hasNetworksData() {
-
-        if (!networksData.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
 
     // UPDATERS
 
@@ -691,6 +653,44 @@ public class ConfiguredNetworks {
             listIterator.next();
         }
         return false;
+    }
+
+    public boolean hasNetworksData() {
+
+        if (!networksData.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean hasNetworkAdditionalData(String ssid) {
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return true;
+            }
+            iterator.next();
+        }
+        return false;
+    }
+
+    public boolean isHidden(String ssid) {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.isHidden();
+            }
+            iterator.next();
+        }
+        return false;
+
     }
 
 

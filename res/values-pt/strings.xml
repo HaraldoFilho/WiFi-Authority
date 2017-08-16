@@ -78,7 +78,7 @@
     <string name="alert_message_network_ssid_changed">O nome (SSID) da seguinte rede foi alterado. Devido a mudanças na política de gerenciamento de redes a partir do Android 6.0, uma rede só pode ser alterada ou removida se foi adicionada pela mesmo aplicativo. Mas você pode adicionar a rede com o novo nome digitando novamente a sua senha:</string>
     <string name="title_activity_map">Mapa</string>
     <string name="menu_map">Mapa</string>
-    <string name="toast_no_location_information">Não há informação de local para esta rede</string>
+    <string name="toast_no_location_information">Não há informação de local para esta rede ainda</string>
     <string name="toast_no_map_information">Não há informação do local atual ainda. Tente novamente em alguns segundos</string>
     <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
     <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>

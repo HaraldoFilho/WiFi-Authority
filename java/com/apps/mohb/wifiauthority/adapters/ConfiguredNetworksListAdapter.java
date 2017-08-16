@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/7/17 12:21 AM
+ *  Last modified : 8/15/17 11:07 PM
  *
  *  -----------------------------------------------------------
  */
@@ -52,13 +52,11 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
     private String state;
 
     public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> wifiConfiguredNetworks,
-                                         ConfiguredNetworks configuredNetworks,
-                                         List<ScanResult> wifiScannedNetworks) {
+                                         ConfiguredNetworks configuredNetworks) {
         super(context, 0, wifiConfiguredNetworks);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         this.wifiConfiguredNetworks = wifiConfiguredNetworks;
         this.configuredNetworks = configuredNetworks;
-        this.wifiScannedNetworks = wifiScannedNetworks;
         try {
             this.configuredNetworks.getDataState();
         } catch (IOException e) {
@@ -73,6 +71,8 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         configuration = (WifiConfiguration) getItem(position);
         ssid = configuredNetworks.getDataSSID(configuration.SSID);
         mac = configuredNetworks.getMacAddressBySSID(ssid);
+
+        wifiScannedNetworks = wifiManager.getScanResults();
 
         settings = PreferenceManager.getDefaultSharedPreferences(getContext());
 
@@ -155,7 +155,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
 
             switch (wifiManager.calculateSignalLevel(
-                    configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, ssid), Constants.LEVELS)) {
+                    configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, mac), Constants.LEVELS)) {
 
                 case Constants.LEVEL_HIGH:
                     imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),

@@ -128,4 +128,8 @@ public class Constants {
     public static final String PREF_MIN_SIGNAL_LOW = "2";
     public static final String PREF_MIN_SIGNAL_VERY_LOW = "1";
 
+    // Log
+    public static final String LOG_TAG = "DEBUG_WIFI";
+
+
 }
