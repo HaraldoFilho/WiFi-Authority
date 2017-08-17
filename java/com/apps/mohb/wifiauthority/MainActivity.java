@@ -453,17 +453,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        // Add network data of networks that were configured outsided application
-        ListIterator<WifiConfiguration> wifiConfigurationListIterator = wifiConfiguredNetworks.listIterator();
-        while (wifiConfigurationListIterator.hasNext()) {
-            WifiConfiguration configuration = wifiConfiguredNetworks.get(wifiConfigurationListIterator.nextIndex());
-            if (!configuredNetworks.hasNetworkAdditionalData(configuration.SSID)) {
-                configuredNetworks.addNetworkData("", configuration.SSID, configuration.hiddenSSID,
-                        "", "", "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
-            }
-            wifiConfigurationListIterator.next();
-        }
-
         // Set and register a scan receiver to get available networks
         wifiScanReceiver = new WiFiScanReceiver();
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
@@ -502,12 +491,12 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
+        // If Settings was opened from ScanActivity reopen it
         if (settings.getBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false)) {
             settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false).commit();
             Intent intent = new Intent(this, ScanNetworksActivity.class);
             startActivity(intent);
         }
-
 
         // Get configured networks additional data
         try {
@@ -517,6 +506,18 @@ public class MainActivity extends AppCompatActivity implements
             configuredNetworks.getDataState();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // Add network data of networks that were configured outside application
+        ListIterator<WifiConfiguration> wifiConfigurationListIterator = wifiConfiguredNetworks.listIterator();
+        while (wifiConfigurationListIterator.hasNext()) {
+            WifiConfiguration configuration = wifiConfiguredNetworks.get(wifiConfigurationListIterator.nextIndex());
+            if (!configuredNetworks.hasNetworkAdditionalData(configuration.SSID)) {
+                configuredNetworks.addNetworkData("", configuration.SSID, configuration.hiddenSSID,
+                        "", configuredNetworks.getCapabilities(configuration), "",
+                        Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+            }
+            wifiConfigurationListIterator.next();
         }
 
         // If all networks were removed outside application...

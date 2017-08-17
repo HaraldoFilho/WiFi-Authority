@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 8/10/17 11:27 PM
+ *  Last modified : 8/17/17 12:24 AM
  *
  *  -----------------------------------------------------------
  */
@@ -94,7 +94,6 @@ public class ConfiguredNetworks {
             iterator.next();
         }
         return false;
-
     }
 
     public void collectGarbage(List<WifiConfiguration> wifiConfiguredNetworks)
@@ -326,6 +325,43 @@ public class ConfiguredNetworks {
         } else if (security.contains(Constants.SCAN_WEP)) {
             return Constants.SET_WEP;
         } else return Constants.SET_OPEN;
+
+    }
+
+    public String getCapabilities(WifiConfiguration configuration) {
+
+        String capabilities = "";
+
+        switch (configuration.allowedKeyManagement.toString()) {
+
+            case Constants.KEY_NONE_WEP:
+                if (configuration.allowedAuthAlgorithms.toString().contains(Constants.ALLOW_1)) {
+                    capabilities = capabilities.concat(Constants.CAP_WEP);
+                }
+                break;
+
+            case Constants.KEY_WPA:
+                capabilities = capabilities.concat(Constants.CAP_WPA);
+                break;
+
+            case Constants.KEY_WPA2:
+                capabilities = capabilities.concat(Constants.CAP_WPA2);
+                break;
+
+            case Constants.KEY_EAP:
+                capabilities = capabilities.concat(Constants.CAP_EAP);
+                break;
+
+        }
+
+        if (configuration.allowedPairwiseCiphers.toString().contains(Constants.ALLOW_1)) {
+            capabilities = capabilities.concat(Constants.CAP_TKTIP);
+        }
+        if (configuration.allowedPairwiseCiphers.toString().contains(Constants.ALLOW_2)) {
+            capabilities = capabilities.concat(Constants.CAP_CCMP);
+        }
+
+        return capabilities;
 
     }
 

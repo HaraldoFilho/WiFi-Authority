@@ -62,6 +62,16 @@ public class Constants {
     public static final int SET_WPA = 2;
     public static final int SET_EAP = 3;
 
+    public static final String CAP_WPA = "[WPA]";
+    public static final String CAP_WPA2 = "[WPA2]";
+    public static final String CAP_EAP = "[IEEE8021X]";
+    public static final String CAP_WEP = "[WEP]";
+    public static final String CAP_TKTIP = "[TKTIP]";
+    public static final String CAP_CCMP = "[CCMP]";
+
+    public static final String ALLOW_1 = "1";
+    public static final String ALLOW_2 = "2";
+
     public static final String CFG_CCMP = "CCMP";
     public static final String CFG_TKIP = "TKIP";
 
