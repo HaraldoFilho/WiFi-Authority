@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/18/17 1:36 AM
+ *  Last modified : 8/18/17 8:52 AM
  *
  *  -----------------------------------------------------------
  */
@@ -32,7 +32,6 @@ import com.apps.mohb.wifiauthority.R;
 import com.apps.mohb.wifiauthority.Toasts;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -59,7 +58,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
         this.configuredNetworks = configuredNetworks;
         try {
             this.configuredNetworks.getDataState();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -152,9 +151,10 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFiOk);
 
-        if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+        try {
 
-            try {
+            if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+
                 switch (wifiManager.calculateSignalLevel(
                         configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, mac), Constants.LEVELS)) {
 
@@ -174,13 +174,14 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                         break;
 
                 }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+
+            } else {
+                imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                        R.drawable.ic_signal_wifi_out_of_reach_red_24dp));
             }
 
-        } else {
-            imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                    R.drawable.ic_signal_wifi_out_of_reach_red_24dp));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
@@ -228,10 +229,14 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                 case OBTAINING_IPADDR:
                     state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
                     ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
-                    if (configuredNetworks.isConnected(wifiConfiguredNetworks, mac)) {
-                        txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
-                        state = getContext().getResources().getString(R.string.layout_net_connected);
-                        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
+                    try {
+                        if (configuredNetworks.isConnected(wifiConfiguredNetworks, mac)) {
+                            txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                            state = getContext().getResources().getString(R.string.layout_net_connected);
+                            ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                     break;
 
@@ -240,10 +245,14 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
             }
             txtNetworkState.setText(state);
         } else {
-            if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
-                txtNetworkState.setText(R.string.layout_net_disconnected);
-            } else {
-                txtNetworkState.setText(R.string.layout_net_out_of_reach);
+            try {
+                if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
+                    txtNetworkState.setText(R.string.layout_net_disconnected);
+                } else {
+                    txtNetworkState.setText(R.string.layout_net_out_of_reach);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

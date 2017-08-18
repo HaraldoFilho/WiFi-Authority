@@ -1,3 +1,6 @@
+#### **0.6.11**
+- Fixed crashes after passwords are changed.
+
 #### **0.6.10**
 - Fixed crashes after passwords are cleaned due to save password configuration being disabled.
 
