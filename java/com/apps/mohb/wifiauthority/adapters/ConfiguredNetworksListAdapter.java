@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/18/17 8:52 AM
+ *  Last modified : 8/18/17 8:03 PM
  *
  *  -----------------------------------------------------------
  */
@@ -230,7 +230,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                     state = getContext().getResources().getString(R.string.net_state_obt_ip_address);
                     ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.OBTAINING_IPADDR;
                     try {
-                        if (configuredNetworks.isConnected(wifiConfiguredNetworks, mac)) {
+                        if (configuredNetworks.isSSIDConnected(wifiConfiguredNetworks, ssid)) {
                             txtNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                             state = getContext().getResources().getString(R.string.layout_net_connected);
                             ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.CONNECTED;

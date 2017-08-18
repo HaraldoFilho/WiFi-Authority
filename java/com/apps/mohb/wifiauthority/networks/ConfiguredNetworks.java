@@ -630,7 +630,23 @@ public class ConfiguredNetworks {
 
     }
 
-    public boolean isConnected(List<WifiConfiguration> configuredNetworks, String mac) throws NullPointerException {
+    public boolean isSSIDConnected(List<WifiConfiguration> configuredNetworks, String ssid) throws NullPointerException {
+
+        ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
+
+        while (listIterator.hasNext()) {
+            int index = listIterator.nextIndex();
+            WifiConfiguration network = configuredNetworks.get(index);
+            String ssidCfg = getDataSSID(network.SSID);
+            if ((ssidCfg.matches(ssid)) && (network.status == WifiConfiguration.Status.CURRENT)) {
+                return true;
+            }
+            listIterator.next();
+        }
+        return false;
+    }
+
+    public boolean isMacAddressConnected(List<WifiConfiguration> configuredNetworks, String mac) throws NullPointerException {
 
         ListIterator<WifiConfiguration> listIterator = configuredNetworks.listIterator();
 

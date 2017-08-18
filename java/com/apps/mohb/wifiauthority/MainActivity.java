@@ -349,6 +349,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+
         // Create list header and footer, that will insert spaces on top and bottom of the
         // list to make material design effect elevation and shadow
         listHeader = getLayoutInflater().inflate(R.layout.list_header, networksListView);
@@ -466,8 +468,6 @@ public class MainActivity extends AppCompatActivity implements
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Shared preferences variable to control if Network Management Policy Dialog for Marshmallow (version 6.x)
         // or higher must be shown
@@ -897,8 +897,10 @@ public class MainActivity extends AppCompatActivity implements
             ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
             ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
 
-            // Set mac address of the supplicant network configuration
-            configuredNetworks.setMacAddressBySSID(wifiInfo.getSSID(), wifiInfo.getBSSID());
+            if (wifiInfo.getSSID() != null && wifiInfo.getBSSID() != null) {
+                // Set mac address of the supplicant network configuration
+                configuredNetworks.setMacAddressBySSID(wifiInfo.getSSID(), wifiInfo.getBSSID());
+            }
 
             // Get networks list sort mode from settings
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),

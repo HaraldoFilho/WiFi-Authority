@@ -13,7 +13,7 @@
 package com.apps.mohb.wifiauthority.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
@@ -39,12 +39,13 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
     private WifiManager wifiManager;
     private ConfiguredNetworks configuredNetworks;
+    private SharedPreferences settings;
 
     public ScannedNetworksListAdapter(Context context, List<ScanResult> list) {
         super(context, 0, list);
         wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         configuredNetworks = new ConfiguredNetworks(getContext());
-
+        settings = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
@@ -60,13 +61,22 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
         ImageView imgCfg = (ImageView) convertView.findViewById(R.id.imgCfg);
 
         try {
+
             // Check if network is already configured
             if (configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), result.SSID)) {
                 imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
 
-                // Check if network is connected
-                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.BSSID)) {
-                    txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                // If show all APs option is enabled on settings
+                if (settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+                    // Check if network is connected using mac address
+                    if (configuredNetworks.isMacAddressConnected(wifiManager.getConfiguredNetworks(), result.BSSID)) {
+                        txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                    }
+                } else {
+                    // Check if network is connected using ssid
+                    if (configuredNetworks.isMacAddressConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                        txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
+                    }
                 }
 
             }
@@ -139,9 +149,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
                     break;
 
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Resources.NotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

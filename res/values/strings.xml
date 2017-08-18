@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.6.12</string>
-    <string name="version_code" translatable="false">68</string>
+    <string name="version_number" translatable="false">0.6.13</string>
+    <string name="version_code" translatable="false">69</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
