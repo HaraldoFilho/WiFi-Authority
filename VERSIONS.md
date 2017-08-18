@@ -1,3 +1,7 @@
+#### **0.6.9**
+- Bug fixes.
+- Improvements on user interface.
+
 #### **0.6.8**
 - Fixed bug of not correctly reconfiguring networks that were added and removed outside application.
 

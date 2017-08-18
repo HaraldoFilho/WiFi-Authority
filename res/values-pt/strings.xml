@@ -112,7 +112,7 @@
     <string name="context_cancel">Cancelar</string>
     <string name="toast_no_network_found">Nenhuma rede foi encontrada</string>
     <string name="toast_no_network_to_display">Nenhuma rede para mostrar. Tente diminuir os níveis mínimos nas configurações</string>
-    <string name="dialog_change_password">Alterar senha</string>
+    <string name="dialog_change_password">Senha</string>
     <string name="context_change_password">Alterar senha</string>
     <string name="pref_show_all_summ_off">Escondendo pontos de acesso duplicados</string>
     <string name="pref_show_all_summ_on">Mostrando todos os pontos de acesso</string>
@@ -123,7 +123,7 @@
     <string name="layout_net_speed">"Velocidade do link: "</string>
     <string name="layout_net_ip_address">"Endereço IP: "</string>
     <string name="layout_net_signal_level">"Nível do sinal: "</string>
-    <string name="layout_net_mac">"Endereço MAC: "</string>
+    <string name="layout_net_mac_address">"Endereço MAC: "</string>
     <string name="button_turn_wifi_on">LIGAR WIFI</string>
     <string name="action_restore_defaults">Restaurar padrões</string>
     <string name="alert_title_reset_preferences">Restaurar padrões?</string>

@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements
                                 configuredNetworks.setHidden(ssid, false);
                             }
 
+
                             // If network is not hidden ...
                             if (!configuredNetworks.isHidden(ssid)
                                     && !scanResult.SSID.isEmpty()
@@ -498,26 +499,30 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(intent);
         }
 
-        // Get configured networks additional data
         try {
+            // Get configured networks additional data
             if (configuredNetworks == null) {
                 configuredNetworks = new ConfiguredNetworks(this);
             }
             configuredNetworks.getDataState();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Add network data of networks that were configured outside application
-        ListIterator<WifiConfiguration> wifiConfigurationListIterator = wifiConfiguredNetworks.listIterator();
-        while (wifiConfigurationListIterator.hasNext()) {
-            WifiConfiguration configuration = wifiConfiguredNetworks.get(wifiConfigurationListIterator.nextIndex());
-            if (!configuredNetworks.hasNetworkAdditionalData(configuration.SSID)) {
-                configuredNetworks.addNetworkData("", configuration.SSID, configuration.hiddenSSID,
-                        "", configuredNetworks.getCapabilities(configuration), "",
-                        Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+        try {
+            // Add network data of networks that were configured outside application
+            ListIterator<WifiConfiguration> wifiConfigurationListIterator = wifiConfiguredNetworks.listIterator();
+            while (wifiConfigurationListIterator.hasNext()) {
+                WifiConfiguration configuration = wifiConfiguredNetworks.get(wifiConfigurationListIterator.nextIndex());
+                if (!configuredNetworks.hasNetworkAdditionalData(configuration.SSID)) {
+                    configuredNetworks.addNetworkData("", configuration.SSID, configuration.hiddenSSID,
+                            "", configuredNetworks.getCapabilities(configuration), "",
+                            Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                }
+                wifiConfigurationListIterator.next();
             }
-            wifiConfigurationListIterator.next();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // If all networks were removed outside application...
@@ -888,6 +893,9 @@ public class MainActivity extends AppCompatActivity implements
             ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
             ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
 
+            // Set mac address of the supplicant network configuration
+            configuredNetworks.setMacAddressBySSID(wifiInfo.getSSID(), wifiInfo.getBSSID());
+
             // Get networks list sort mode from settings
             String sort = settings.getString(getResources().getString(R.string.pref_key_sort),
                     getResources().getString(R.string.pref_def_sort));
@@ -901,12 +909,14 @@ public class MainActivity extends AppCompatActivity implements
 
                     // Automatic
                     case Constants.PREF_SORT_AUTO:
+
                         // Sorts according to title display mode preference
                         if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
                             sortByDescription();
                         } else {
                             sortByName();
                         }
+
                         // Sort list by decreasing order of signal level
                         Collections.sort(wifiConfiguredNetworks, new Comparator<WifiConfiguration>() {
                             @Override
@@ -919,11 +929,13 @@ public class MainActivity extends AppCompatActivity implements
                                 while (listIterator.hasNext()) {
                                     int index = listIterator.nextIndex();
                                     ScanResult scanResult = wifiScannedNetworks.get(index);
-                                    String ssid = scanResult.SSID;
-                                    if (rhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    String mac = scanResult.BSSID;
+                                    if (configuredNetworks.getMacAddressBySSID(rhs.SSID)
+                                            .matches(mac)) {
                                         rhsLevel = scanResult.level;
                                     }
-                                    if (lhs.SSID.matches(configuredNetworks.getCfgSSID(ssid))) {
+                                    if (configuredNetworks.getMacAddressBySSID(lhs.SSID)
+                                            .matches(mac)) {
                                         lhsLevel = scanResult.level;
                                     }
                                     listIterator.next();
@@ -932,6 +944,7 @@ public class MainActivity extends AppCompatActivity implements
                                 return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
                             }
                         });
+
                         // Move connected network to the beginning of the list
                         ListIterator<WifiConfiguration> listIterator = wifiConfiguredNetworks.listIterator();
                         while (listIterator.hasNext()) {
@@ -943,6 +956,7 @@ public class MainActivity extends AppCompatActivity implements
                             }
                             listIterator.next();
                         }
+
                         break;
 
                     // By description

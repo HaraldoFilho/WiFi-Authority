@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,11 +65,28 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
                 imgCfg.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_star_green_24dp));
 
                 // Check if network is connected
-                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                if (configuredNetworks.isConnected(wifiManager.getConfiguredNetworks(), result.BSSID)) {
                     txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                 }
 
             }
+
+
+            // Mac address
+
+            TextView txtScanNetworkMac = (TextView) convertView.findViewById(R.id.txtScanNetMac);
+            txtScanNetworkMac.setText(result.BSSID.toUpperCase());
+
+            try {
+                // If it is not showing all APs do not show MAC address
+                if (!PreferenceManager.getDefaultSharedPreferences(getContext())
+                        .getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
+                    txtScanNetworkMac.setHeight(Constants.HEIGHT_ZERO);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
             // Network security
 

@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.6.8</string>
-    <string name="version_code" translatable="false">64</string>
+    <string name="version_number" translatable="false">0.6.9</string>
+    <string name="version_code" translatable="false">65</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -82,7 +82,7 @@
     <string name="dialog_network_name_changed_password">Type again the network password:</string>
     <string name="dialog_network_name_changed_connect">Connect to network</string>
     <string name="dialog_edit_description">Edit description</string>
-    <string name="dialog_change_password">Change password</string>
+    <string name="dialog_change_password">Password</string>
     <string name="alert_title_warning">WARNING!</string>
     <string name="alert_title_are_you_sure">Delete network?</string>
     <string name="alert_title_reset_preferences">Restore defaults?</string>
@@ -126,7 +126,8 @@
     <string name="layout_net_title">Title</string>
     <string name="layout_net_subtitle">Subtitle</string>
     <string name="layout_net_ssid" translatable="false">SSID: "</string>
-    <string name="layout_net_mac">"MAC Address: "</string>
+    <string name="layout_net_mac_address">"MAC Address: "</string>
+    <string name="layout_net_mac" translatable="false">"MAC: "</string>
     <string name="layout_net_security">"Security: "</string>
     <string name="layout_net_ip_address">"IP address: "</string>
     <string name="layout_net_frequency">"Frequency: "</string>

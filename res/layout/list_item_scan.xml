@@ -20,10 +20,20 @@
         android:layout_marginTop="@dimen/item_margin_top" />
 
     <TextView
-        android:text="@string/layout_net_security"
+        android:text="@string/layout_net_mac"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtScanNetName"
+        android:id="@+id/txtScanNetMac"
+        android:layout_alignLeft="@+id/txtScanNetName"
+        android:layout_alignStart="@+id/txtScanNetName"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="@string/layout_net_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetMac"
         android:id="@+id/txtScanNetSecurityTitle"
         android:layout_alignLeft="@+id/txtScanNetName"
         android:layout_alignStart="@+id/txtScanNetName" />
@@ -32,7 +42,7 @@
         android:text="@string/layout_net_security"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtScanNetName"
+        android:layout_below="@+id/txtScanNetMac"
         android:layout_toRightOf="@+id/txtScanNetSecurityTitle"
         android:id="@+id/txtScanNetSecurity" />
 

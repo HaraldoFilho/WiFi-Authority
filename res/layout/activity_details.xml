@@ -38,7 +38,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:text="@string/layout_net_mac"
+            android:text="@string/layout_net_mac_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txtNetMacTitle"
@@ -48,7 +48,7 @@
             android:layout_alignStart="@+id/txtNetSSIDTitle" />
 
         <TextView
-            android:text="@string/layout_net_mac"
+            android:text="@string/layout_net_mac_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtNetSSID"

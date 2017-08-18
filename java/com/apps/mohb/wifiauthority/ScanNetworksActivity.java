@@ -91,6 +91,20 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 e.printStackTrace();
             }
 
+
+            try {
+                // sort list by decreasing order of signal level
+                Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
+                    @Override
+                    public int compare(ScanResult lhs, ScanResult rhs) {
+                        return wifiManager.compareSignalLevel(rhs.level, lhs.level);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
             try {
 
                 // remove duplicated networks from list if the show all aps setting is off
@@ -194,23 +208,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
                     Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
                 }
-            } else {
-
-                try {
-                    // sort list by decreasing order of signal level
-                    Collections.sort(wifiScannedNetworks, new Comparator<ScanResult>() {
-                        @Override
-                        public int compare(ScanResult lhs, ScanResult rhs) {
-                            return wifiManager.compareSignalLevel(rhs.level, lhs.level);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
             }
-
             updateListOfNetworks(context);
 
         }
