@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/17/17 11:44 PM
+ *  Last modified : 8/18/17 1:36 AM
  *
  *  -----------------------------------------------------------
  */
@@ -154,24 +154,28 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
 
-            switch (wifiManager.calculateSignalLevel(
-                    configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, mac), Constants.LEVELS)) {
+            try {
+                switch (wifiManager.calculateSignalLevel(
+                        configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, mac), Constants.LEVELS)) {
 
-                case Constants.LEVEL_HIGH:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_high_green_24dp));
-                    break;
+                    case Constants.LEVEL_HIGH:
+                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_wifi_high_green_24dp));
+                        break;
 
-                case Constants.LEVEL_LOW:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_mid_yellow_24dp));
-                    break;
+                    case Constants.LEVEL_LOW:
+                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_wifi_mid_yellow_24dp));
+                        break;
 
-                case Constants.LEVEL_VERY_LOW:
-                    imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
-                            R.drawable.ic_wifi_low_red_24dp));
-                    break;
+                    case Constants.LEVEL_VERY_LOW:
+                        imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
+                                R.drawable.ic_wifi_low_red_24dp));
+                        break;
 
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
 
         } else {

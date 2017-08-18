@@ -63,7 +63,7 @@ public class ConfiguredNetworks {
 
         try {
             getDataState();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -732,7 +732,7 @@ public class ConfiguredNetworks {
 
     // JSON
 
-    public void setDataState(ArrayList<NetworkData> data) throws IOException {
+    public void setDataState(ArrayList<NetworkData> data) throws IOException, IllegalStateException {
         String jsonData = writeJsonString(data);
         editor.putString(Constants.DATA, jsonData);
         editor.commit();
@@ -740,7 +740,7 @@ public class ConfiguredNetworks {
 
     // get a network data list from memory through a json string
     // if list was not saved yet creates a new array list
-    public boolean getDataState() throws IOException {
+    public boolean getDataState() throws IOException, IllegalStateException {
         String jsonData = preferences.getString(Constants.DATA, null);
         if (jsonData != null) {
             networksData = readJsonString(jsonData);
@@ -751,7 +751,7 @@ public class ConfiguredNetworks {
     }
 
     // create a json string of a list of network data items
-    private String writeJsonString(ArrayList<NetworkData> dataItems) throws IOException {
+    private String writeJsonString(ArrayList<NetworkData> dataItems) throws IOException, IllegalStateException {
         StringWriter stringWriter = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(stringWriter);
         jsonWriter.setIndent("  ");
@@ -761,7 +761,8 @@ public class ConfiguredNetworks {
     }
 
     // write all network data to json string
-    private void writeDataArrayList(JsonWriter writer, ArrayList<NetworkData> dataItems) throws IOException {
+    private void writeDataArrayList(JsonWriter writer, ArrayList<NetworkData> dataItems)
+            throws IOException, IllegalStateException {
         writer.beginArray();
         for (NetworkData dataItem : dataItems) {
             writeDataItem(writer, dataItem);
@@ -770,7 +771,7 @@ public class ConfiguredNetworks {
     }
 
     // write a single network data to json string
-    private void writeDataItem(JsonWriter writer, NetworkData dataItem) throws IOException {
+    private void writeDataItem(JsonWriter writer, NetworkData dataItem) throws IOException, IllegalStateException {
         writer.beginObject();
         writer.name(Constants.JSON_DESCRIPTION).value(dataItem.getDescription());
         writer.name(Constants.JSON_SSID).value(dataItem.getSSID());
@@ -785,7 +786,7 @@ public class ConfiguredNetworks {
     }
 
     // read a json string containing a list of network items
-    private ArrayList<NetworkData> readJsonString(String jsonString) throws IOException {
+    private ArrayList<NetworkData> readJsonString(String jsonString) throws IOException, IllegalStateException {
         JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
         try {
             return readDataArrayList(jsonReader);
@@ -795,7 +796,7 @@ public class ConfiguredNetworks {
     }
 
     // read a list of network data items from a json string
-    private ArrayList<NetworkData> readDataArrayList(JsonReader jsonReader) throws IOException {
+    private ArrayList<NetworkData> readDataArrayList(JsonReader jsonReader) throws IOException, IllegalStateException {
         ArrayList<NetworkData> dataItems = new ArrayList<>();
         jsonReader.beginArray();
         while (jsonReader.hasNext()) {
@@ -806,7 +807,7 @@ public class ConfiguredNetworks {
     }
 
     // read a single network data item from a json string
-    private NetworkData readDataItem(JsonReader jsonReader) throws IOException {
+    private NetworkData readDataItem(JsonReader jsonReader) throws IOException, IllegalStateException {
         String dataDescription = "";
         String dataSSID = "";
         boolean dataHidden = false;
