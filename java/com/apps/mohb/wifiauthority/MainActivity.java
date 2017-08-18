@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/12/17 12:24 AM
+ *  Last modified : 8/18/17 10:25 AM
  *
  *  -----------------------------------------------------------
  */
@@ -473,6 +473,8 @@ public class MainActivity extends AppCompatActivity implements
         // or higher must be shown
         showNetworkManagementPolicyWarnPref = this.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
 
+        wifiDisabledDialog = null;
+
         // Register a broadcast receiver to monitor changes on network state to update network status
         BroadcastReceiver wifiStateMonitor = new NetworkStateMonitor();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -497,6 +499,10 @@ public class MainActivity extends AppCompatActivity implements
             settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false).commit();
             Intent intent = new Intent(this, ScanNetworksActivity.class);
             startActivity(intent);
+        }
+
+        if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
+            showWifiDisabledAlertDialog();
         }
 
         try {
@@ -573,12 +579,6 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set that Network Name Changed Dialog was not already been opened
         networkNameChangedDialogOpened = false;
-
-        wifiDisabledDialog = null;
-
-        if ((!wifiManager.isWifiEnabled()) && (wifiDisabledDialog == null)) {
-            showWifiDisabledAlertDialog();
-        }
 
     }
 
@@ -686,9 +686,13 @@ public class MainActivity extends AppCompatActivity implements
         while (listIterator.hasNext()) {
             int index = listIterator.nextIndex();
             ScanResult scanResult = wifiScannedNetworks.get(index);
-            if ((configuredNetworks.getDataSSID(network.SSID).matches(scanResult.SSID))
-                    || (configuredNetworks.getMacAddressBySSID(network.SSID).matches(scanResult.BSSID))) {
-                itemConnect.setEnabled(true);
+            try {
+                if ((configuredNetworks.getDataSSID(network.SSID).matches(scanResult.SSID))
+                        || (configuredNetworks.getMacAddressBySSID(network.SSID).matches(scanResult.BSSID))) {
+                    itemConnect.setEnabled(true);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
             listIterator.next();
         }

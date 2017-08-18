@@ -213,7 +213,7 @@ public class ConfiguredNetworks {
         return "\"" + password + "\"";
     }
 
-    public String getMacAddressBySSID(String ssid) {
+    public String getMacAddressBySSID(String ssid) throws NullPointerException {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {

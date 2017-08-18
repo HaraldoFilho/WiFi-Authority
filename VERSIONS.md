@@ -1,3 +1,6 @@
+#### **0.6.12**
+- Bug fixes.
+
 #### **0.6.11**
 - Fixed crashes after passwords are changed.
 
