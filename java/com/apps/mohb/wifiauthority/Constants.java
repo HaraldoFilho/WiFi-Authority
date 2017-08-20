@@ -22,6 +22,8 @@ public class Constants {
 
     // Permissions request
     public static final int FINE_LOCATION_PERMISSION_REQUEST = 0;
+    public static final int RESULTS_EMPTY = 0;
+    public static final int RESULT_INDEX = 0;
 
     // Lists Saved Preferences
     public static final String DATA = "Data";
@@ -74,8 +76,17 @@ public class Constants {
 
     public static final String CFG_CCMP = "CCMP";
     public static final String CFG_TKIP = "TKIP";
+    public static final int CFG_PRIORITY = 40;
 
-    public static final String DUMMY_PASSWORD = "--------";
+    public static final String WPA_DUMMY_PASSWORD = "--------";
+    public static final String WEP_DUMMY_PASSWORD = "-----";
+
+    public static final int WPA_PASSWORD_MIN_LENGTH = 8;
+    public static final int WPA_PASSWORD_MAX_LENGTH = 64;
+
+    public static final int WEP_PASSWORD_64BIT_LENGTH = 5;
+    public static final int WEP_PASSWORD_128BIT_LENGTH = 13;
+    public static final int WEP_PASSWORD_KEY_INDEX = 0;
 
     // Lists
     public static final int LIST_HEAD = 0;
@@ -88,6 +99,11 @@ public class Constants {
     public static final int TOAST_X_OFFSET = 0;
     public static final int TOAST_Y_OFFSET = 0;
 
+    // Dialogs
+    public static final String KEY_NOTICES = "notices";
+    public static final String KEY_URL = "url";
+    public static final String KEY_EMAIL = "mailto:";
+
     // Networks signal levels
     public static final int LEVELS = 3;
     public static final int LEVEL_HIGH = 2;
@@ -98,7 +114,7 @@ public class Constants {
 
     // Network frequency
     public static final int FREQ_5GHZ = 5000;
-    public static final int HEIGHT_ZERO = 0;
+    public static final int INVISIBLE = 0;
     public static final int NO_FREQ_SET = 0;
 
     // FAB alpha
@@ -138,8 +154,10 @@ public class Constants {
     public static final String PREF_MIN_SIGNAL_LOW = "2";
     public static final String PREF_MIN_SIGNAL_VERY_LOW = "1";
 
-    // Log
+    // General
     public static final String LOG_TAG = "DEBUG_WIFI";
-
+    public static final String EMPTY = "";
+    public static final String SPACE = " ";
+    public static final String QUOTE = "\"";
 
 }

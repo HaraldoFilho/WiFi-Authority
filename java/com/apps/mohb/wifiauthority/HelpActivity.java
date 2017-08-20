@@ -55,7 +55,7 @@ public class HelpActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // load options_help page in webView
-        webView.loadUrl(getString(R.string.url_website) + bundle.getString("url"));
+        webView.loadUrl(getString(R.string.url_website) + bundle.getString(Constants.KEY_URL));
     }
 
     @Override
@@ -75,8 +75,8 @@ public class HelpActivity extends AppCompatActivity {
             case R.id.action_send_question:
                 String[] address = new String[Constants.QUESTION_ARRAY_SIZE];
                 address[Constants.LIST_HEAD] = getString(R.string.info_feedback_email);
-                composeEmail(address, getString(R.string.action_question) + " " + getString(R.string.action_about_application)
-                        + " " + getString(R.string.info_app_name));
+                composeEmail(address, getString(R.string.action_question) + Constants.SPACE + getString(R.string.action_about_application)
+                        + Constants.SPACE + getString(R.string.info_app_name));
                 break;
         }
 
@@ -111,7 +111,7 @@ public class HelpActivity extends AppCompatActivity {
     */
     private void composeEmail(String[] addresses, String subject) {
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.setData(Uri.parse(Constants.KEY_EMAIL)); // only email apps should handle this
         intent.putExtra(Intent.EXTRA_EMAIL, addresses);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         if (intent.resolveActivity(getPackageManager()) != null) {

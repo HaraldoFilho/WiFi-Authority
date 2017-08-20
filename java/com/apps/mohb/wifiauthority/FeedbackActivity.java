@@ -46,7 +46,7 @@ public class FeedbackActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // load options_help page in webView
-        webView.loadUrl(getString(R.string.url_website) + bundle.getString("url"));
+        webView.loadUrl(getString(R.string.url_website) + bundle.getString(Constants.KEY_URL));
     }
 
     @Override

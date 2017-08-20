@@ -25,7 +25,6 @@ public class PreferencesResetAlertFragment extends DialogFragment {
 
     public interface PreferencesResetDialogListener {
         void onAlertDialogPositiveClick(DialogFragment dialog);
-
         void onAlertDialogNegativeClick(DialogFragment dialog);
     }
 

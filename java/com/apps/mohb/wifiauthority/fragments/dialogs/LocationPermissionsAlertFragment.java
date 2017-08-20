@@ -25,7 +25,6 @@ public class LocationPermissionsAlertFragment extends DialogFragment {
 
     public interface LocationPermissionsDialogListener {
         void onAlertLocationPermDialogPositiveClick(DialogFragment dialog);
-
         void onAlertLocationPermDialogNegativeClick(DialogFragment dialog);
     }
 

@@ -25,9 +25,7 @@ public class NetworkManagementPolicyAlertFragment extends DialogFragment {
 
     public interface NetworkManagementPolicyDialogListener {
         void onAlertNetworkManagementPolicyDialogPositiveClick(DialogFragment dialog);
-
         void onAlertNetworkManagementPolicyDialogNeutralClick(DialogFragment dialog);
-
         void onAlertNetworkManagementPolicyDialogNegativeClick(DialogFragment dialog);
     }
 

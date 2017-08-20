@@ -25,7 +25,6 @@ public class NetworkDeleteAlertFragment extends DialogFragment {
 
     public interface NetworkDeleteDialogListener {
         void onNetworkDeleteDialogPositiveClick(DialogFragment dialog);
-
         void onNetworkDeleteDialogNegativeClick(DialogFragment dialog);
     }
 

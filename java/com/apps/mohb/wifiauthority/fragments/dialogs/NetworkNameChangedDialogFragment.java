@@ -37,7 +37,6 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
     public interface NetworkNameChangedDialogListener {
         void onNetworkNameChangedDialogPositiveClick(DialogFragment dialog);
-
         void onNetworkNameChangedDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -90,8 +89,10 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
         if (bundle != null) {
             networkDescription.setText(bundle.getString(Constants.KEY_DESCRIPTION));
-            networkOldName.setText(":   " + bundle.getString(Constants.KEY_OLD_NAME));
-            networkNewName.setText(":   " + bundle.getString(Constants.KEY_NEW_NAME));
+            networkOldName.setText(getString(R.string.dialog_network_name_changed_colon)
+                    + bundle.getString(Constants.KEY_OLD_NAME));
+            networkNewName.setText(getString(R.string.dialog_network_name_changed_colon)
+                    + bundle.getString(Constants.KEY_NEW_NAME));
 
             mac = bundle.getString(Constants.KEY_BSSID);
             oldSSID = configuredNetworks.getDataSSID(bundle.getString(Constants.KEY_OLD_NAME));
@@ -114,11 +115,11 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
                     wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
                     wifiConfiguration.SSID = configuredNetworks.getCfgSSID(newSSID);
-                    wifiConfiguration.priority = 40;
+                    wifiConfiguration.priority = Constants.CFG_PRIORITY;
 
                     wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
                             configuredNetworks.getNetworkSecurity(security),
-                            "\"" + networkPasswd.getText().toString() + "\"");
+                            configuredNetworks.getCfgPassword(networkPasswd.getText().toString()));
 
                     wifiManager.disconnect();
 
@@ -134,7 +135,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                     wifiManager.saveConfiguration();
 
                     configuredNetworks.removeNetworkData(oldSSID);
-                    configuredNetworks.addNetworkData(description, newSSID, isHidden, mac, security, "",
+                    configuredNetworks.addNetworkData(description, newSSID, isHidden, mac, security, Constants.EMPTY,
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {

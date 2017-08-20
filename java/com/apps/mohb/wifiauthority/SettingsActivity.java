@@ -66,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(
-                        index >= 0
+                        index >= Constants.LIST_HEAD
                                 ? listPreference.getEntries()[index]
                                 : null);
 
@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity implements
         sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
+                        .getString(preference.getKey(), Constants.EMPTY));
     }
 
     @Override
@@ -155,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity implements
             case R.id.action_help_settings:
                 Intent intent = new Intent(this, HelpActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_help_settings));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_help_settings));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;

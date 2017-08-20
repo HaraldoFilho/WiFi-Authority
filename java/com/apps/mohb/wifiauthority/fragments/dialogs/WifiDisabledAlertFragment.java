@@ -25,7 +25,6 @@ public class WifiDisabledAlertFragment extends DialogFragment {
 
     public interface WifiDisabledDialogListener {
         void onAlertWifiDisabledDialogPositiveClick(DialogFragment dialog);
-
         void onAlertWifiDisabledDialogNegativeClick(DialogFragment dialog);
     }
 

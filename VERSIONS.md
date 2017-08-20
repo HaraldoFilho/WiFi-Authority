@@ -1,3 +1,8 @@
+#### **0.6.14**
+- Bug fixes.
+- When adding a network or changing password, connect button is only enabled if password is valid.
+- Structural changes on source code.
+
 #### **0.6.13**
 - Bug fixes.
 

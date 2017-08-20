@@ -25,7 +25,6 @@ public class RestoreNetworksAlertFragment extends DialogFragment {
 
     public interface RestoreNetworksListener {
         void onAlertDialogPositiveClick(DialogFragment dialog);
-
         void onAlertDialogNegativeClick(DialogFragment dialog);
     }
 

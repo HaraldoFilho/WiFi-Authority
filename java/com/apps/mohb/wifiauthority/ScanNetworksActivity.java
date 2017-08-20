@@ -110,7 +110,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 // remove duplicated networks from list if the show all aps setting is off
                 if (!settings.getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
 
-                    String uniques = "";
+                    String uniques = Constants.EMPTY;
                     ListIterator<ScanResult> listIteratorDuplicate = wifiScannedNetworks.listIterator();
 
                     while (listIteratorDuplicate.hasNext()) {
@@ -254,16 +254,16 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 }
 
                 // Set default values for these variables
-                String ssid = "";
-                String bssid = "";
-                String capabilities = "";
+                String ssid = Constants.EMPTY;
+                String bssid = Constants.EMPTY;
+                String capabilities = Constants.EMPTY;
 
                 // Get the correct position of clicked item according to Android version
                 // due to use of header and footer
                 int correctPosition = getCorrectPosition(position);
 
                 // Check if position is inside networks list size (not header or footer)
-                if ((correctPosition >= 0) && (correctPosition < wifiScannedNetworks.size())) {
+                if ((correctPosition >= Constants.LIST_HEAD) && (correctPosition < wifiScannedNetworks.size())) {
                     ssid = wifiScannedNetworks.get(correctPosition).SSID;
                     bssid = wifiScannedNetworks.get(correctPosition).BSSID;
                     capabilities = wifiScannedNetworks.get(correctPosition).capabilities;
@@ -347,7 +347,7 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             case R.id.action_help_scan:
                 intent = new Intent(this, HelpActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_help_scan));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_help_scan));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -468,8 +468,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         switch (requestCode) {
             case Constants.FINE_LOCATION_PERMISSION_REQUEST: {
                 // if permission is granted reset
-                if (grantResults.length > 0
-                        && ((grantResults[0] != PackageManager.PERMISSION_GRANTED))) {
+                if (grantResults.length > Constants.RESULTS_EMPTY
+                        && ((grantResults[Constants.RESULT_INDEX] != PackageManager.PERMISSION_GRANTED))) {
                     scanForAvailableNetworks();
                 } else {
                     finish();

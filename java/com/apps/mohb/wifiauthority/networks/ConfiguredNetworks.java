@@ -54,8 +54,8 @@ public class ConfiguredNetworks {
 
         supplicantNetworkState = NetworkInfo.DetailedState.IDLE;
         lastSupplicantNetworkState = NetworkInfo.DetailedState.IDLE;
-        supplicantSSID = "";
-        lastSupplicantSSID = "";
+        supplicantSSID = Constants.EMPTY;
+        lastSupplicantSSID = Constants.EMPTY;
 
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         preferences = context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
@@ -73,7 +73,7 @@ public class ConfiguredNetworks {
     public void addNetworkData(String description, String ssid, boolean hidden, String bssid,
                                String security, String password, double latitude, double longitude) {
         if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
-            password = "";
+            password = Constants.EMPTY;
         }
         NetworkData data = new NetworkData(description, getDataSSID(ssid), hidden, bssid,
                 security, password, latitude, longitude);
@@ -102,11 +102,11 @@ public class ConfiguredNetworks {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         String ssid;
-        String listOfNetworks = "";
+        String listOfNetworks = Constants.EMPTY;
 
-        for (int i = 0; i < wifiConfiguredNetworks.size(); i++) {
+        for (int i = Constants.LIST_HEAD; i < wifiConfiguredNetworks.size(); i++) {
             ssid = wifiConfiguredNetworks.get(i).SSID;
-            listOfNetworks = listOfNetworks.concat(ssid + " ");
+            listOfNetworks = listOfNetworks.concat(ssid + Constants.SPACE);
         }
 
         while (iterator.hasNext()) {
@@ -129,29 +129,44 @@ public class ConfiguredNetworks {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         String ssid;
-        String listOfNetworks = "";
+        String listOfNetworks = Constants.EMPTY;
 
-        for (int i = 0; i < wifiConfiguredNetworks.size(); i++) {
+        for (int i = Constants.LIST_HEAD; i < wifiConfiguredNetworks.size(); i++) {
             ssid = wifiConfiguredNetworks.get(i).SSID;
-            listOfNetworks = listOfNetworks.concat(ssid + " ");
+            listOfNetworks = listOfNetworks.concat(ssid + Constants.SPACE);
         }
 
         while (iterator.hasNext()) {
+
             data = networksData.get(iterator.nextIndex());
             ssid = data.getSSID();
+
             if (!listOfNetworks.contains(ssid)) {
+
+                int security = getNetworkSecurity(data.getSecurity());
+                String password = data.getPassword();
+
                 // If no password is stored and network is not open set a dummy password
-                if (data.getPassword().isEmpty()
-                        && getNetworkSecurity(data.getSecurity()) != Constants.SET_OPEN) {
-                    data.setPassword(Constants.DUMMY_PASSWORD);
+                if (password.isEmpty() && security != Constants.SET_OPEN) {
+                    if (security == Constants.SET_WEP) {
+                        password = Constants.WEP_DUMMY_PASSWORD;
+                   } else {
+                        password = Constants.WPA_DUMMY_PASSWORD;
+                    }
                 }
-                addNetworkConfiguration(context, data.getSSID(), data.isHidden(), data.getSecurity(), data.getPassword());
+
+                addNetworkConfiguration(context, data.getSSID(), data.isHidden(), data.getSecurity(), password);
+
                 // If store password settings option is disabled clear password
                 if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
-                    data.setPassword("");
+                    password = Constants.EMPTY;
                 }
+
+                data.setPassword(password);
                 saveDataState();
+
             }
+
             iterator.next();
         }
 
@@ -161,7 +176,7 @@ public class ConfiguredNetworks {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         while (iterator.hasNext()) {
             NetworkData data = networksData.get(iterator.nextIndex());
-            data.setPassword("");
+            data.setPassword(Constants.EMPTY);
             iterator.next();
         }
         saveDataState();
@@ -178,7 +193,7 @@ public class ConfiguredNetworks {
         }
         wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
         wifiConfiguration.SSID = getCfgSSID(ssid);
-        wifiConfiguration.priority = 40;
+        wifiConfiguration.priority = Constants.CFG_PRIORITY;
         wifiConfiguration = setNetworkSecurity(wifiConfiguration, getNetworkSecurity(security), getCfgPassword(password));
 
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
@@ -196,21 +211,16 @@ public class ConfiguredNetworks {
         return networksData;
     }
 
-    public String getDataSSID(String cfgSSID) {
-        if (!cfgSSID.isEmpty()) {
-            return cfgSSID.replace("\"", "");
-        } else {
-            return "";
-        }
+    public String getDataSSID(String ssid) {
+        return ssid.replace(Constants.QUOTE, Constants.EMPTY);
     }
 
     public String getCfgSSID(String ssid) {
-        String cfgSSID = "\"" + ssid + "\"";
-        return cfgSSID;
+        return  Constants.QUOTE + ssid + Constants.QUOTE;
     }
 
     public String getCfgPassword(String password) {
-        return "\"" + password + "\"";
+        return Constants.QUOTE + password + Constants.QUOTE;
     }
 
     public String getMacAddressBySSID(String ssid) throws NullPointerException {
@@ -223,7 +233,7 @@ public class ConfiguredNetworks {
             }
             iterator.next();
         }
-        return "";
+        return Constants.EMPTY;
     }
 
     public double getLatitudeBySSID(String ssid) {
@@ -266,7 +276,7 @@ public class ConfiguredNetworks {
             }
             iterator.next();
         }
-        return "";
+        return Constants.EMPTY;
     }
 
     public String getPassword(String ssid) {
@@ -280,7 +290,7 @@ public class ConfiguredNetworks {
             }
             iterator.next();
         }
-        return "";
+        return Constants.EMPTY;
 
     }
 
@@ -299,6 +309,21 @@ public class ConfiguredNetworks {
 
     }
 
+    public String getSecurity(String ssid) {
+
+        ListIterator<NetworkData> iterator = networksData.listIterator();
+        NetworkData data;
+        while (iterator.hasNext()) {
+            data = networksData.get(iterator.nextIndex());
+            if (getDataSSID(ssid).matches(data.getSSID())) {
+                return data.getSecurity();
+            }
+            iterator.next();
+        }
+        return Constants.EMPTY;
+
+    }
+
     public int getScannedNetworkLevel(List<ScanResult> wifiScannedNetworks, String mac)
             throws NullPointerException {
 
@@ -313,7 +338,7 @@ public class ConfiguredNetworks {
             }
             listIterator.next();
         }
-        return 0;
+        return Constants.LEVEL_VERY_LOW;
     }
 
     public int getNetworkSecurity(String security) {
@@ -330,7 +355,7 @@ public class ConfiguredNetworks {
 
     public String getCapabilities(WifiConfiguration configuration) {
 
-        String capabilities = "";
+        String capabilities = Constants.EMPTY;
 
         switch (configuration.allowedKeyManagement.toString()) {
 
@@ -473,7 +498,7 @@ public class ConfiguredNetworks {
             data = networksData.get(iterator.nextIndex());
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
-                    password = "";
+                    password = Constants.EMPTY;
                 }
                 data.setPassword(password);
                 saveDataState();
@@ -497,8 +522,8 @@ public class ConfiguredNetworks {
                 configuration.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
                 configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
                 configuration.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
-                configuration.wepTxKeyIndex = 0;
-                configuration.wepKeys[0] = password;
+                configuration.wepTxKeyIndex = Constants.WEP_PASSWORD_KEY_INDEX;
+                configuration.wepKeys[Constants.WEP_PASSWORD_KEY_INDEX] = password;
                 break;
 
             case Constants.SET_WPA:
@@ -745,6 +770,24 @@ public class ConfiguredNetworks {
 
     }
 
+    public boolean isValidPassword(int securityOption, String password) {
+
+        if ((((securityOption == Constants.SET_WPA) || (securityOption == Constants.SET_EAP))
+                && ((password.length() >= Constants.WPA_PASSWORD_MIN_LENGTH)
+                && (password.length() <= Constants.WPA_PASSWORD_MAX_LENGTH)))
+                || ((securityOption == Constants.SET_WEP)
+                && ((password.length() == Constants.WEP_PASSWORD_64BIT_LENGTH)
+                || (password.length() == Constants.WEP_PASSWORD_128BIT_LENGTH)))
+                || (securityOption == Constants.SET_OPEN)) {
+
+            return true;
+
+        } else {
+            return false;
+        }
+
+    }
+
 
     // JSON
 
@@ -770,7 +813,7 @@ public class ConfiguredNetworks {
     private String writeJsonString(ArrayList<NetworkData> dataItems) throws IOException, IllegalStateException {
         StringWriter stringWriter = new StringWriter();
         JsonWriter jsonWriter = new JsonWriter(stringWriter);
-        jsonWriter.setIndent("  ");
+        jsonWriter.setIndent(Constants.SPACE);
         writeDataArrayList(jsonWriter, dataItems);
         jsonWriter.close();
         return stringWriter.toString();
@@ -824,13 +867,13 @@ public class ConfiguredNetworks {
 
     // read a single network data item from a json string
     private NetworkData readDataItem(JsonReader jsonReader) throws IOException, IllegalStateException {
-        String dataDescription = "";
-        String dataSSID = "";
+        String dataDescription = Constants.EMPTY;
+        String dataSSID = Constants.EMPTY;
         boolean dataHidden = false;
-        String dataBSSID = "";
-        String dataSecurity = "";
+        String dataBSSID = Constants.EMPTY;
+        String dataSecurity = Constants.EMPTY;
         int dataFrequency = Constants.NO_FREQ_SET;
-        String dataPassword = "";
+        String dataPassword = Constants.EMPTY;
         Double dataLatitude = Constants.DEFAULT_LATITUDE;
         Double dataLongitude = Constants.DEFAULT_LONGITUDE;
 

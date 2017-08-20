@@ -31,7 +31,6 @@ public class DescriptionEditDialogFragment extends DialogFragment {
 
     public interface DescriptionEditDialogListener {
         void onDescriptionEditDialogPositiveClick(DialogFragment dialog);
-
         void onDescriptionEditDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -68,7 +67,8 @@ public class DescriptionEditDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_button_ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (!configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
-                    configuredNetworks.addNetworkData(text.getText().toString(), networkSSID, isHidden, "", "", "",
+                    configuredNetworks.addNetworkData(text.getText().toString(), networkSSID, isHidden,
+                            Constants.EMPTY, Constants.EMPTY, Constants.EMPTY,
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 configuredNetworks.updateNetworkDescription(networkSSID, text.getText().toString());

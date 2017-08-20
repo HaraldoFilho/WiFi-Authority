@@ -61,7 +61,7 @@
     <string name="context_forget">Esquecer</string>
     <string name="context_connect">Conectar</string>
     <string name="context_disconnect">Desconectar</string>
-    <string name="toast_unable_remove_network">A rede selecionada não pode ser removida</string>
+    <string name="toast_unable_remove_network">A rede selecionada não pôde ser removida</string>
     <string name="layout_net_out_of_reach">Fora do alcance</string>
     <string name="dialog_edit_description">Editar descrição</string>
     <string name="toast_network_is_configured">Esta rede já está configurada</string>
@@ -74,7 +74,7 @@
     <string name="dialog_network_name_changed_title">Nome da rede alterado</string>
     <string name="dialog_network_name_changed_connect">Conectar à rede</string>
     <string name="alert_button_not_warn">Não alertar mais</string>
-    <string name="alert_message_network_mng_policy_change">A partir do Android 6.0, a política relacionada ao gerenciamento de redes foi alterada. Você não será capaz de excluir redes a menos que ela tenha sido adicionada através do WiFi Authority.\n</string>
+    <string name="alert_message_network_mng_policy_change">A partir do Android 6.0, a política relacionada ao gerenciamento de redes foi alterada. Você não será capaz de excluir ou alterar redes a menos que ela tenha sido adicionada através do WiFi Authority.\n</string>
     <string name="alert_message_network_ssid_changed">O nome (SSID) da seguinte rede foi alterado. Devido a mudanças na política de gerenciamento de redes a partir do Android 6.0, uma rede só pode ser alterada ou removida se foi adicionada pela mesmo aplicativo. Mas você pode adicionar a rede com o novo nome digitando novamente a sua senha:</string>
     <string name="title_activity_map">Mapa</string>
     <string name="menu_map">Mapa</string>
@@ -142,5 +142,6 @@
     <string name="pref_restore_networks_summ_on">Restaurando redes automaticamente</string>
     <string name="pref_title_restore_networks">Restaurar redes excluídas</string>
     <string name="toast_unable_add_network">Não foi possível adicionar a rede. Por favor, verifique se todas as informações da rede estão corretas e tente novamente</string>
+    <string name="toast_unable_to_change_password">Não foi possível alterar a senha</string>
 
 </resources>

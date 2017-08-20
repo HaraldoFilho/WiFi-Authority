@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.6.13</string>
-    <string name="version_code" translatable="false">69</string>
+    <string name="version_number" translatable="false">0.6.14</string>
+    <string name="version_code" translatable="false">70</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -79,6 +79,7 @@
     <string name="dialog_network_name_changed_description">Description</string>
     <string name="dialog_network_name_changed_old_name">Old name</string>
     <string name="dialog_network_name_changed_new_name">New name</string>
+    <string name="dialog_network_name_changed_colon" translatable="false">: </string>
     <string name="dialog_network_name_changed_password">Type again the network password:</string>
     <string name="dialog_network_name_changed_connect">Connect to network</string>
     <string name="dialog_edit_description">Edit description</string>
@@ -90,7 +91,7 @@
     <string name="alert_title_wifi_disabled">WiFi disabled!</string>
     <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
     <string name="alert_message_delete_network">This action can not be undone\n</string>
-    <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to delete networks unless they were added by WiFi Authority.\n</string>
+    <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to remove or update networks unless they were added by WiFi Authority.\n</string>
     <string name="alert_message_network_ssid_changed">The name (SSID) of the following network has been changed. Due to changes on the policy regarding network management, from Android 6.0 and higher, a network can be updated or removed only if it was added by the same application. But you can re-add the network with the new name by typing its password again:</string>
     <string name="alert_message_reset_preferences">All settings will be restored to the default values\n</string>
     <string name="alert_message_restore_networks">All network configurations were removed. Do you want to restore them?\n</string>
@@ -107,6 +108,7 @@
     <!--Toasts-->
     <string name="toast_unable_add_network">Unable to add network. Please, check if all network info is correct and try again</string>
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
+    <string name="toast_unable_to_change_password">Unable to change the password</string>
     <string name="toast_missing_information">There is still some missing information for this network. Try again in a few seconds</string>
     <string name="toast_no_location_information">There is no location information for this network yet</string>
     <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds</string>

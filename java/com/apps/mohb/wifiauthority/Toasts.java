@@ -25,12 +25,11 @@ public class Toasts {
 
     private static Toast unableAddNetwork;
     private static Toast unableRemoveNetwork;
+    private static Toast unableToChangePassword;
     private static Toast missingInformation;
-    private static Toast invalidPassword;
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
-    private static Toast wifiDisabled;
     private static Toast legalNotices;
     private static Toast helpPage;
 
@@ -92,6 +91,23 @@ public class Toasts {
 
 
     /*
+         Toast to notify that it is unable to change password
+    */
+
+    public static void showUnableToChangePassword(Context c) {
+        unableToChangePassword = Toast.makeText((c), R.string.toast_unable_to_change_password, Toast.LENGTH_SHORT);
+        unableToChangePassword.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        unableToChangePassword.show();
+    }
+
+    public static void cancelUnableToChangePassword() {
+        if (unableToChangePassword != null) {
+            unableToChangePassword.cancel();
+        }
+    }
+
+
+    /*
          Toast to notify that there is no network found or to display
     */
 
@@ -104,40 +120,6 @@ public class Toasts {
     public static void cancelNoNetworkFound() {
         if (noNetworkFound != null) {
             noNetworkFound.cancel();
-        }
-    }
-
-
-    /*
-         Toast to notify that wifi is disabled
-    */
-
-    public static void showWiFiDisabled(Context c) {
-        wifiDisabled = Toast.makeText((c), R.string.toast_wifi_disabled, Toast.LENGTH_SHORT);
-        wifiDisabled.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-        wifiDisabled.show();
-    }
-
-    public static void cancelWiFiDisabled() {
-        if (wifiDisabled != null) {
-            wifiDisabled.cancel();
-        }
-    }
-
-
-    /*
-         Toast to notify to type a valid password
-    */
-
-    public static void showInvalidPassword(Context c) {
-        invalidPassword = Toast.makeText((c), R.string.toast_invalid_password, Toast.LENGTH_SHORT);
-        invalidPassword.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-        invalidPassword.show();
-    }
-
-    public static void cancelInvalidPassword() {
-        if (invalidPassword != null) {
-            invalidPassword.cancel();
         }
     }
 
@@ -226,11 +208,10 @@ public class Toasts {
     public static void cancelAllToasts() {
         cancelUnableAddNetwork();
         cancelUnableRemoveNetwork();
-        cancelInvalidPassword();
+        cancelUnableToChangePassword();
         cancelNetworkIsConfigured();
         cancelNetworkConnectionError();
         cancelNoNetworkFound();
-        cancelWiFiDisabled();
         cancelMissingInformation();
         cancelLegalNotices();
         cancelHelpPage();

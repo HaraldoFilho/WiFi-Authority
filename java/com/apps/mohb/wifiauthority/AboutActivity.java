@@ -109,7 +109,7 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.action_feedback:
                 intent = new Intent(this, FeedbackActivity.class);
                 bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_contact));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_contact));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -118,7 +118,7 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.action_bug_report:
                 intent = new Intent(this, FeedbackActivity.class);
                 bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_bug_report));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_bug_report));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;

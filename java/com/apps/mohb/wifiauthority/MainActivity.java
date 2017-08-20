@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/18/17 10:25 AM
+ *  Last modified : 8/20/17 7:58 PM
  *
  *  -----------------------------------------------------------
  */
@@ -189,12 +189,12 @@ public class MainActivity extends AppCompatActivity implements
                                 // Check if user's last known location has been acquired
                                 if (isLastLocationKnown()) {
                                     // Create additional data for the network with the scanned SSID, Mac Address and the current location
-                                    configuredNetworks.addNetworkData("", scanResult.SSID, false, scanResult.BSSID,
-                                            scanResult.capabilities, "", lastLatitude, lastLongitude);
+                                    configuredNetworks.addNetworkData(Constants.EMPTY, scanResult.SSID, false, scanResult.BSSID,
+                                            scanResult.capabilities, Constants.EMPTY, lastLatitude, lastLongitude);
                                 } else { // If location has not been acquired create additional data for the network
                                     // with the scanned SSID, Mac Address and the default location (0,0)
-                                    configuredNetworks.addNetworkData("", scanResult.SSID, false, scanResult.BSSID,
-                                            scanResult.capabilities, "", Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                                    configuredNetworks.addNetworkData(Constants.EMPTY, scanResult.SSID, false, scanResult.BSSID,
+                                            scanResult.capabilities, Constants.EMPTY, Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                                 }
                             }
 
@@ -397,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 // Set default values for these variables
-                String ssid = "";
+                String ssid = Constants.EMPTY;
                 Double latitude = Constants.DEFAULT_LATITUDE;
                 Double longitude = Constants.DEFAULT_LONGITUDE;
 
@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements
                 int correctPosition = getCorrectPosition(position);
 
                 // Check if position is inside networks list size (not header or footer)
-                if ((correctPosition >= 0) && (correctPosition < wifiConfiguredNetworks.size())) {
+                if ((correctPosition >= Constants.LIST_HEAD) && (correctPosition < wifiConfiguredNetworks.size())) {
                     ssid = wifiConfiguredNetworks.get(correctPosition).SSID;
                     latitude = configuredNetworks.getLatitudeBySSID(ssid);
                     longitude = configuredNetworks.getLongitudeBySSID(ssid);
@@ -442,7 +442,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 // If list is scrolling up hide the floating action button
-                if (firstVisibleItem > 0) {
+                if (firstVisibleItem > Constants.LIST_HEAD) {
                     fab.hide();
                 } else {
                     fab.show(new FloatingActionButton.OnVisibilityChangedListener() {
@@ -521,8 +521,8 @@ public class MainActivity extends AppCompatActivity implements
             while (wifiConfigurationListIterator.hasNext()) {
                 WifiConfiguration configuration = wifiConfiguredNetworks.get(wifiConfigurationListIterator.nextIndex());
                 if (!configuredNetworks.hasNetworkAdditionalData(configuration.SSID)) {
-                    configuredNetworks.addNetworkData("", configuration.SSID, configuration.hiddenSSID,
-                            "", configuredNetworks.getCapabilities(configuration), "",
+                    configuredNetworks.addNetworkData(Constants.EMPTY, configuration.SSID, configuration.hiddenSSID,
+                            Constants.EMPTY, configuredNetworks.getCapabilities(configuration), Constants.EMPTY,
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                 }
                 wifiConfigurationListIterator.next();
@@ -620,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_help:
                 intent = new Intent(this, HelpActivity.class);
                 bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_help_main));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_help_main));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -629,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
                 bundle = new Bundle();
-                bundle.putString("url", getString(R.string.url_help_main));
+                bundle.putString(Constants.KEY_URL, getString(R.string.url_help_main));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
@@ -659,6 +659,10 @@ public class MainActivity extends AppCompatActivity implements
         if (wifiManager.isWifiEnabled()) {
             // Set text according to network state
             switch (network.status) {
+                // Disconnected
+                case WifiConfiguration.Status.DISABLED:
+                    itemConnect.setTitle(R.string.context_connect);
+                    break;
                 // Connected
                 case WifiConfiguration.Status.CURRENT:
                     itemConnect.setTitle(R.string.context_disconnect);
@@ -667,15 +671,11 @@ public class MainActivity extends AppCompatActivity implements
                 case WifiConfiguration.Status.ENABLED:
                     itemConnect.setTitle(R.string.context_cancel);
                     break;
-                // Disconnected
-                case WifiConfiguration.Status.DISABLED:
-                    itemConnect.setTitle(R.string.context_connect);
-                    break;
             }
         }
 
         // Disable password item if network is open
-        if ((network.wepKeys[0] == null) && (network.preSharedKey == null)) {
+        if ((network.wepKeys[Constants.WEP_PASSWORD_KEY_INDEX] == null) && (network.preSharedKey == null)) {
             itemPassword.setEnabled(false);
         }
 
@@ -712,7 +712,8 @@ public class MainActivity extends AppCompatActivity implements
 
             // Connect
             case R.id.connect:
-                if (configuredNetworks.getPassword(ssid).matches(Constants.DUMMY_PASSWORD)) {
+                if (configuredNetworks.getPassword(ssid).matches(Constants.WPA_DUMMY_PASSWORD)
+                        || configuredNetworks.getPassword(ssid).matches(Constants.WEP_DUMMY_PASSWORD)) {
                     showChangePasswordDialog(network, ssid, isHidden);
                 } else {
                     connectToNetwork(wifiManager, network);
@@ -746,40 +747,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private void connectToNetwork(WifiManager wifiManager, WifiConfiguration network) {
-
-        if (!wifiManager.isWifiEnabled()) {
-            wifiManager.setWifiEnabled(true);
-        }
-        // Get network id of the current active network
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        int activeNetworkId = wifiInfo.getNetworkId();
-        // Disconnect and disable the current network
-        wifiManager.disconnect();
-        wifiManager.disableNetwork(activeNetworkId);
-        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-        ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-        // Check if it is trying to connect to a different network
-        if (network.networkId != activeNetworkId) {
-            // Enable and connect to the new network
-            wifiManager.enableNetwork(network.networkId, true);
-        }
-
-    }
-
-    private void showChangePasswordDialog(WifiConfiguration network, String ssid, boolean isHidden) {
-
-        DialogFragment dialogPassword = new PasswordChangeDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
-        bundle.putString(Constants.KEY_SSID, ssid);
-        bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
-        bundle.putString(Constants.KEY_SECURITY, network.allowedKeyManagement.toString());
-        dialogPassword.setArguments(bundle);
-        dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
-
-    }
-
     @Override
     public void onBackPressed() {
         Toasts.cancelAllToasts();
@@ -809,8 +776,8 @@ public class MainActivity extends AppCompatActivity implements
         switch (requestCode) {
             case Constants.FINE_LOCATION_PERMISSION_REQUEST: {
                 // if permission is granted create list of networks
-                if (grantResults.length > 0
-                        && ((grantResults[0] == PackageManager.PERMISSION_GRANTED))) {
+                if (grantResults.length > Constants.RESULTS_EMPTY
+                        && ((grantResults[Constants.RESULT_INDEX] == PackageManager.PERMISSION_GRANTED))) {
                     updateListOfNetworks();
                 } else {
                     finish();
@@ -858,6 +825,46 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             return false;
         }
+    }
+
+    /*
+         Connect to network
+    */
+    private void connectToNetwork(WifiManager wifiManager, WifiConfiguration network) {
+
+        if (!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+        }
+        // Get network id of the current active network
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int activeNetworkId = wifiInfo.getNetworkId();
+        // Disconnect and disable the current network
+        wifiManager.disconnect();
+        wifiManager.disableNetwork(activeNetworkId);
+        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+        ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+        // Check if it is trying to connect to a different network
+        if (network.networkId != activeNetworkId) {
+            // Enable and connect to the new network
+            wifiManager.enableNetwork(network.networkId, true);
+        }
+
+    }
+
+    /*
+         Show change password dialog
+    */
+    private void showChangePasswordDialog(WifiConfiguration network, String ssid, boolean isHidden) {
+
+        DialogFragment dialogPassword = new PasswordChangeDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.KEY_NETWORK_ID, network.networkId);
+        bundle.putString(Constants.KEY_SSID, ssid);
+        bundle.putBoolean(Constants.KEY_HIDDEN, isHidden);
+        bundle.putString(Constants.KEY_SECURITY, configuredNetworks.getSecurity(ssid));
+        dialogPassword.setArguments(bundle);
+        dialogPassword.show(getSupportFragmentManager(), "PasswordChangeDialogFragment");
+
     }
 
     /*
@@ -1154,7 +1161,7 @@ public class MainActivity extends AppCompatActivity implements
         // Open help page explaining change on network management policy
         Intent intent = new Intent(this, HelpActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString("url", getString(R.string.url_help_main) + getString(R.string.url_help_note_tag));
+        bundle.putString(Constants.KEY_URL, getString(R.string.url_help_main) + getString(R.string.url_help_note_tag));
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -1197,7 +1204,7 @@ public class MainActivity extends AppCompatActivity implements
             // If no password is stored and network is not open set a dummy password
             if (data.getPassword().isEmpty()
                     && configuredNetworks.getNetworkSecurity(data.getSecurity()) != Constants.SET_OPEN) {
-                data.setPassword(Constants.DUMMY_PASSWORD);
+                data.setPassword(Constants.WPA_DUMMY_PASSWORD);
             }
             // Add network configuration
             configuredNetworks.addNetworkConfiguration(this, data.getSSID(), data.isHidden(),
@@ -1205,7 +1212,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // If store password settings option is disabled clear password
             if (!settings.getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
-                data.setPassword("");
+                data.setPassword(Constants.EMPTY);
             }
             listIterator.next();
 

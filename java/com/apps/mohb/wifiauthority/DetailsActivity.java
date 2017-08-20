@@ -89,8 +89,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Set link speed and signal level units to empty in case
         // of they are not shown because network is not connected
-        txtNetworkLinkSpeedUnit.setText("");
-        txtNetworkSignalLevelUnit.setText("");
+        txtNetworkLinkSpeedUnit.setText(Constants.EMPTY);
+        txtNetworkSignalLevelUnit.setText(Constants.EMPTY);
 
         // Check if the network is connected or connecting
         if ((ssid.matches(configuredNetworks.getDataSSID(wifiInfo.getSSID())))) {
@@ -100,12 +100,12 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             try {
                 ipAddressString = getIpAddressString(wifiInfo.getIpAddress());
             } catch (ArrayIndexOutOfBoundsException e) {
-                ipAddressString = "";
+                ipAddressString = Constants.EMPTY;
                 e.printStackTrace();
             }
 
             // Show IP address
-            if (!ipAddressString.matches("")) {
+            if (!ipAddressString.matches(Constants.EMPTY)) {
                 txtNetworkIpAddress.setText(ipAddressString);
             } else {
                 doNotShowView(txtNetworkIpAddressTitle);
@@ -115,7 +115,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             // Show link speed
             if (wifiInfo.getLinkSpeed() > Constants.NO_FREQ_SET) {
                 txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
-                txtNetworkLinkSpeedUnit.setText(" " + WifiInfo.LINK_SPEED_UNITS);
+                txtNetworkLinkSpeedUnit.setText(Constants.SPACE + WifiInfo.LINK_SPEED_UNITS);
             } else {
                 doNotShowView(txtNetworkLinkSpeedTitle);
                 doNotShowView(txtNetworkLinkSpeed);
@@ -124,7 +124,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
             // Show signal level
             txtNetworkSignalLevel.setText(String.valueOf(wifiInfo.getRssi()));
-            txtNetworkSignalLevelUnit.setText(" " + getString(R.string.layout_db));
+            txtNetworkSignalLevelUnit.setText(Constants.SPACE + getString(R.string.layout_db));
 
             // Show frequency
             setNetworkFrequencyText(true);
@@ -215,9 +215,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             }
             if (configuredNetworks.getFrequency(ssid) > Constants.NO_FREQ_SET) {
                 if (configuredNetworks.getFrequency(ssid) < Constants.FREQ_5GHZ) {
-                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_2p4ghz));
+                    txtNetworkFrequency.setText(Constants.SPACE + getResources().getString(R.string.layout_net_freq_2p4ghz));
                 } else {
-                    txtNetworkFrequency.setText(" " + getResources().getString(R.string.layout_net_freq_5ghz));
+                    txtNetworkFrequency.setText(Constants.SPACE + getResources().getString(R.string.layout_net_freq_5ghz));
                 }
                 txtNetworkFrequencyUnit.setText(getResources().getString(R.string.layout_net_freq_unit));
             } else {
@@ -265,7 +265,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
          Set height of view to 0 to not show it
     */
     private void doNotShowView(TextView view) {
-        view.setHeight(Constants.HEIGHT_ZERO);
+        view.setHeight(Constants.INVISIBLE);
     }
 
 

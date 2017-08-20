@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 8/10/17 1:05 AM
+ *  Last modified : 8/19/17 11:54 AM
  *
  *  -----------------------------------------------------------
  */
@@ -20,9 +20,12 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,7 +41,6 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
     public interface AddNetworkDialogListener {
         void onAddNetworkDialogPositiveClick(DialogFragment dialog);
-
         void onAddNetworkDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -49,21 +51,27 @@ public class AddNetworkDialogFragment extends DialogFragment {
     private CheckBox checkPasswdVisible;
     private EditText networkDescription;
 
-
     private WifiManager wifiManager;
     private WifiConfiguration wifiConfiguration;
     private ConfiguredNetworks configuredNetworks;
 
-    String ssid;
-    boolean hidden = false;
-    String security = "";
-    String password = "";
+    private String ssid;
+    private boolean hidden = false;
+    private String security = Constants.EMPTY;
+    private int securityOption;
+    private String password = Constants.EMPTY;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.fragment_add_network_dialog, null);
+        final View view = inflater.inflate(R.layout.fragment_add_network_dialog, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(view);
+        final Bundle bundle = this.getArguments();
+
+        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiConfiguration = new WifiConfiguration();
+        configuredNetworks = new ConfiguredNetworks(getContext());
 
         networkName = (EditText) view.findViewById(R.id.txtSSID);
         networkSecurity = (Spinner) view.findViewById(R.id.spinSecurity);
@@ -71,20 +79,10 @@ public class AddNetworkDialogFragment extends DialogFragment {
         checkPasswdVisible = (CheckBox) view.findViewById(R.id.checkPasswd);
         networkDescription = (EditText) view.findViewById(R.id.txtDescription);
 
-        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiConfiguration = new WifiConfiguration();
-        configuredNetworks = new ConfiguredNetworks(getContext());
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.security_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         networkSecurity.setAdapter(adapter);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(view);
-
-
-        final Bundle bundle = this.getArguments();
 
         if (bundle != null) {
             ssid = bundle.getString(Constants.KEY_SSID);
@@ -92,20 +90,103 @@ public class AddNetworkDialogFragment extends DialogFragment {
             networkName.setText(ssid);
             networkName.setEnabled(false);
 
-            if (configuredNetworks.getNetworkSecurity(security) != Constants.SET_OPEN) {
-                networkSecurity.setSelection(configuredNetworks.getNetworkSecurity(security));
-            } else {
+            if (configuredNetworks.getNetworkSecurity(security) == Constants.SET_OPEN) {
                 networkPasswd.setEnabled(false);
                 checkPasswdVisible.setEnabled(false);
+            } else {
+                networkSecurity.setSelection(configuredNetworks.getNetworkSecurity(security));
             }
+
             networkSecurity.setEnabled(false);
+
             wifiConfiguration = configuredNetworks.setNetworkCiphers(wifiConfiguration, security);
+
             builder.setTitle(R.string.dialog_add_network_title);
+
         } else {
             hidden = true;
             wifiConfiguration.hiddenSSID = true;
             builder.setTitle(R.string.dialog_add_hidden_network_title);
         }
+
+        networkSecurity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (configuredNetworks.isValidPassword(networkSecurity.getSelectedItemPosition(),
+                        networkPasswd.getText().toString())) {
+                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
+                } else {
+                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
+
+                if (networkSecurity.getLastVisiblePosition() == Constants.SET_OPEN) {
+                    networkPasswd.setEnabled(false);
+                    checkPasswdVisible.setEnabled(false);
+                } else {
+                    networkPasswd.setEnabled(true);
+                    checkPasswdVisible.setEnabled(true);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Required empty method
+            }
+        });
+
+        networkPasswd.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                // Required empty method
+            }
+        });
+
+        networkPasswd.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Required empty method
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Required empty method
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (configuredNetworks.isValidPassword(networkSecurity.getSelectedItemPosition(),
+                        networkPasswd.getText().toString())) {
+                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+
+                } else {
+                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
+
+            }
+        });
+
+        checkPasswdVisible.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPasswdVisible.isChecked()) {
+                    networkPasswd.setTransformationMethod(null);
+                    networkPasswd.setSelection(networkPasswd.getText().length());
+                } else {
+                    networkPasswd.setTransformationMethod(new PasswordTransformationMethod());
+                    networkPasswd.setSelection(networkPasswd.getText().length());
+                }
+            }
+        });
 
 
         builder.setPositiveButton(R.string.dialog_button_connect, new DialogInterface.OnClickListener() {
@@ -114,27 +195,27 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
                 ssid = networkName.getText().toString();
                 password = networkPasswd.getText().toString();
+                securityOption = networkSecurity.getSelectedItemPosition();
 
-                if (password.length() >= Constants.DUMMY_PASSWORD.length() || !networkPasswd.isEnabled()) {
+                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
 
-                    if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
+                    wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
+                    wifiConfiguration.SSID = configuredNetworks.getCfgSSID(ssid);
+                    wifiConfiguration.priority = Constants.CFG_PRIORITY;
 
-                        wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
-                        wifiConfiguration.SSID = configuredNetworks.getCfgSSID(ssid);
-                        wifiConfiguration.priority = 40;
+                    wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
+                            securityOption, configuredNetworks.getCfgPassword(password));
 
-                        wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
-                                networkSecurity.getSelectedItemPosition(), configuredNetworks.getCfgPassword(password));
+                    wifiManager.disconnect();
 
-                        wifiManager.disconnect();
-                        int netId = wifiManager.addNetwork(wifiConfiguration);
-                        if(netId < 0) {
-                            Toasts.showUnableAddNetwork(getContext());
-                        }
+                    int netId = wifiManager.addNetwork(wifiConfiguration);
+
+                    if (netId != Constants.NETWORK_UPDATE_FAIL) {
+
                         wifiManager.enableNetwork(netId, true);
                         wifiManager.reconnect();
 
-                        String bssid = "";
+                        String bssid = Constants.EMPTY;
                         if (bundle != null) {
                             bssid = bundle.getString(Constants.KEY_BSSID);
                         }
@@ -148,33 +229,19 @@ public class AddNetworkDialogFragment extends DialogFragment {
                             configuredNetworks.updateNetworkDescription(ssid, description);
                         }
                         configuredNetworks.saveDataState();
-                    } else {
-                        Toasts.showNetworkIsConfigured(getContext());
-                    }
 
+                    } else {
+                        Toasts.showUnableAddNetwork(getContext());
+                    }
                 } else {
-                    Toasts.showInvalidPassword(getContext());
+                    Toasts.showNetworkIsConfigured(getContext());
                 }
 
             }
-        })
-                .setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onAddNetworkDialogNegativeClick(AddNetworkDialogFragment.this);
-                    }
-                });
 
-
-        checkPasswdVisible.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkPasswdVisible.isChecked()) {
-                    networkPasswd.setTransformationMethod(null);
-                    networkPasswd.setSelection(networkPasswd.getText().length());
-                } else {
-                    networkPasswd.setTransformationMethod(new PasswordTransformationMethod());
-                    networkPasswd.setSelection(networkPasswd.getText().length());
-                }
+        }).setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                mListener.onAddNetworkDialogNegativeClick(AddNetworkDialogFragment.this);
             }
         });
 
@@ -198,3 +265,4 @@ public class AddNetworkDialogFragment extends DialogFragment {
     }
 
 }
+

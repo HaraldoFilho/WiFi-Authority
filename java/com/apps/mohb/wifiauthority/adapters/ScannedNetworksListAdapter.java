@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 7/14/17 11:36 PM
+ *  Last modified : 8/19/17 1:08 PM
  *
  *  -----------------------------------------------------------
  */
@@ -91,7 +91,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
                 // If it is not showing all APs do not show MAC address
                 if (!PreferenceManager.getDefaultSharedPreferences(getContext())
                         .getBoolean(Constants.PREF_KEY_SHOW_ALL_APS, false)) {
-                    txtScanNetworkMac.setHeight(Constants.HEIGHT_ZERO);
+                    txtScanNetworkMac.setHeight(Constants.INVISIBLE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

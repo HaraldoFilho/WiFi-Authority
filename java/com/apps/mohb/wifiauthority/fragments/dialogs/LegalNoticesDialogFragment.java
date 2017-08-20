@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
 
 
@@ -30,7 +31,7 @@ public class LegalNoticesDialogFragment extends DialogFragment {
 
         LegalNoticesDialogFragment legalNoticesDialogFragment = new LegalNoticesDialogFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("notices", notices);
+        bundle.putString(Constants.KEY_NOTICES, notices);
         legalNoticesDialogFragment.setArguments(bundle);
 
         return legalNoticesDialogFragment;
@@ -40,7 +41,7 @@ public class LegalNoticesDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        String legalNotices = getArguments().getString("notices");
+        String legalNotices = getArguments().getString(Constants.KEY_NOTICES);
 
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View view = layoutInflater.inflate(R.layout.fragment_about_dialog, null);
