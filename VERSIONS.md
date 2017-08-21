@@ -1,3 +1,6 @@
+#### **0.6.15**
+- Fixed bug of app not saving security info when adding a hidden network and due to it restoring removed secure networks as unsecured.
+
 #### **0.6.14**
 - Bug fixes.
 - When adding a network or changing password, connect button is only enabled if password is valid.

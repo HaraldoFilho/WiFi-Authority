@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 8/19/17 11:54 AM
+ *  Last modified : 8/21/17 12:46 AM
  *
  *  -----------------------------------------------------------
  */
@@ -41,6 +41,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
     public interface AddNetworkDialogListener {
         void onAddNetworkDialogPositiveClick(DialogFragment dialog);
+
         void onAddNetworkDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -56,6 +57,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
     private ConfiguredNetworks configuredNetworks;
 
     private String ssid;
+    private String bssid;
     private boolean hidden = false;
     private String security = Constants.EMPTY;
     private int securityOption;
@@ -86,6 +88,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
         if (bundle != null) {
             ssid = bundle.getString(Constants.KEY_SSID);
+            bssid = bundle.getString(Constants.KEY_BSSID);
             security = bundle.getString(Constants.KEY_SECURITY);
             networkName.setText(ssid);
             networkName.setEnabled(false);
@@ -105,6 +108,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
         } else {
             hidden = true;
+            bssid = Constants.EMPTY;
             wifiConfiguration.hiddenSSID = true;
             builder.setTitle(R.string.dialog_add_hidden_network_title);
         }
@@ -215,12 +219,13 @@ public class AddNetworkDialogFragment extends DialogFragment {
                         wifiManager.enableNetwork(netId, true);
                         wifiManager.reconnect();
 
-                        String bssid = Constants.EMPTY;
-                        if (bundle != null) {
-                            bssid = bundle.getString(Constants.KEY_BSSID);
-                        }
-
                         String description = networkDescription.getText().toString();
+
+                        // If adding a hidden network, there is no bundle to get security info from it,
+                        // so get capabilities string from configuration
+                        if (bundle == null) {
+                            security = configuredNetworks.getCapabilities(wifiConfiguration);
+                        }
 
                         if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
                             configuredNetworks.addNetworkData(description, ssid, hidden, bssid, security, password,
