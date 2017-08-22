@@ -155,9 +155,12 @@ public class Constants {
     public static final String PREF_MIN_SIGNAL_VERY_LOW = "1";
 
     // General
-    public static final String LOG_TAG = "DEBUG_WIFI";
     public static final String EMPTY = "";
     public static final String SPACE = " ";
     public static final String QUOTE = "\"";
+    public static final String INVALID_MAC = "00:00:00:00:00:00";
+
+    // Debug
+    public static final String LOG_TAG = "DEBUG_WIFI";
 
 }

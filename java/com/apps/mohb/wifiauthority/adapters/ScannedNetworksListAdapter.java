@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 8/19/17 1:08 PM
+ *  Last modified : 8/21/17 7:56 PM
  *
  *  -----------------------------------------------------------
  */
@@ -74,7 +74,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
                     }
                 } else {
                     // Check if network is connected using ssid
-                    if (configuredNetworks.isMacAddressConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
+                    if (configuredNetworks.isSSIDConnected(wifiManager.getConfiguredNetworks(), result.SSID)) {
                         txtScanNetworkName.setTextColor(ContextCompat.getColor(getContext(), R.color.colorGreen));
                     }
                 }

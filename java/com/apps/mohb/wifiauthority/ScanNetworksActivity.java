@@ -330,10 +330,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
 
         switch (id) {
 
-            // Add Hidden Network
+            // Add Network
             case R.id.action_add_network:
                 DialogFragment dialog = new AddNetworkDialogFragment();
-                dialog.show(getSupportFragmentManager(), "AddHiddenNetworkDialogFragment");
+                dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
                 break;
 
             // Settings

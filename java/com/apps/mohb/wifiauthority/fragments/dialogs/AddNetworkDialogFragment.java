@@ -41,7 +41,6 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
     public interface AddNetworkDialogListener {
         void onAddNetworkDialogPositiveClick(DialogFragment dialog);
-
         void onAddNetworkDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -107,9 +106,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
             builder.setTitle(R.string.dialog_add_network_title);
 
         } else {
-            hidden = true;
             bssid = Constants.EMPTY;
-            wifiConfiguration.hiddenSSID = true;
             builder.setTitle(R.string.dialog_add_hidden_network_title);
         }
 
@@ -210,14 +207,20 @@ public class AddNetworkDialogFragment extends DialogFragment {
                     wifiConfiguration = configuredNetworks.setNetworkSecurity(wifiConfiguration,
                             securityOption, configuredNetworks.getCfgPassword(password));
 
+                    // Set network as hidden if configured ssid is not found
+                    if (!configuredNetworks.isAvailableBySSID(wifiManager.getScanResults(), ssid)) {
+                        hidden = true;
+                        wifiConfiguration.hiddenSSID = true;
+                    } else {
+                        hidden = false;
+                        wifiConfiguration.hiddenSSID = false;
+                    }
+
                     wifiManager.disconnect();
 
                     int netId = wifiManager.addNetwork(wifiConfiguration);
 
                     if (netId != Constants.NETWORK_UPDATE_FAIL) {
-
-                        wifiManager.enableNetwork(netId, true);
-                        wifiManager.reconnect();
 
                         String description = networkDescription.getText().toString();
 
@@ -234,6 +237,9 @@ public class AddNetworkDialogFragment extends DialogFragment {
                             configuredNetworks.updateNetworkDescription(ssid, description);
                         }
                         configuredNetworks.saveDataState();
+
+                        wifiManager.enableNetwork(netId, true);
+                        wifiManager.reconnect();
 
                     } else {
                         Toasts.showUnableAddNetwork(getContext());

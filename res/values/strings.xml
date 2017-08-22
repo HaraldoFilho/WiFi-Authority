@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.6.15</string>
-    <string name="version_code" translatable="false">71</string>
+    <string name="version_number" translatable="false">0.6.16</string>
+    <string name="version_code" translatable="false">72</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -70,7 +70,7 @@
     <string name="dialog_view_title">Title</string>
     <string name="dialog_view_text">text</string>
     <string name="dialog_add_network_title">Add Network</string>
-    <string name="dialog_add_hidden_network_title">Add Hidden Network</string>
+    <string name="dialog_add_hidden_network_title">Add Network</string>
     <string name="dialog_add_network_name">Network Name (SSID)</string>
     <string name="dialog_add_network_description">Description</string>
     <string name="dialog_add_network_security">Security</string>
@@ -109,7 +109,7 @@
     <string name="toast_unable_add_network">Unable to add network. Please, check if all network info is correct and try again</string>
     <string name="toast_unable_remove_network">Unable to remove the selected network</string>
     <string name="toast_unable_to_change_password">Unable to change the password</string>
-    <string name="toast_missing_information">There is still some missing information for this network. Try again in a few seconds</string>
+    <string name="toast_no_details">Detailed information for this network is still unavailable. Try again in a few seconds</string>
     <string name="toast_no_location_information">There is no location information for this network yet</string>
     <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds</string>
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>

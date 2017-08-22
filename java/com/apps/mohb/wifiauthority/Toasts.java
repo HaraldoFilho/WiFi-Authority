@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 7/15/17 10:41 AM
+ *  Last modified : 8/21/17 11:20 PM
  *
  *  -----------------------------------------------------------
  */
@@ -26,7 +26,7 @@ public class Toasts {
     private static Toast unableAddNetwork;
     private static Toast unableRemoveNetwork;
     private static Toast unableToChangePassword;
-    private static Toast missingInformation;
+    private static Toast noDetailedInformation;
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
@@ -45,14 +45,14 @@ public class Toasts {
          Toast to notify that there is no location information
     */
 
-    public static void showMissingInformation(Context c, int textId) {
-        missingInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
-        missingInformation.show();
+    public static void showNoDetailedInformation(Context c, int textId) {
+        noDetailedInformation = Toast.makeText((c), textId, Toast.LENGTH_SHORT);
+        noDetailedInformation.show();
     }
 
-    public static void cancelMissingInformation() {
-        if (missingInformation != null) {
-            missingInformation.cancel();
+    public static void cancelNoDetailedInformation() {
+        if (noDetailedInformation != null) {
+            noDetailedInformation.cancel();
         }
     }
 
@@ -212,7 +212,7 @@ public class Toasts {
         cancelNetworkIsConfigured();
         cancelNetworkConnectionError();
         cancelNoNetworkFound();
-        cancelMissingInformation();
+        cancelNoDetailedInformation();
         cancelLegalNotices();
         cancelHelpPage();
     }

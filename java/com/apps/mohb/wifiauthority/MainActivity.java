@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/20/17 7:58 PM
+ *  Last modified : 8/21/17 11:18 PM
  *
  *  -----------------------------------------------------------
  */
@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 String mac = configuredNetworks.getMacAddressBySSID(ssid);
 
-                if (!mac.isEmpty()) {
+                if (!mac.isEmpty() && !mac.matches(Constants.INVALID_MAC)) {
                     // Create bundle with the information needed to show more detailed information
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.KEY_SSID, configuredNetworks.getDataSSID(ssid));
@@ -425,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements
                     intent.putExtras(bundle);
                     startActivity(intent);
                 } else {
-                    Toasts.showMissingInformation(getApplicationContext(), R.string.toast_missing_information);
+                    Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_details);
                 }
 
             }
@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements
                     intent = new Intent(this, MapActivity.class);
                     startActivity(intent);
                 } else {
-                    Toasts.showMissingInformation(getApplicationContext(),
+                    Toasts.showNoDetailedInformation(getApplicationContext(),
                             R.string.toast_no_configured_networks);
                 }
                 break;

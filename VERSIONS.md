@@ -1,3 +1,7 @@
+#### **0.6.16**
+- Bug fixes.
+- Improvements on user interface.
+
 #### **0.6.15**
 - Fixed bug of app not saving security info when adding a hidden network and due to it restoring removed secure networks as unsecured.
 

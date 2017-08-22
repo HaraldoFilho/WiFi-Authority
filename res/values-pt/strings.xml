@@ -43,7 +43,7 @@
     <string name="dialog_add_network_password">Senha</string>
     <string name="dialog_add_network_security">Segurança</string>
     <string name="dialog_add_network_name">Nome da Rede (SSID)</string>
-    <string name="dialog_add_hidden_network_title">Adicionar Rede Oculta</string>
+    <string name="dialog_add_hidden_network_title">Adicionar Rede</string>
     <string name="dialog_button_connect">Conectar</string>
     <string name="dialog_add_network_title">Adicionar Rede</string>
     <string name="dialog_check_show_passwd">Mostrar senha</string>
@@ -118,7 +118,7 @@
     <string name="pref_show_all_summ_on">Mostrando todos os pontos de acesso</string>
     <string name="pref_title_show_all">Mostrar todos os APs</string>
     <string name="activity_title_details">Detalhes da Rede</string>
-    <string name="toast_missing_information">Ainda faltam algumas informações para esta rede. Tente novamente em alguns segundos.</string>
+    <string name="toast_no_details">Informações detalhadas para esta rede ainda não estão disponíveis. Tente novamente em alguns segundos.</string>
     <string name="layout_net_frequency">"Frequência: "</string>
     <string name="layout_net_speed">"Velocidade do link: "</string>
     <string name="layout_net_ip_address">"Endereço IP: "</string>
