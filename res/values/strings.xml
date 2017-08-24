@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">0.6.16</string>
-    <string name="version_code" translatable="false">72</string>
+    <string name="version_number" translatable="false">0.6.17</string>
+    <string name="version_code" translatable="false">73</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -70,7 +70,7 @@
     <string name="dialog_view_title">Title</string>
     <string name="dialog_view_text">text</string>
     <string name="dialog_add_network_title">Add Network</string>
-    <string name="dialog_add_hidden_network_title">Add Network</string>
+    <string name="dialog_add_hidden_network_title">Add Hidden Network</string>
     <string name="dialog_add_network_name">Network Name (SSID)</string>
     <string name="dialog_add_network_description">Description</string>
     <string name="dialog_add_network_security">Security</string>

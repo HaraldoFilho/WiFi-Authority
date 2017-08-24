@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/18/17 8:03 PM
+ *  Last modified : 8/22/17 10:34 PM
  *
  *  -----------------------------------------------------------
  */
@@ -261,7 +261,9 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
         ImageView imgHidden = (ImageView) convertView.findViewById(R.id.imgHidden);
 
-        if (configuredNetworks.isHidden(ssid)) {
+        if (configuredNetworks.isHidden(ssid) ||
+                (configuredNetworks.isAvailableByMacAddress(wifiScannedNetworks, mac)
+                        && !configuredNetworks.isAvailableBySSID(wifiScannedNetworks, ssid))) {
             imgHidden.setImageDrawable(ContextCompat.getDrawable(getContext(),
                     R.drawable.ic_visibility_off_grey_24dp));
         } else {

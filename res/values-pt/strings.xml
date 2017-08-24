@@ -43,7 +43,7 @@
     <string name="dialog_add_network_password">Senha</string>
     <string name="dialog_add_network_security">Segurança</string>
     <string name="dialog_add_network_name">Nome da Rede (SSID)</string>
-    <string name="dialog_add_hidden_network_title">Adicionar Rede</string>
+    <string name="dialog_add_hidden_network_title">Adicionar Rede Oculta</string>
     <string name="dialog_button_connect">Conectar</string>
     <string name="dialog_add_network_title">Adicionar Rede</string>
     <string name="dialog_check_show_passwd">Mostrar senha</string>
