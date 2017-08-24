@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/21/17 11:18 PM
+ *  Last modified : 8/24/17 12:50 AM
  *
  *  -----------------------------------------------------------
  */
@@ -407,28 +407,31 @@ public class MainActivity extends AppCompatActivity implements
 
                 // Check if position is inside networks list size (not header or footer)
                 if ((correctPosition >= Constants.LIST_HEAD) && (correctPosition < wifiConfiguredNetworks.size())) {
+
                     ssid = wifiConfiguredNetworks.get(correctPosition).SSID;
                     latitude = configuredNetworks.getLatitudeBySSID(ssid);
                     longitude = configuredNetworks.getLongitudeBySSID(ssid);
-                }
 
-                String mac = configuredNetworks.getMacAddressBySSID(ssid);
+                    String mac = configuredNetworks.getMacAddressBySSID(ssid);
 
-                if (!mac.isEmpty() && !mac.matches(Constants.INVALID_MAC)) {
-                    // Create bundle with the information needed to show more detailed information
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KEY_SSID, configuredNetworks.getDataSSID(ssid));
-                    bundle.putString(Constants.KEY_BSSID, mac);
-                    bundle.putDouble(Constants.KEY_LATITUDE, latitude);
-                    bundle.putDouble(Constants.KEY_LONGITUDE, longitude);
-                    Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-                    Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_details);
+                    if (!mac.isEmpty() && !mac.matches(Constants.INVALID_MAC)) {
+                        // Create bundle with the information needed to show more detailed information
+                        Bundle bundle = new Bundle();
+                        bundle.putString(Constants.KEY_SSID, configuredNetworks.getDataSSID(ssid));
+                        bundle.putString(Constants.KEY_BSSID, mac);
+                        bundle.putDouble(Constants.KEY_LATITUDE, latitude);
+                        bundle.putDouble(Constants.KEY_LONGITUDE, longitude);
+                        Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    } else {
+                        Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_details);
+                    }
+
                 }
 
             }
+
         });
 
 
