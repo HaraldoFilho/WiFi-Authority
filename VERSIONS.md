@@ -1,3 +1,6 @@
+#### **0.6.19**
+- Removed hidden network icon from configured networks due to its unstable behaviour.
+
 #### **0.6.18**
 - Bug fixes.
 

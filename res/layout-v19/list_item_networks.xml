@@ -83,15 +83,5 @@
         android:layout_toLeftOf="@+id/imgLockerCfg"
         android:layout_toStartOf="@+id/imgLockerCfg" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/item_margin_right"
-        android:layout_marginEnd="@dimen/item_margin_right"
-        android:id="@+id/imgHidden"
-        android:layout_alignBottom="@+id/txtNetStatus"
-        android:layout_toLeftOf="@+id/imgWiFiOk"
-        android:layout_toStartOf="@+id/imgWiFiOk" />
-
 
 </RelativeLayout>
