@@ -21,6 +21,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.location.Location;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -39,6 +40,9 @@ import com.apps.mohb.wifiauthority.adapters.ScannedNetworksListAdapter;
 import com.apps.mohb.wifiauthority.fragments.dialogs.AddNetworkDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.LocationPermissionsAlertFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +52,9 @@ import java.util.ListIterator;
 
 public class ScanNetworksActivity extends AppCompatActivity implements
         LocationPermissionsAlertFragment.LocationPermissionsDialogListener,
-        AddNetworkDialogFragment.AddNetworkDialogListener {
+        AddNetworkDialogFragment.AddNetworkDialogListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private WifiManager wifiManager;
     private List<ScanResult> wifiScannedNetworks;
@@ -65,6 +71,10 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     private String minSecurityToShow;
     private String minSignalLevelToShow;
 
+    private GoogleApiClient googleApiClient;
+    private Location location;
+    private double lastLatitude;
+    private double lastLongitude;
 
     /*
          Inner class to receive WiFi scan results
@@ -75,6 +85,18 @@ public class ScanNetworksActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
 
             progressDialog.cancel();
+
+            // Get the last user's none location. Most of the times
+            // this corresponds to user's current location or very near
+            try {
+                location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                if (location != null) {
+                    lastLatitude = location.getLatitude();
+                    lastLongitude = location.getLongitude();
+                }
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
 
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
@@ -277,6 +299,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         bundle.putString(Constants.KEY_SSID, ssid);
                         bundle.putString(Constants.KEY_BSSID, bssid);
                         bundle.putString(Constants.KEY_SECURITY, capabilities);
+                        bundle.putDouble(Constants.KEY_LATITUDE, lastLatitude);
+                        bundle.putDouble(Constants.KEY_LONGITUDE, lastLongitude);
                         dialog.setArguments(bundle);
                         dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
                     } else { // If network is already configured show dialog informing this
@@ -288,6 +312,21 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             }
         });
 
+        // Create an instance of GoogleAPIClient to load maps
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
     }
 
     @Override
@@ -374,10 +413,31 @@ public class ScanNetworksActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
+
+    // GoogleClientApi callback methods
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        wifiManager.startScan();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+    }
 
     // CLASS METHODS
 

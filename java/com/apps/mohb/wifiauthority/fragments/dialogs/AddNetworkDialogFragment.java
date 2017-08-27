@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 8/21/17 12:46 AM
+ *  Last modified : 8/27/17 6:13 PM
  *
  *  -----------------------------------------------------------
  */
@@ -41,6 +41,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
     public interface AddNetworkDialogListener {
         void onAddNetworkDialogPositiveClick(DialogFragment dialog);
+
         void onAddNetworkDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -61,6 +62,8 @@ public class AddNetworkDialogFragment extends DialogFragment {
     private String security = Constants.EMPTY;
     private int securityOption;
     private String password = Constants.EMPTY;
+    private double lastLatitude;
+    private double lastLongitude;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class AddNetworkDialogFragment extends DialogFragment {
             ssid = bundle.getString(Constants.KEY_SSID);
             bssid = bundle.getString(Constants.KEY_BSSID);
             security = bundle.getString(Constants.KEY_SECURITY);
+            lastLatitude = bundle.getDouble(Constants.KEY_LATITUDE);
+            lastLongitude = bundle.getDouble(Constants.KEY_LONGITUDE);
             networkName.setText(ssid);
             networkName.setEnabled(false);
 
@@ -107,6 +112,8 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
         } else {
             bssid = Constants.EMPTY;
+            lastLongitude = Constants.DEFAULT_LATITUDE;
+            lastLongitude = Constants.DEFAULT_LONGITUDE;
             builder.setTitle(R.string.dialog_add_hidden_network_title);
         }
 
@@ -232,7 +239,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
                         if (!configuredNetworks.hasNetworkAdditionalData(ssid)) {
                             configuredNetworks.addNetworkData(description, ssid, hidden, bssid, security, password,
-                                    Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
+                                    lastLatitude, lastLongitude);
                         } else {
                             configuredNetworks.updateNetworkDescription(ssid, description);
                         }

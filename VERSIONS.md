@@ -1,3 +1,6 @@
+#### **0.6.20**
+- Added location retrieval on ScanNetworksActivity so app already has location info when a network is added.
+
 #### **0.6.19**
 - Removed hidden network icon from configured networks due to its unstable behaviour.
 

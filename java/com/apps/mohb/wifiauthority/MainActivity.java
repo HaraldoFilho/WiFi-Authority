@@ -463,15 +463,6 @@ public class MainActivity extends AppCompatActivity implements
         wifiScanReceiver = new WiFiScanReceiver();
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
-        // Create an instance of GoogleAPIClient to load maps
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
-
         // Shared preferences variable to control if Network Management Policy Dialog for Marshmallow (version 6.x)
         // or higher must be shown
         showNetworkManagementPolicyWarnPref = this.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
@@ -484,6 +475,15 @@ public class MainActivity extends AppCompatActivity implements
         filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         this.registerReceiver(wifiStateMonitor, filter);
+
+        // Create an instance of GoogleAPIClient to load maps
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
     }
 
@@ -791,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    // GoogleClientApi methods
+    // GoogleClientApi callback methods
 
     @Override
     public void onConnected(Bundle bundle) {
