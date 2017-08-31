@@ -12,7 +12,7 @@
 - View detailed information, including the location, of a configured network
 - View all configured networks on a map
 - View the WiFi connection status
-- Automatically reconfigure name and hidden status changes on networks
+- Automatically reconfigure name changes on networks
 - Automatically restore networks removed outside the application
 - Store password inside application so it can be restored
 
