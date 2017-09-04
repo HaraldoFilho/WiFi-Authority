@@ -1,3 +1,6 @@
+#### **1.0.0**
+- First production release of the application. Includes all bug fixes and improvements implemented in the beta versions.
+
 #### **0.6.20**
 - Added location retrieval on ScanNetworksActivity so app already has location info when a network is added.
 
