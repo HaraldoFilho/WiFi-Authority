@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="@dimen/item_elevation"
+    android:background="@drawable/item_tile" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/layout_net_title"
+        android:id="@+id/txtNetTitle"
+        android:layout_gravity="left"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text_size_big"
+        android:layout_marginLeft="@dimen/item_margin_left"
+        android:layout_marginRight="@dimen/item_margin_left"
+        android:layout_marginTop="@dimen/item_margin_top" />
+
+    <TextView
+        android:text="@string/layout_net_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNetTitle"
+        android:id="@+id/txtNetSubtitle"
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="@string/layout_net_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtNetSecurityTitle"
+        android:layout_below="@+id/txtNetSubtitle"
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle" />
+
+    <TextView
+        android:text="@string/layout_net_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNetSubtitle"
+        android:layout_toRightOf="@+id/txtNetSecurityTitle"
+        android:id="@+id/txtNetSecurity" />
+
+    <TextView
+        android:text="@string/layout_net_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtNetStatusTitle"
+        android:layout_below="@+id/txtNetSecurityTitle"
+        android:layout_alignLeft="@+id/txtNetTitle"
+        android:layout_alignStart="@+id/txtNetTitle" />
+
+    <TextView
+        android:text="@string/layout_net_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNetSecurity"
+        android:layout_toRightOf="@+id/txtNetStatusTitle"
+        android:id="@+id/txtNetStatus"
+        android:layout_marginBottom="@dimen/item_margin_bottom" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginEnd="@dimen/item_margin_right"
+        android:id="@+id/imgLockerCfg"
+        android:layout_alignBottom="@+id/txtNetStatus"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginEnd="@dimen/item_margin_right"
+        android:id="@+id/imgWiFiOk"
+        android:layout_alignBottom="@+id/txtNetStatus"
+        android:layout_toLeftOf="@+id/imgLockerCfg"
+        android:layout_toStartOf="@+id/imgLockerCfg" />
+
+
+</RelativeLayout>

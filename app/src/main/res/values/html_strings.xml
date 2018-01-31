@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--Terms of use-->
+<string name="html_terms_of_use"><html><body>Last modification: November 23, 2016\n\n\nThank you for using <b>“WiFi Authority”</b>.\n\nBy using <b>“WiFi Authority”
+</b> the user agrees with the following terms:\n\n1. Mobile applications, like any other piece of software are prone to fails,
+bugs, crashes, data losses and other malfunctions. The operating system and the hardware on which it is running are prone to the same problems. So, <b>mohb apps</b>
+is not responsible for any consequences of such malfunctions, use this application at your own risk.
+\n\n2. The maps service is provided by <b>“Google Maps
+<sup><small><small><small>TM</small></small></small></sup>”</b> API, so <b>mohb apps</b> is not responsible for any malfunctions
+that can occur with it and any consequences of it.\n\n3. These terms
+are subjected to changes. In this case, the user will be notified in the application page on <b>“Google Play Store
+<sup><small><small><small>TM</small></small></small></sup>”</b> when a new version of the app has been released and
+by continuing using the application the user automatically agrees with the new terms.
+\n\n\n\n<small><i>“Google Maps<sup><small><small><small>TM</small></small></small></sup>” and “Google Play Store
+<sup><small><small><small>TM</small></small></small></sup>” are trademarks of Google, Inc.\n\nmohb apps
+does not have any partnership or any other form of relation with Google, Inc.</i></small>\n\n\n
+</body></html></string>
+
+<!--Privacy policy-->
+<string name="html_privacy_policy"><html><body>Last modification: November 23, 2016\n\n\nThank you for using <b>“WiFi Authority”</b>\n\nThrough
+this document, <b>mohb apps</b> guarantee that <b>“WiFi Authority”</b> does not collect any user\'s personal data necessary to the proper operation of the application,
+including current location. These data are stored only on local storage of the user\'s device and it is not sent in any way to <b>mohb apps</b>.
+If the user uninstall the app, all this data is permanently deleted. <b>“WiFi Authority”</b> also does not collect any other user\'s personal data, including phone identity, contacts, files,
+installed applications or any other data that can identify the user. The internet connection is used only by the purpose of get the maps, get address information of the locations,
+get Legal Notices, get Help pages and send feedback e-mails.\n\nThis document
+is subjected to changes. In this case, the user will be notified in the application page on <b>“Google Play Store
+<sup><small><small><small>TM</small></small></small></sup>”</b> when a new version of the app have been
+released.\n\n\n\n<small><i>“Google Play Store
+<sup><small><small><small>TM</small></small></small></sup>” is a trademark of Google, Inc.\n\n\n</i></small>
+</body></html></string>
+
+<!--Icons attribution-->
+<string name="html_icons_attribution">The wifi signal representation in the application icon and the icons inside the application were designed by <b><i>Google, Inc.</i></b> under the “material design guidelines“ and used and modified according to <b>Creative Commons
+Attribution 4.0 International License (CC-BY 4.0)</b>.</string>
+
+</resources>

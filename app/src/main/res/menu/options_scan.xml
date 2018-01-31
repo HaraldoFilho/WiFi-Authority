@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.apps.mohb.wifiauthority.ScanNetworksActivity">
+
+    <item
+        android:id="@+id/action_add_network"
+        android:orderInCategory="1"
+        android:title="@string/menu_add_network"
+        android:icon="@drawable/ic_add_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_scan_settings"
+        android:orderInCategory="2"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
+     <item
+        android:id="@+id/action_help_scan"
+        android:orderInCategory="3"
+        android:title="@string/menu_help"
+        app:showAsAction="never" />
+
+</menu>

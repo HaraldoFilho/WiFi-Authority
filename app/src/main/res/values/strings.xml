@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!--Application version-->
+    <string name="version_name">version: </string>
+    <string name="version_number" translatable="false">1.0.0</string>
+    <string name="version_code" translatable="false">77</string>
+
+    <!--Application information-->
+    <string name="info_app_name" translatable="false">WiFi Authority</string>
+    <string name="info_app_url" translatable="false">http://goo.gl/3zOJcC</string>
+    <string name="info_name" translatable="false">mohb apps</string>
+    <string name="info_website">mohb-apps.com</string>
+    <string name="info_feedback_email">feedback@mohb-apps.com</string>
+    <string name="info_developer">Developer:</string>
+    <string name="info_developer_name" translatable="false">Haraldo Albergaria Filho</string>
+    <string name="info_skype" translatable="false">skype: mohb.apps</string>
+    <string name="info_copyright_text" translatable="false">Copyright © 2017 mohb apps</string>
+    <string name="info_rights_reserved_text">All Rights Reserved.</string>
+
+    <!--System time-->
+    <string name="system_time_default" translatable="false">EEEE, MMMM d yyyy - K:m a</string>
+    <string name="system_time_pt" translatable="false">EEEE, d MMMM yyyy - HH:mm</string>
+
+    <!--Menus titles-->
+    <string name="menu_map">Map</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_about">About</string>
+    <string name="menu_add_network">Add Hidden Network</string>
+    <string name="menu_refresh">Refresh</string>
+
+    <!--Activities titles-->
+    <string name="activity_title_your_networks">Your Networks</string>
+    <string name="activity_title_networks">Available Networks</string>
+    <string name="activity_title_details">Network Details</string>
+    <string name="activity_title_help">Help</string>
+    <string name="activity_title_about">About</string>
+
+    <!--Actions menus-->
+    <string name="action_send_feedback">Send feedback</string>
+    <string name="action_send_question">Send question</string>
+    <string name="action_report_bug">Report a bug</string>
+    <string name="action_terms_of_use">Terms of use</string>
+    <string name="action_privacy_policy">Privacy policy</string>
+    <string name="action_legal_notices">Legal notices</string>
+    <string name="action_material_icons">Icons attribution</string>
+    <string name="action_website">Website</string>
+    <string name="action_feedback">Feedback</string>
+    <string name="action_question">Question</string>
+    <string name="action_about_application">about application</string>
+    <string name="action_restore_defaults">Restore defaults</string>
+
+    <!--Context menus-->
+    <string name="context_edit_description">Edit description</string>
+    <string name="context_connect">Connect</string>
+    <string name="context_cancel">Cancel</string>
+    <string name="context_disconnect">Disconnect</string>
+    <string name="context_forget">Forget</string>
+    <string name="context_delete">Delete</string>
+    <string name="context_change_password">Change password</string>
+
+    <!--Dialogs-->
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_connect">Connect</string>
+    <string name="dialog_check_show_passwd">Show password</string>
+    <string name="dialog_check_store_passwd">Store password</string>
+    <string name="dialog_view_title">Title</string>
+    <string name="dialog_view_text">text</string>
+    <string name="dialog_add_network_title">Add Network</string>
+    <string name="dialog_add_hidden_network_title">Add Hidden Network</string>
+    <string name="dialog_add_network_name">Network Name (SSID)</string>
+    <string name="dialog_add_network_description">Description</string>
+    <string name="dialog_add_network_security">Security</string>
+    <string name="dialog_add_network_password">Password</string>
+    <string name="dialog_network_name_changed_title">Network name has been changed</string>
+    <string name="dialog_network_name_changed_description">Description</string>
+    <string name="dialog_network_name_changed_old_name">Old name</string>
+    <string name="dialog_network_name_changed_new_name">New name</string>
+    <string name="dialog_network_name_changed_colon" translatable="false">: </string>
+    <string name="dialog_network_name_changed_password">Type again the network password:</string>
+    <string name="dialog_network_name_changed_connect">Connect to network</string>
+    <string name="dialog_edit_description">Edit description</string>
+    <string name="dialog_change_password">Password</string>
+    <string name="alert_title_warning">WARNING!</string>
+    <string name="alert_title_are_you_sure">Delete network?</string>
+    <string name="alert_title_reset_preferences">Restore defaults?</string>
+    <string name="alert_title_restore_networks">Restore networks?</string>
+    <string name="alert_title_wifi_disabled">WiFi disabled!</string>
+    <string name="alert_message_loc_permission_needed">WiFi Authority needs permission to get device\'s location to generate the list of available networks. Do you want to see the request permission dialog again?\n</string>
+    <string name="alert_message_delete_network">This action can not be undone\n</string>
+    <string name="alert_message_network_mng_policy_change">From Android 6.0 and higher, the policy regarding network management has been changed. You won\'t be able to remove or update networks unless they were added by WiFi Authority.\n</string>
+    <string name="alert_message_network_ssid_changed">The name (SSID) of the following network has been changed. Due to changes on the policy regarding network management, from Android 6.0 and higher, a network can be updated or removed only if it was added by the same application. But you can re-add the network with the new name by typing its password again:</string>
+    <string name="alert_message_reset_preferences">All settings will be restored to the default values\n</string>
+    <string name="alert_message_restore_networks">All network configurations were removed. Do you want to restore them?\n</string>
+    <string name="alert_message_wifi_disabled">WiFi was disabled. Do you want to turn it on again?</string>
+    <string name="alert_button_no">No</string>
+    <string name="alert_button_yes">Yes</string>
+    <string name="alert_button_not_warn">Do not warn again</string>
+    <string name="alert_button_tell_more">Tell me more</string>
+    <string name="alert_button_close_app">No, close application</string>
+
+    <!-- Progress dialogs -->
+    <string name="progress_scan_networks">Scanning for available networks,\nplease wait...</string>
+
+    <!--Toasts-->
+    <string name="toast_unable_add_network">Unable to add network. Please, check if all network info is correct and try again</string>
+    <string name="toast_unable_remove_network">Unable to remove the selected network</string>
+    <string name="toast_unable_to_change_password">Unable to change the password</string>
+    <string name="toast_no_details">Detailed information for this network is still unavailable. Try again in a few seconds</string>
+    <string name="toast_no_location_information">There is no location information for this network yet</string>
+    <string name="toast_no_map_information">There is no current location information yet. Try again in a few seconds</string>
+    <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
+    <string name="toast_invalid_password">Please, type a valid password</string>
+    <string name="toast_network_is_configured">This network is already configured</string>
+    <string name="toast_wifi_disabled">WiFi is turned off, turning it on...</string>
+    <string name="toast_get_legal_notices">Loading legal notices text...</string>
+    <string name="toast_no_legal_notices">Couldn\'t load legal notices text</string>
+    <string name="toast_get_help_page">Loading help page from internet...</string>
+    <string name="toast_authentication_failed">Authentication failed</string>
+    <string name="toast_obt_ip_address_failed">Failed on obtain IP address</string>
+    <string name="toast_no_network_found">No network has been found</string>
+    <string name="toast_no_network_to_display">No network to display. Try decreasing minimum levels on settings</string>
+
+    <!--Layout resources-->
+    <string name="layout_net_title">Title</string>
+    <string name="layout_net_subtitle">Subtitle</string>
+    <string name="layout_net_ssid" translatable="false">SSID: "</string>
+    <string name="layout_net_mac_address">"MAC Address: "</string>
+    <string name="layout_net_mac" translatable="false">"MAC: "</string>
+    <string name="layout_net_security">"Security: "</string>
+    <string name="layout_net_ip_address">"IP address: "</string>
+    <string name="layout_net_frequency">"Frequency: "</string>
+    <string name="layout_net_freq_2p4ghz">2.4</string>
+    <string name="layout_net_freq_5ghz">5</string>
+    <string name="layout_net_freq_unit" translatable="false">" GHz"</string>
+    <string name="layout_net_speed">"Link speed: "</string>
+    <string name="layout_net_signal_level">"Signal level: "</string>
+    <string name="layout_net_status">"Status: "</string>
+    <string name="layout_net_signal">"Signal level: "</string>
+    <string name="layout_db" translatable="false">dBm</string>
+    <string name="layout_net_connected">Connected</string>
+    <string name="layout_net_disconnected">Disconnected</string>
+    <string name="layout_net_out_of_reach">Out of reach</string>
+    <string name="layout_no_play_services_title">Google Play Services is not installed or needs to be updated</string>
+    <string name="layout_no_play_services_text">WiFi Authority needs Google Play Services up-to-date  to work\nPlease, install or update Google Play Services and reopen the application</string>
+    <string name="layout_press_back_button">Press back button to exit</string>
+
+    <!-- Button -->
+    <string name="button_turn_wifi_on">TURN WIFI ON</string>
+
+    <!--Help pages-->
+    <string name="url_website">https://mohb-apps.com/</string>
+    <string name="url_help_main">wifiauthority-help-your-networks</string>
+    <string name="url_help_note_tag" translatable="false">#note</string>
+    <string name="url_help_scan">wifiauthority-help-available-networks</string>
+    <string name="url_help_settings">wifiauthority-help-settings</string>
+    <string name="url_contact">contact</string>
+    <string name="url_bug_report">bug-report</string>
+
+    <!--Security-->
+    <string name="security_deactivated">Open</string>
+    <string name="security_WEP" translatable="false">WEP</string>
+    <string name="security_WPA" translatable="false">WPA/WPA2/FT PSK</string>
+    <string name="security_EAP" translatable="false">802.1x EAP</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Network states -->
+
+    <string name="net_state_disconnected">Disconnected</string>
+    <string name="net_state_scannig">Scanning...</string>
+    <string name="net_state_connecting">Connecting...</string>
+    <string name="net_state_authenticating">Authenticating...</string>
+    <string name="net_state_obt_ip_address">Obtaining IP address...</string>
+    <string name="net_state_idle">Idle</string>
+
+    <!-- Settings -->
+
+    <!-- YOUR NETWORKS group -->
+    <string name="pref_group_your_networks_settings" translatable="false">YOUR_NETS_KEY</string>
+    <string name="pref_group_your_networks">YOUR  NETWORKS</string>
+
+    <!-- Title -->
+    <string name="pref_key_header" translatable="false">HEADER</string>
+    <string name="pref_title_header">Headers</string>
+    <string name="pref_def_header" translatable="false">1</string>
+
+    <!-- Sort order -->
+    <string name="pref_key_sort" translatable="false">SORT</string>
+    <string name="pref_title_sort">Sort order</string>
+    <string name="pref_def_sort" translatable="false">1</string>
+
+    <!-- Automatic reconfiguration -->
+    <string name="pref_key_reconfig" translatable="false">SSID_RECONFIG</string>
+    <string name="pref_title_reconfig">Automatic reconfiguration</string>
+    <string name="pref_reconfig_summ_on">Reconfigure if name changes</string>
+    <string name="pref_reconfig_summ_off">Don not reconfigure if name changes</string>
+    <string name="pref_def_reconfig" translatable="false">true</string>
+
+    <!-- Store password -->
+    <string name="pref_key_store_password" translatable="false">STORE_PASSWORD</string>
+    <string name="pref_title_store_password">Store password</string>
+    <string name="pref_store_password_summ_on">Password is stored in application</string>
+    <string name="pref_store_password_summ_off">Password is not stored in application</string>
+    <string name="pref_def_store_password" translatable="false">false</string>
+
+    <!-- Restore network configurations -->
+    <string name="pref_key_restore_networks" translatable="false">RESTORE NETWORKS</string>
+    <string name="pref_title_restore_networks">Restore removed networks</string>
+    <string name="pref_restore_networks_summ_on">Automatic restoring networks</string>
+    <string name="pref_restore_networks_summ_off">Not restoring networks</string>
+    <string name="pref_def_restore_networks" translatable="false">false</string>
+
+    <!-- AVAILABLE NETWORKS group -->
+    <string name="pref_group_available_networks_settings" translatable="false">AVAILABLE_NETS_KEY</string>
+    <string name="pref_group_available_networks">AVAILABLE NETWORKS</string>
+
+    <!-- Minimum security level -->
+    <string name="pref_key_security" translatable="false">SECURITY</string>
+    <string name="pref_title_security">Minimum security level</string>
+    <string name="pref_def_security" translatable="false">1</string>
+
+    <!-- Minimum signal level -->
+    <string name="pref_key_signal" translatable="false">SIGNAL</string>
+    <string name="pref_title_signal">Minimum signal level</string>
+    <string name="pref_def_signal" translatable="false">1</string>
+
+    <!-- Show all access points -->
+    <string name="pref_key_show_all" translatable="false">SHOW_ALL_APS</string>
+    <string name="pref_title_show_all">Show all APs</string>
+    <string name="pref_show_all_summ_on">Showing all access points</string>
+    <string name="pref_show_all_summ_off">Hiding duplicate access points</string>
+    <string name="pref_def_show_all" translatable="false">false</string>
+
+</resources>

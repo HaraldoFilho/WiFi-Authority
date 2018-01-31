@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_defaults"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_settings_backup_restore_white_24dp"
+        android:title="@string/action_restore_defaults"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_help_settings"
+        android:orderInCategory="2"
+        android:title="@string/activity_title_help"
+        app:showAsAction="never" />
+</menu>

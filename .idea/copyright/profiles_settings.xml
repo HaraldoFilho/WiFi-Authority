@@ -1,0 +1,8 @@
+<component name="CopyrightManager">
+  <settings default="copyright notice">
+    <module2copyright>
+      <element module="Project Files" copyright="copyright notice" />
+      <element module="Changed Files" copyright="copyright notice" />
+    </module2copyright>
+  </settings>
+</component>

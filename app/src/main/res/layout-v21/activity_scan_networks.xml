@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_scan_networks"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.apps.mohb.wifiauthority.ScanNetworksActivity">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scanList"
+        android:layout_marginLeft="@dimen/item_margin_left"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/item_spacing" />
+
+</FrameLayout>

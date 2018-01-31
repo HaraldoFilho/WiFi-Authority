@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.apps.mohb.wifiauthority.DetailsActivity">
+
+    <RelativeLayout
+        android:id="@+id/details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtNetSSIDTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="@dimen/text_detail_margin_left"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/layout_net_ssid"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtNetSSID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtNetSSIDTitle"
+            android:layout_toRightOf="@+id/txtNetSSIDTitle"
+            android:text="@string/layout_net_ssid"
+            android:textSize="@dimen/text_size_big"
+            android:textStyle="bold" />
+
+        <TextView
+            android:text="@string/layout_net_mac_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtNetMacTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_below="@+id/txtNetSSIDTitle"
+            android:layout_alignLeft="@+id/txtNetSSIDTitle"
+            android:layout_alignStart="@+id/txtNetSSIDTitle" />
+
+        <TextView
+            android:text="@string/layout_net_mac_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetSSID"
+            android:layout_toRightOf="@+id/txtNetMacTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:id="@+id/txtNetMac" />
+
+        <TextView
+            android:text="@string/layout_net_ip_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtNetIpAddressTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_below="@+id/txtNetMacTitle"
+            android:layout_alignLeft="@+id/txtNetSSIDTitle"
+            android:layout_alignStart="@+id/txtNetSSIDTitle" />
+
+        <TextView
+            android:text="@string/layout_net_ip_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetMac"
+            android:layout_toRightOf="@+id/txtNetIpAddressTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:id="@+id/txtNetIpAddress" />
+
+        <TextView
+            android:text="@string/layout_net_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtNetSpeedTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_below="@+id/txtNetIpAddressTitle"
+            android:layout_alignLeft="@+id/txtNetSSIDTitle"
+            android:layout_alignStart="@+id/txtNetSSIDTitle" />
+
+        <TextView
+            android:text="@string/layout_net_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetIpAddress"
+            android:layout_toRightOf="@+id/txtNetSpeedTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:id="@+id/txtNetSpeed" />
+
+        <TextView
+            android:text="@string/layout_net_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetIpAddress"
+            android:layout_toRightOf="@+id/txtNetSpeed"
+            android:textSize="@dimen/text_size_medium"
+            android:id="@+id/txtNetSpeedUnit" />
+
+        <TextView
+            android:text="@string/layout_net_signal_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtNetSignalLevelTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_below="@+id/txtNetSpeedTitle"
+            android:layout_alignLeft="@+id/txtNetSSIDTitle"
+            android:layout_alignStart="@+id/txtNetSSIDTitle" />
+
+        <TextView
+            android:text="@string/layout_net_signal_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetSpeedTitle"
+            android:layout_toRightOf="@+id/txtNetSignalLevelTitle"
+            android:textSize="@dimen/text_size_medium"
+            android:id="@+id/txtNetSignalLevel" />
+
+        <TextView
+            android:text="@string/layout_net_signal_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtNetSpeedUnit"
+            android:layout_toRightOf="@+id/txtNetSignalLevel"
+            android:textSize="@dimen/text_size_medium"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:id="@+id/txtNetSignalLevelUnit" />
+
+    </RelativeLayout>
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/details"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

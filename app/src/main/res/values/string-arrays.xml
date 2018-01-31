@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- Security options -->
+    <string-array name="security_options">
+        <item>Deactivated</item>
+        <item>WEP</item>
+        <item>WPA/WPA2/FT PSK</item>
+        <item>802.1x EAP</item>
+    </string-array>
+
+    <!-- Settings -->
+
+    <!-- YOUR NETWORKS group -->
+
+    <!-- Title -->
+    <string-array name="pref_header_titles">
+        <item>Description</item>
+        <item>Network name</item>
+    </string-array>
+    <string-array name="pref_header_entry_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- Sort order -->
+    <string-array name="pref_sort_titles">
+        <item>Automatic</item>
+        <item>Description</item>
+        <item>Network name</item>
+        <item>No sort</item>
+    </string-array>
+    <string-array name="pref_sort_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!-- AVAILABLE NETWORKS group -->
+
+    <!-- Minimum security level -->
+    <string-array name="pref_security_titles">
+        <item>High</item>
+        <item>Low</item>
+        <item>Unsecure</item>
+    </string-array>
+    <string-array name="pref_security_entry_values">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- Minimum signal level -->
+    <string-array name="pref_signal_titles">
+        <item>High</item>
+        <item>Low</item>
+        <item>Very low</item>
+    </string-array>
+    <string-array name="pref_signal_entry_values">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

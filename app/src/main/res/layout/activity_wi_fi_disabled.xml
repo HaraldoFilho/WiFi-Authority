@@ -1,0 +1,26 @@
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="0dp"
+    tools:context="com.apps.mohb.wifiauthority.WiFiDisabledActivity">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="@dimen/button_padding_vertical"
+        android:paddingLeft="@dimen/button_padding_horizontal"
+        android:paddingRight="@dimen/button_padding_horizontal"
+        android:paddingTop="@dimen/button_padding_vertical"
+        android:text="@string/button_turn_wifi_on"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+
+</android.widget.RelativeLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="@string/alert_message_network_ssid_changed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dialog_margin"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_marginRight="@dimen/dialog_text_margin"
+        android:id="@+id/txtMessage" />
+
+    <TextView
+        android:text="@string/dialog_network_name_changed_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dialog_margin"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        android:layout_below="@+id/txtMessage"
+        android:id="@+id/txtNetSubtitle" />
+
+    <TextView
+        android:text="@string/dialog_network_name_changed_old_name"
+        android:layout_width="@dimen/dialog_tag_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_below="@+id/txtNetSubtitle"
+        android:id="@+id/txtOldNameTag" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_toRightOf="@+id/txtOldNameTag"
+        android:layout_alignBottom="@+id/txtOldNameTag"
+        android:id="@+id/txtOldName" />
+
+    <TextView
+        android:text="@string/dialog_network_name_changed_new_name"
+        android:layout_width="@dimen/dialog_tag_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_below="@+id/txtOldNameTag"
+        android:id="@+id/txtNewNameTag" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_toRightOf="@id/txtNewNameTag"
+        android:layout_alignBottom="@+id/txtNewNameTag"
+        android:id="@+id/txtNewName" />
+
+    <TextView
+        android:text="@string/dialog_network_name_changed_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dialog_margin"
+        android:layout_marginLeft="@dimen/dialog_text_margin"
+        android:layout_marginRight="@dimen/dialog_text_margin"
+        android:layout_below="@+id/txtNewNameTag"
+        android:id="@+id/txtTypeNewPasswd" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:inputType="textPassword"
+        android:layout_below="@+id/txtTypeNewPasswd"
+        android:id="@+id/txtNewPassword" />
+
+    <CheckBox
+        android:text="@string/dialog_check_show_passwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dialog_widget_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:layout_below="@+id/txtNewPassword"
+        android:id="@+id/checkNewPasswd" />
+
+    <CheckBox
+        android:text="@string/dialog_network_name_changed_connect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dialog_checkbox_margin"
+        android:layout_marginLeft="@dimen/dialog_widget_margin"
+        android:layout_marginRight="@dimen/dialog_margin"
+        android:layout_below="@+id/checkNewPasswd"
+        android:id="@+id/checkConnect" />
+
+</RelativeLayout>

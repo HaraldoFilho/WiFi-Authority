@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="@dimen/item_elevation"
+    android:background="@drawable/item_tile" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/layout_net_title"
+        android:id="@+id/txtScanNetName"
+        android:layout_gravity="left"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/text_size_big"
+        android:layout_marginLeft="@dimen/item_margin_left"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginTop="@dimen/item_margin_top" />
+
+    <TextView
+        android:text="@string/layout_net_mac"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetName"
+        android:id="@+id/txtScanNetMac"
+        android:layout_alignLeft="@+id/txtScanNetName"
+        android:layout_alignStart="@+id/txtScanNetName"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="@string/layout_net_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetMac"
+        android:id="@+id/txtScanNetSecurityTitle"
+        android:layout_alignLeft="@+id/txtScanNetName"
+        android:layout_alignStart="@+id/txtScanNetName" />
+
+    <TextView
+        android:text="@string/layout_net_security"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetMac"
+        android:layout_toRightOf="@+id/txtScanNetSecurityTitle"
+        android:id="@+id/txtScanNetSecurity" />
+
+    <TextView
+        android:text="@string/layout_net_signal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtScaNetSignalTitle"
+        android:layout_below="@+id/txtScanNetSecurityTitle"
+        android:layout_alignLeft="@+id/txtScanNetName"
+        android:layout_alignStart="@+id/txtScanNetName" />
+
+    <TextView
+        android:text="@string/layout_net_signal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetSecurity"
+        android:layout_toRightOf="@+id/txtScaNetSignalTitle"
+        android:id="@+id/txtScanNetSignal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="@dimen/item_margin_bottom" />
+
+    <TextView
+        android:text="@string/layout_db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtScanNetSecurity"
+        android:layout_toRightOf="@+id/txtScanNetSignal"
+        android:id="@+id/txtLevel"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="@dimen/item_margin_bottom" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginEnd="@dimen/item_margin_right"
+        android:id="@+id/imgCfg"
+        android:layout_alignBottom="@+id/txtScanNetSignal"
+        android:layout_toLeftOf="@+id/imgWiFi"
+        android:layout_toStartOf="@+id/imgWiFi" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginEnd="@dimen/item_margin_right"
+        android:id="@+id/imgWiFi"
+        android:layout_alignBottom="@+id/txtScanNetSignal"
+        android:layout_toLeftOf="@+id/imgLocker"
+        android:layout_toStartOf="@+id/imgLocker" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/item_margin_right"
+        android:layout_marginEnd="@dimen/item_margin_right"
+        android:id="@+id/imgLocker"
+        android:layout_alignBottom="@+id/txtScanNetSignal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>
