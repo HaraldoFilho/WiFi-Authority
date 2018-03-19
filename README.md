@@ -27,29 +27,22 @@
 - Production release date: Sep 3, 2017
 - Developer: Haraldo Albergaria Filho
 
-#### This application uses:
+### API Key
 
-- Activities
-- Fragments
-- Intents
-- Splash Screen
-- Array Lists
-- Dialogs
-- Toasts
-- Floating Button
-- Text View
-- Image View
-- List View
-- Map View
-- Web View
-- WiFi Manager
-- WiFi Configuration
-- Network Location
-- Internet
-- Shared Preferences
-- Google Play Services API
-- Google Maps API
-- Internationalization
-- Adaptative Interface Design
+This application uses a *Google Maps™* API Key, that for obvious reasons it was removed from this repository. An API Key can be obtained following the instructions here:
+https://developers.google.com/maps/documentation/android/signup
+
+After get the key, the file **google_maps_api.xml** must be created at **_./app/src/debug/res/values/_** with the following content:
+
+```xml
+<resources>
+
+    <!--Google Maps API Debug Key-->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
+        ### API Key (it starts with "AIza") ###
+    </string>
+
+</resources>
+```
 
 ####
