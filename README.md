@@ -1,7 +1,5 @@
 # **WiFi Authority**
 
-### About the application
-
 **_WiFi Authority_** is a Wi-Fi networks management application for Android™ on which you can:
 
 - List all WiFi networks configured on the device with multiple sort options
