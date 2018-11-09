@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string-array name="pref_header_entry_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="pref_header_titles">
+        <item>Descrição</item>
+        <item>Nome da rede</item>
+    </string-array>
+    <string-array name="pref_security_entry_values">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="pref_security_titles">
+        <item>Alto</item>
+        <item>Baixo</item>
+        <item>Sem segurança</item>
+    </string-array>
+    <string-array name="pref_signal_entry_values">
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="pref_signal_titles">
+        <item>Alto</item>
+        <item>Baixo</item>
+        <item>Muito baixo</item>
+    </string-array>
+    <string-array name="pref_sort_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="pref_sort_titles">
+        <item>Automático</item>
+        <item>Descrição</item>
+        <item>Nome da rede</item>
+        <item>Desordenado</item>
+    </string-array>
+    <string-array name="security_options">
+        <item>Desativada</item>
+        <item>WEP</item>
+        <item>WPA/WPA2/FT PSK</item>
+        <item>802.1x EAP</item>
+    </string-array>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navegar para a página inicial"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Navegar para cima"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Mais opções"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Concluído"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Ver tudo"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Selecione um app"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"DESATIVAR"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"ATIVAR"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Pesquisar..."</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Limpar consulta"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Consulta de pesquisa"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Pesquisar"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Enviar consulta"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Pesquisa por voz"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Compartilhar com"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Compartilhar com <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Recolher"</string>
+    <string name="action_about_application">sobre o aplicativo</string>
+    <string name="action_feedback">Feedback</string>
+    <string name="action_legal_notices">Avisos legais\n(em Inglês)</string>
+    <string name="action_material_icons">Atribuição dos ícones</string>
+    <string name="action_privacy_policy">Política de privacidade</string>
+    <string name="action_question">Dúvida</string>
+    <string name="action_report_bug">Relatar uma falha</string>
+    <string name="action_restore_defaults">Restaurar padrões</string>
+    <string name="action_send_feedback">Enviar feedback</string>
+    <string name="action_send_question">Enviar dúvida</string>
+    <string name="action_terms_of_use">Termos de uso</string>
+    <string name="action_website">Website</string>
+    <string name="activity_title_about">Sobre</string>
+    <string name="activity_title_details">Detalhes da Rede</string>
+    <string name="activity_title_help">Ajuda</string>
+    <string name="activity_title_networks">Redes Disponíveis</string>
+    <string name="activity_title_your_networks">Suas Redes</string>
+    <string name="alert_button_close_app">Não, fechar o aplicativo</string>
+    <string name="alert_button_no">Não</string>
+    <string name="alert_button_not_warn">Não alertar mais</string>
+    <string name="alert_button_tell_more">Saber mais</string>
+    <string name="alert_button_yes">Sim</string>
+    <string name="alert_message_delete_network">Esta ação não poderá ser desfeita</string>
+    <string name="alert_message_loc_permission_needed">WiFi Authority precisa da permissão para obter a localização do dispositivo para gerar a lista de redes disponíveis. Você deseja ver novamente a janela de solicitação de permissão?\n</string>
+    <string name="alert_message_network_mng_policy_change">A partir do Android 6.0, a política relacionada ao gerenciamento de redes foi alterada. Você não será capaz de excluir ou alterar redes a menos que ela tenha sido adicionada através do WiFi Authority.\n</string>
+    <string name="alert_message_network_ssid_changed">O nome (SSID) da seguinte rede foi alterado. Devido a mudanças na política de gerenciamento de redes a partir do Android 6.0, uma rede só pode ser alterada ou removida se foi adicionada pela mesmo aplicativo. Mas você pode adicionar a rede com o novo nome digitando novamente a sua senha:</string>
+    <string name="alert_message_reset_preferences">Todas as configurações serão restauradas para os valores padrão\n</string>
+    <string name="alert_message_restore_networks">Todas as configurações de rede foram excluídas. Você deseja restaurá-las?\n</string>
+    <string name="alert_message_wifi_disabled">O WiFi foi desabilitado. Você deseja liga-lo novamente?</string>
+    <string name="alert_title_are_you_sure">Excluir rede?</string>
+    <string name="alert_title_reset_preferences">Restaurar padrões?</string>
+    <string name="alert_title_restore_networks">Restaurar redes?</string>
+    <string name="alert_title_warning">ATENÇÃO!</string>
+    <string name="alert_title_wifi_disabled">WiFi desabilitado!</string>
+    <string name="button_turn_wifi_on">LIGAR WIFI</string>
+    <string name="context_cancel">Cancelar</string>
+    <string name="context_change_password">Alterar senha</string>
+    <string name="context_connect">Conectar</string>
+    <string name="context_delete">Excluir</string>
+    <string name="context_disconnect">Desconectar</string>
+    <string name="context_edit_description">Editar descrição</string>
+    <string name="context_forget">Esquecer</string>
+    <string name="dialog_add_hidden_network_title">Adicionar Rede Oculta</string>
+    <string name="dialog_add_network_description">Descrição</string>
+    <string name="dialog_add_network_name">Nome da Rede (SSID)</string>
+    <string name="dialog_add_network_password">Senha</string>
+    <string name="dialog_add_network_security">Segurança</string>
+    <string name="dialog_add_network_title">Adicionar Rede</string>
+    <string name="dialog_button_cancel">Cancelar</string>
+    <string name="dialog_button_connect">Conectar</string>
+    <string name="dialog_button_ok">OK</string>
+    <string name="dialog_change_password">Senha</string>
+    <string name="dialog_check_show_passwd">Mostrar senha</string>
+    <string name="dialog_check_store_passwd">Armazenar senha</string>
+    <string name="dialog_edit_description">Editar descrição</string>
+    <string name="dialog_network_name_changed_connect">Conectar à rede</string>
+    <string name="dialog_network_name_changed_description">Descrição</string>
+    <string name="dialog_network_name_changed_new_name">Nome novo</string>
+    <string name="dialog_network_name_changed_old_name">Nome antigo</string>
+    <string name="dialog_network_name_changed_password">Digite novamente a senha de rede:</string>
+    <string name="dialog_network_name_changed_title">Nome da rede alterado</string>
+    <string name="dialog_view_text">texto</string>
+    <string name="dialog_view_title">Título</string>
+    <string name="html_icons_attribution">A representação do wifi no icone do applicativo e os icones dentro do aplicativo foram desenhados por <b><i>Google, Inc.</i></b> seguindo as “material design guidelines“ e utilizados e alterados de acordo com a <b>Licença
+Internacional Creative Commons Atribuição 4.0 (CC-BY 4.0)</b>.</string>
+    <string name="html_privacy_policy"><html><body>Última modificação: 23 de novembro de 2016\n\n\nObrigado por usar <b>“WiFi Authority”</b>.\n\nAtravés deste documento, <b>mohb apps</b>
+garante que o aplicativo <b>“WiFi Authority”</b> não coleta qualquer dado pessoal do usuário necessário para o correto funcionamento do aplicativo, incluindo a localização atual. Esses dados são gravados apenas no armazenamento local do dispositivo do usuário e não é enviado por qualquer meio para <b>mohb apps</b>. Se o usuário desinstalar o aplicativo
+todos esses dados serão excluídos permanentemente. <b>“WiFi Authority”</b> também não coleta qualquer outro dado pessoal do usuário, incluindo identidade do telefone, contatos,
+arquivos, aplicativos instalados ou qualquer outro dado que possa identificar o usuário. A conexão de internet é usada apenas com o propósito de obter os mapas, obter as Notas Legais, obter as páginas de Ajuda e enviar e-mails de feedback.\n\nEste documento está sujeito a mudanças. Nesse caso, o usuário será notificado através da
+<b>“Google Play Store<sup><small><small><small>TM</small></small></small></sup>”</b> quando uma nova versão do aplicativo com as mudanças
+for lançada.\n\n\n\n<small><i>“Google Play Store<sup><small><small><small>TM</small></small></small></sup>”
+é uma marca registrada de Google, Inc.\n\n\n</i></small>
+</body></html></string>
+    <string name="html_terms_of_use"><html><body>Última modificação: 23 de novembro de 2016\n\n\nObrigado por usar <b>“WiFi Authority”</b>.\n\nAo usar <b>“WiFi Authority”
+</b> o usuário concorda com os seguintes termos:\n\n1. Aplicativos móveis, assim como qualquer outro tipo de software está sujeito a falhas,
+erros de código, fechamentos inesperados, perdas de dados e outros mal funcionamentos. O sistema operacional e o dispositivo em
+que ele está sendo executado também estão sujeitos aos mesmos problemas. Assim sendo, <b>mohb apps</b> não é responsável por qualquer consequência da ocorrência
+de um mal funcionamento, use o aplicativo por sua própria conta e risco.\n\n2. Os serviços de
+mapas são disponibilizados pela API do <b>“Google Maps<sup><small><small><small>TM</small></small></small></sup>”</b>,
+assim sendo, <b>mohb apps</b> não é responsável por qualquer mal funcionamento dele e por suas consequências.
+\n\n3. Estes termos estão sujeitos a mudanças. Nesse caso, o usuário será notificado através da
+<b>“Google Play Store<sup><small><small><small>TM</small></small></small></sup>”</b> quando uma nova versão do aplicativo com as mudanças for
+lançada e ao continuar a usar o aplicativo o usuário automaticamente concorda com os novos termos.\n\n\n\n<small><i>“Google Maps<sup><small><small><small>TM</small></small></small></sup>”
+e “Google Play Store<sup><small><small><small>TM</small></small></small></sup>”
+são marcas registradas de Google, Inc.\n\n\n</i></small>
+</body></html></string>
+    <string name="info_developer">Desenvolvedor:</string>
+    <string name="info_feedback_email">duvida@mohb-apps.com.br</string>
+    <string name="info_rights_reserved_text">Todos os Direitos Reservados</string>
+    <string name="info_website">mohb-apps.com.br</string>
+    <string name="layout_net_connected">Conectada</string>
+    <string name="layout_net_disconnected">Desconectada</string>
+    <string name="layout_net_freq_2p4ghz">2,4</string>
+    <string name="layout_net_freq_5ghz">5</string>
+    <string name="layout_net_frequency">"Frequência: "</string>
+    <string name="layout_net_ip_address">"Endereço IP: "</string>
+    <string name="layout_net_mac_address">"Endereço MAC: "</string>
+    <string name="layout_net_out_of_reach">Fora do alcance</string>
+    <string name="layout_net_security">"Segurança: "</string>
+    <string name="layout_net_signal">"Nível do sinal: "</string>
+    <string name="layout_net_signal_level">"Nível do sinal: "</string>
+    <string name="layout_net_speed">"Velocidade do link: "</string>
+    <string name="layout_net_status">"Estado: "</string>
+    <string name="layout_net_subtitle">Subtitulo</string>
+    <string name="layout_net_title">Titulo</string>
+    <string name="layout_no_play_services_text">WiFi Authority precisa do Google Play Services atualizado para funcionar\nPor favor, instale ou atualize Google Play Services e reabra o aplicativo</string>
+    <string name="layout_no_play_services_title">Google Play Services não está instalado ou precisa ser atualizado</string>
+    <string name="layout_press_back_button">Pressione o botão de voltar para sair</string>
+    <string name="menu_about">Sobre</string>
+    <string name="menu_add_network">Adicionar Rede Oculta</string>
+    <string name="menu_help">Ajuda</string>
+    <string name="menu_map">Mapa</string>
+    <string name="menu_refresh">Atualizar</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="net_state_authenticating">Autenticando...</string>
+    <string name="net_state_connecting">Conectando...</string>
+    <string name="net_state_disconnected">Desconectada</string>
+    <string name="net_state_idle">Aguardando</string>
+    <string name="net_state_obt_ip_address">Obtendo endereço IP...</string>
+    <string name="net_state_scannig">Escaneando...</string>
+    <string name="pref_group_available_networks">REDES DISPONÍVEIS</string>
+    <string name="pref_group_your_networks">SUAS REDES</string>
+    <string name="pref_reconfig_summ_off">Não reconfigura com mudança de nome</string>
+    <string name="pref_reconfig_summ_on">Reconfigura com mudança de nome</string>
+    <string name="pref_restore_networks_summ_off">Não restaurando as redes</string>
+    <string name="pref_restore_networks_summ_on">Restaurando redes automaticamente</string>
+    <string name="pref_show_all_summ_off">Escondendo pontos de acesso duplicados</string>
+    <string name="pref_show_all_summ_on">Mostrando todos os pontos de acesso</string>
+    <string name="pref_store_password_summ_off">Senha não é armazenada no aplicativo</string>
+    <string name="pref_store_password_summ_on">Senha é armazenada no aplicativo</string>
+    <string name="pref_title_header">Títulos</string>
+    <string name="pref_title_reconfig">Reconfiguração automática</string>
+    <string name="pref_title_restore_networks">Restaurar redes excluídas</string>
+    <string name="pref_title_security">Nivel de segurança mínimo</string>
+    <string name="pref_title_show_all">Mostrar todos os APs</string>
+    <string name="pref_title_signal">Nível mínimo de sinal</string>
+    <string name="pref_title_sort">Ordenação</string>
+    <string name="pref_title_store_password">Armazenar senha</string>
+    <string name="progress_scan_networks">Procurando redes disponíveis,\npor favor aguarde...</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Pesquisar"</string>
+    <string name="security_deactivated">Aberta</string>
+    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="title_activity_map">Mapa</string>
+    <string name="title_activity_settings">Configurações</string>
+    <string name="toast_authentication_failed">Falha na autenticação</string>
+    <string name="toast_get_help_page">Carregando página de ajuda da internet...</string>
+    <string name="toast_get_legal_notices">Carregando texto de avisos legais...</string>
+    <string name="toast_invalid_password">Por favor, digite uma senha válida</string>
+    <string name="toast_network_is_configured">Esta rede já está configurada</string>
+    <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>
+    <string name="toast_no_details">Informações detalhadas para esta rede ainda não estão disponíveis. Tente novamente em alguns segundos.</string>
+    <string name="toast_no_legal_notices">Não foi possível carregar texto de avisos legais</string>
+    <string name="toast_no_location_information">Não há informação de local para esta rede ainda</string>
+    <string name="toast_no_map_information">Não há informação do local atual ainda. Tente novamente em alguns segundos</string>
+    <string name="toast_no_network_found">Nenhuma rede foi encontrada</string>
+    <string name="toast_no_network_to_display">Nenhuma rede para mostrar. Tente diminuir os níveis mínimos nas configurações</string>
+    <string name="toast_obt_ip_address_failed">Falha ao obter o endereço IP</string>
+    <string name="toast_unable_add_network">Não foi possível adicionar a rede. Por favor, verifique se todas as informações da rede estão corretas e tente novamente</string>
+    <string name="toast_unable_remove_network">A rede selecionada não pôde ser removida</string>
+    <string name="toast_unable_to_change_password">Não foi possível alterar a senha</string>
+    <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
+    <string name="url_bug_report">relatorio-de-falha</string>
+    <string name="url_contact">contato</string>
+    <string name="url_help_main">wifiauthority-ajuda-suas-redes</string>
+    <string name="url_help_scan">wifiauthority-ajuda-redes-disponiveis</string>
+    <string name="url_help_settings">wifiauthority-ajuda-configuracoes</string>
+    <string name="url_website">https://mohb-apps.com.br/</string>
+    <string name="version_name">versão:</string>
+</resources>
