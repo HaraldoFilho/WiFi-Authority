@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+  ~  Copyright (c) 2018 mohb apps - All Rights Reserved
+  ~
+  ~  Project       : WiFiAuthority
+  ~  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
+  ~
+  ~  File          : strings.xml
+  ~  Last modified : 11/8/18 11:04 PM
+  ~
+  ~  -----------------------------------------------------------
+  -->
+
 <resources>
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.0</string>
-    <string name="version_code" translatable="false">77</string>
+    <string name="version_number" translatable="false">1.0.1</string>
+    <string name="version_code" translatable="false">78</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>

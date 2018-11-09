@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (c) 2018 mohb apps - All Rights Reserved
+  ~
+  ~  Project       : WiFiAuthority
+  ~  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
+  ~
+  ~  File          : options_about.xml
+  ~  Last modified : 11/8/18 10:57 PM
+  ~
+  ~  -----------------------------------------------------------
+  -->
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
@@ -23,11 +35,15 @@
         android:orderInCategory="4"
         android:title="@string/action_privacy_policy"
         app:showAsAction="never" />
+
+    <!-- ##### DEPRECATED #####
     <item
         android:id="@+id/action_legal_notices"
         android:orderInCategory="5"
         android:title="@string/action_legal_notices"
         app:showAsAction="never" />
+    -->
+
     <item
         android:id="@+id/action_material_icons"
         android:orderInCategory="6"

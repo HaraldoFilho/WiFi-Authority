@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2018 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 7/15/17 10:35 AM
+ *  Last modified : 11/8/18 10:57 PM
  *
  *  -----------------------------------------------------------
  */
@@ -34,6 +34,7 @@ public class AboutActivity extends AppCompatActivity {
     /*
          Inner Class to load Legal Notices text from internet
     */
+    /* ##### DEPRECATED #####
     private class GetLegalNotices extends AsyncTask {
 
         private DialogFragment dialog;
@@ -79,6 +80,7 @@ public class AboutActivity extends AppCompatActivity {
         }
 
     }
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,10 +137,12 @@ public class AboutActivity extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "PrivacyPolicyDialogFragment");
                 break;
 
+            /* ##### DEPRECATED #####
             // Legal notices
             case R.id.action_legal_notices:
                 new GetLegalNotices().execute();
                 break;
+            */
 
             // Icons attribution
             case R.id.action_material_icons:
