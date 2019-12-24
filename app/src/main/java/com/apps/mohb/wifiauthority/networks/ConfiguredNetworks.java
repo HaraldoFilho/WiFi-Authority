@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2019 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 8/17/17 12:24 AM
+ *  Last modified : 12/24/19 4:42 PM
  *
  *  -----------------------------------------------------------
  */
@@ -15,8 +15,8 @@ package com.apps.mohb.wifiauthority.networks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
@@ -37,8 +37,8 @@ import java.util.ListIterator;
 public class ConfiguredNetworks {
 
     private static ArrayList<NetworkData> networksData;
-    public static NetworkInfo.DetailedState supplicantNetworkState;
-    public static NetworkInfo.DetailedState lastSupplicantNetworkState;
+    public static SupplicantState supplicantNetworkState;
+    public static SupplicantState lastSupplicantNetworkState;
     public static String supplicantSSID;
     public static String lastSupplicantSSID;
 
@@ -52,8 +52,8 @@ public class ConfiguredNetworks {
             networksData = new ArrayList<>();
         }
 
-        supplicantNetworkState = NetworkInfo.DetailedState.IDLE;
-        lastSupplicantNetworkState = NetworkInfo.DetailedState.IDLE;
+        supplicantNetworkState = SupplicantState.DISCONNECTED;
+        lastSupplicantNetworkState = SupplicantState.DISCONNECTED;
         supplicantSSID = Constants.EMPTY;
         lastSupplicantSSID = Constants.EMPTY;
 
@@ -150,7 +150,7 @@ public class ConfiguredNetworks {
                 if (password.isEmpty() && security != Constants.SET_OPEN) {
                     if (security == Constants.SET_WEP) {
                         password = Constants.WEP_DUMMY_PASSWORD;
-                   } else {
+                    } else {
                         password = Constants.WPA_DUMMY_PASSWORD;
                     }
                 }
@@ -216,7 +216,7 @@ public class ConfiguredNetworks {
     }
 
     public String getCfgSSID(String ssid) {
-        return  Constants.QUOTE + ssid + Constants.QUOTE;
+        return Constants.QUOTE + ssid + Constants.QUOTE;
     }
 
     public String getCfgPassword(String password) {

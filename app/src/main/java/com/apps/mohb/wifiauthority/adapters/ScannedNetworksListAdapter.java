@@ -55,10 +55,10 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
         convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_scan, parent, false);
 
-        TextView txtScanNetworkName = (TextView) convertView.findViewById(R.id.txtScanNetName);
+        TextView txtScanNetworkName = convertView.findViewById(R.id.txtScanNetName);
         txtScanNetworkName.setText(result.SSID);
 
-        ImageView imgCfg = (ImageView) convertView.findViewById(R.id.imgCfg);
+        ImageView imgCfg = convertView.findViewById(R.id.imgCfg);
 
         try {
 
@@ -84,7 +84,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
             // Mac address
 
-            TextView txtScanNetworkMac = (TextView) convertView.findViewById(R.id.txtScanNetMac);
+            TextView txtScanNetworkMac = convertView.findViewById(R.id.txtScanNetMac);
             txtScanNetworkMac.setText(result.BSSID.toUpperCase());
 
             try {
@@ -100,10 +100,10 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
             // Network security
 
-            TextView txtScanNetworkSecurity = (TextView) convertView.findViewById(R.id.txtScanNetSecurity);
+            TextView txtScanNetworkSecurity = convertView.findViewById(R.id.txtScanNetSecurity);
             String capabilities = result.capabilities;
 
-            ImageView imgLocker = (ImageView) convertView.findViewById(R.id.imgLocker);
+            ImageView imgLocker = convertView.findViewById(R.id.imgLocker);
 
             if (capabilities.contains(Constants.SCAN_WPA)) {
                 txtScanNetworkSecurity.setText(getContext().getResources().getString(R.string.security_WPA));
@@ -126,9 +126,9 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
 
             // Network signal level
 
-            ImageView imgWiFi = (ImageView) convertView.findViewById(R.id.imgWiFi);
+            ImageView imgWiFi = convertView.findViewById(R.id.imgWiFi);
 
-            TextView txtScanNetworkSignal = (TextView) convertView.findViewById(R.id.txtScanNetSignal);
+            TextView txtScanNetworkSignal = convertView.findViewById(R.id.txtScanNetSignal);
             txtScanNetworkSignal.setText(String.valueOf(result.level));
 
             switch (wifiManager.calculateSignalLevel(result.level, Constants.LEVELS)) {

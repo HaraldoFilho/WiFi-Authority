@@ -1,3 +1,9 @@
+#### **1.0.2**
+- Fixed bugs on Android 9.0 (Pie)
+
+#### **1.0.1**
+- Added Android 8.0 (Oreo) support
+
 #### **1.0.0**
 - First production release of the application. Includes all bug fixes and improvements implemented in the beta versions.
 

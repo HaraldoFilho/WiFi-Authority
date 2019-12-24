@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.1</string>
-    <string name="version_code" translatable="false">78</string>
+    <string name="version_number" translatable="false">1.0.2</string>
+    <string name="version_code" translatable="false">79</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -141,9 +141,6 @@
     <string name="layout_net_status">"Status: "</string>
     <string name="layout_net_signal">"Signal level: "</string>
     <string name="layout_db" translatable="false">dBm</string>
-    <string name="layout_net_connected">Connected</string>
-    <string name="layout_net_disconnected">Disconnected</string>
-    <string name="layout_net_out_of_reach">Out of reach</string>
     <string name="layout_no_play_services_title">Google Play Services is not installed or needs to be updated</string>
     <string name="layout_no_play_services_text">WiFi Authority needs Google Play Services up-to-date  to work\nPlease, install or update Google Play Services and reopen the application</string>
     <string name="layout_press_back_button">Press back button to exit</string>
@@ -170,12 +167,14 @@
 
     <!-- Network states -->
 
+    <string name="net_state_idle">Idle</string>
     <string name="net_state_disconnected">Disconnected</string>
     <string name="net_state_scannig">Scanning...</string>
     <string name="net_state_connecting">Connecting...</string>
     <string name="net_state_authenticating">Authenticating...</string>
     <string name="net_state_obt_ip_address">Obtaining IP address...</string>
-    <string name="net_state_idle">Idle</string>
+    <string name="net_state_connected">Connected</string>
+    <string name="net_state_out_of_reach">Out of reach</string>
 
     <!-- Settings -->
 

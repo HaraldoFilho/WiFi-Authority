@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2019 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 8/24/17 12:50 AM
+ *  Last modified : 12/24/19 5:41 PM
  *
  *  -----------------------------------------------------------
  */
@@ -21,8 +21,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -661,17 +661,17 @@ public class MainActivity extends AppCompatActivity implements
 
         if (wifiManager.isWifiEnabled()) {
             // Set text according to network state
-            switch (network.status) {
+            switch (configuredNetworks.supplicantNetworkState) {
                 // Disconnected
-                case WifiConfiguration.Status.DISABLED:
+                case DISCONNECTED:
                     itemConnect.setTitle(R.string.context_connect);
                     break;
                 // Connected
-                case WifiConfiguration.Status.CURRENT:
+                case COMPLETED:
                     itemConnect.setTitle(R.string.context_disconnect);
                     break;
                 // Connecting...
-                case WifiConfiguration.Status.ENABLED:
+                case AUTHENTICATING:
                     itemConnect.setTitle(R.string.context_cancel);
                     break;
             }
@@ -844,8 +844,8 @@ public class MainActivity extends AppCompatActivity implements
         // Disconnect and disable the current network
         wifiManager.disconnect();
         wifiManager.disableNetwork(activeNetworkId);
-        ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-        ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+        ConfiguredNetworks.lastSupplicantNetworkState = SupplicantState.DISCONNECTED;
+        ConfiguredNetworks.supplicantNetworkState = SupplicantState.DISCONNECTED;
         // Check if it is trying to connect to a different network
         if (network.networkId != activeNetworkId) {
             // Enable and connect to the new network
@@ -904,7 +904,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // Get the state of the current active network
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            ConfiguredNetworks.supplicantNetworkState = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+            ConfiguredNetworks.supplicantNetworkState = wifiInfo.getSupplicantState();
             ConfiguredNetworks.supplicantSSID = wifiInfo.getSSID();
 
             if (wifiInfo.getSSID() != null && wifiInfo.getBSSID() != null) {
@@ -1001,8 +1001,8 @@ public class MainActivity extends AppCompatActivity implements
             // Disconnect and disable the current network
             wifiManager.disconnect();
             wifiManager.disableNetwork(activeNetworkId);
-            ConfiguredNetworks.lastSupplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
-            ConfiguredNetworks.supplicantNetworkState = NetworkInfo.DetailedState.DISCONNECTED;
+            ConfiguredNetworks.lastSupplicantNetworkState = SupplicantState.DISCONNECTED;
+            ConfiguredNetworks.supplicantNetworkState = SupplicantState.DISCONNECTED;
         }
 
         // Create a list adapter if one was not created yet

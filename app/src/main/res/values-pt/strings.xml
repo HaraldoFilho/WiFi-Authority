@@ -50,8 +50,7 @@
     <string name="activity_title_your_networks">Suas Redes</string>
     <string name="layout_net_security">"Segurança: "</string>
     <string name="layout_net_status">"Estado: "</string>
-    <string name="layout_net_connected">Conectada</string>
-    <string name="layout_net_disconnected">Desconectada</string>
+    <string name="net_state_connected">Conectada</string>
     <string name="layout_net_subtitle">Subtitulo</string>
     <string name="security_deactivated">Aberta</string>
     <string name="layout_net_signal">"Nível do sinal: "</string>
@@ -62,7 +61,7 @@
     <string name="context_connect">Conectar</string>
     <string name="context_disconnect">Desconectar</string>
     <string name="toast_unable_remove_network">A rede selecionada não pôde ser removida</string>
-    <string name="layout_net_out_of_reach">Fora do alcance</string>
+    <string name="net_state_out_of_reach">Fora do alcance</string>
     <string name="dialog_edit_description">Editar descrição</string>
     <string name="toast_network_is_configured">Esta rede já está configurada</string>
     <string name="alert_message_delete_network">Esta ação não poderá ser desfeita</string>
