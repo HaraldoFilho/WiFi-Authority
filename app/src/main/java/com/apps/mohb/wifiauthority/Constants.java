@@ -97,7 +97,7 @@ public class Constants {
 
     // Toasts
     public static final int TOAST_X_OFFSET = 0;
-    public static final int TOAST_Y_OFFSET = 0;
+    public static final int TOAST_Y_OFFSET = 100;
 
     // Dialogs
     public static final String KEY_NOTICES = "notices";

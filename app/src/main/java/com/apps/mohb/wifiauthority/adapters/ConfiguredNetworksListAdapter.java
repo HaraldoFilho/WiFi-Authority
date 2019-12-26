@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 12/25/19 3:49 PM
+ *  Last modified : 12/26/19 12:19 PM
  *
  *  -----------------------------------------------------------
  */
@@ -198,8 +198,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                     wifiManager.disableNetwork(configuration.networkId);
 
                     if (ConfiguredNetworks.lastSupplicantNetworkState == SupplicantState.AUTHENTICATING) {
-                        Toasts.setContext(getContext());
-                        Toasts.showNetworkConnectionError(R.string.toast_authentication_failed);
+                        Toasts.showNetworkConnectionError(getContext(), R.string.toast_authentication_failed);
                     }
                     state = getContext().getResources().getString(R.string.net_state_disconnected);
                     ConfiguredNetworks.lastSupplicantNetworkState = SupplicantState.DISCONNECTED;

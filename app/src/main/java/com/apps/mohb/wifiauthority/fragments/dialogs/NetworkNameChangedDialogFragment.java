@@ -140,8 +140,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {
-                    Toasts.setContext(getContext());
-                    Toasts.showNetworkIsConfigured();
+                    Toasts.showNetworkIsConfigured(getContext());
                 }
 
             }

@@ -13,7 +13,6 @@
 package com.apps.mohb.wifiauthority;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -21,66 +20,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.apps.mohb.wifiauthority.fragments.dialogs.LegalNoticesDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.MaterialIconsDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PrivacyPolicyDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.TermsOfUseDialogFragment;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 
 public class AboutActivity extends AppCompatActivity {
-
-    /*
-         Inner Class to load Legal Notices text from internet
-    */
-    /* ##### DEPRECATED #####
-    private class GetLegalNotices extends AsyncTask {
-
-        private DialogFragment dialog;
-        private String legalNotices;
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // show toast before start loading legal notices text
-            Toasts.setContext(getApplicationContext());
-            Toasts.createLegalNotices();
-            Toasts.setLegalNoticesText(R.string.toast_get_legal_notices);
-            Toasts.showLegalNotices();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            // get legal notices text
-            GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-            if (googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()) == ConnectionResult.SUCCESS) {
-                legalNotices = googleApiAvailability.getOpenSourceSoftwareLicenseInfo(getApplicationContext());
-            } else {
-                // else show a toast informing that couldn't get
-                Toasts.setLegalNoticesText(R.string.toast_no_legal_notices);
-                Toasts.showLegalNotices();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            if ((legalNotices != null) && (!legalNotices.isEmpty())) {
-                // if successfully got legal notices text, show it on a dialog fragment
-                dialog = new LegalNoticesDialogFragment().newInstance(legalNotices);
-                dialog.show(getSupportFragmentManager(), "LegalNoticesDialogFragment");
-            } else {
-                // else show a toast informing that couldn't get
-                Toasts.setLegalNoticesText(R.string.toast_no_legal_notices);
-                Toasts.showLegalNotices();
-            }
-        }
-
-    }
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

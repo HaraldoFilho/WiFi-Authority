@@ -46,8 +46,7 @@ public class HelpActivity extends AppCompatActivity {
         super.onStart();
         // show toast to inform that will
         // get options_help page from internet
-        Toasts.setContext(getApplicationContext());
-        Toasts.createHelpPage();
+        Toasts.createHelpPage(getApplicationContext());
         Toasts.showHelpPage();
     }
 

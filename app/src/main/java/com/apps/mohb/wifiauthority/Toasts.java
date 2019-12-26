@@ -30,23 +30,15 @@ public class Toasts {
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
-    private static Toast legalNotices;
     private static Toast helpPage;
-
-    private static Context context;
-
-
-    public static void setContext(Context c) {
-        context = c;
-    }
-
 
     /*
          Toast to notify that there is no location information
     */
 
-    public static void showNoDetailedInformation(int textId) {
+    public static void showNoDetailedInformation(Context context, int textId) {
         noDetailedInformation = Toast.makeText((context), textId, Toast.LENGTH_SHORT);
+        noDetailedInformation.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         noDetailedInformation.show();
     }
 
@@ -61,9 +53,9 @@ public class Toasts {
          Toast to notify that it is unable to add network
     */
 
-    public static void showUnableAddNetwork() {
+    public static void showUnableAddNetwork(Context context) {
         unableAddNetwork = Toast.makeText((context), R.string.toast_unable_add_network, Toast.LENGTH_LONG);
-        unableAddNetwork.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        unableAddNetwork.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         unableAddNetwork.show();
     }
 
@@ -77,9 +69,9 @@ public class Toasts {
          Toast to notify that it is unable to remove network
     */
 
-    public static void showUnableRemoveNetwork() {
+    public static void showUnableRemoveNetwork(Context context) {
         unableRemoveNetwork = Toast.makeText((context), R.string.toast_unable_remove_network, Toast.LENGTH_SHORT);
-        unableRemoveNetwork.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        unableRemoveNetwork.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         unableRemoveNetwork.show();
     }
 
@@ -94,9 +86,9 @@ public class Toasts {
          Toast to notify that it is unable to change password
     */
 
-    public static void showUnableToChangePassword() {
+    public static void showUnableToChangePassword(Context context) {
         unableToChangePassword = Toast.makeText((context), R.string.toast_unable_to_change_password, Toast.LENGTH_SHORT);
-        unableToChangePassword.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        unableToChangePassword.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         unableToChangePassword.show();
     }
 
@@ -111,9 +103,9 @@ public class Toasts {
          Toast to notify that there is no network found or to display
     */
 
-    public static void showNoNetworkFound(int textId) {
+    public static void showNoNetworkFound(Context context, int textId) {
         noNetworkFound = Toast.makeText((context), textId, Toast.LENGTH_SHORT);
-        noNetworkFound.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        noNetworkFound.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         noNetworkFound.show();
     }
 
@@ -128,9 +120,9 @@ public class Toasts {
          Toast to notify that network is already configured
     */
 
-    public static void showNetworkIsConfigured() {
+    public static void showNetworkIsConfigured(Context context) {
         networkIsConfigured = Toast.makeText((context), R.string.toast_network_is_configured, Toast.LENGTH_SHORT);
-        networkIsConfigured.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        networkIsConfigured.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
         networkIsConfigured.show();
     }
 
@@ -145,7 +137,7 @@ public class Toasts {
          Toast to notify a network connection error
     */
 
-    public static void showNetworkConnectionError(int textId) {
+    public static void showNetworkConnectionError(Context context, int textId) {
         networkConnectionError = Toast.makeText((context), textId, Toast.LENGTH_SHORT);
         networkConnectionError.show();
     }
@@ -158,36 +150,12 @@ public class Toasts {
 
 
     /*
-         Toast to notify that is getting Legal Notices text from the internet
-    */
-
-    public static void createLegalNotices() {
-        legalNotices = Toast.makeText((context), "", Toast.LENGTH_SHORT);
-        legalNotices.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-    }
-
-    public static void setLegalNoticesText(int textId) {
-        legalNotices.setText(textId);
-    }
-
-    public static void showLegalNotices() {
-        legalNotices.show();
-    }
-
-    public static void cancelLegalNotices() {
-        if (legalNotices != null) {
-            legalNotices.cancel();
-        }
-    }
-
-
-    /*
          Toast to notify that is getting an options_help page from the internet
     */
 
-    public static void createHelpPage() {
+    public static void createHelpPage(Context context) {
         helpPage = Toast.makeText((context), R.string.toast_get_help_page, Toast.LENGTH_SHORT);
-        helpPage.setGravity(Gravity.CENTER, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
+        helpPage.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
     }
 
     public static void showHelpPage() {
@@ -213,7 +181,6 @@ public class Toasts {
         cancelNetworkConnectionError();
         cancelNoNetworkFound();
         cancelNoDetailedInformation();
-        cancelLegalNotices();
         cancelHelpPage();
     }
 

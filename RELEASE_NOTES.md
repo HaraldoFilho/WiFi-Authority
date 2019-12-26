@@ -1,3 +1,6 @@
+#### **1.0.5**
+- Improvements on user interface.
+
 #### **1.0.4**
 - Fixed bugs.
 

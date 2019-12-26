@@ -249,12 +249,10 @@ public class AddNetworkDialogFragment extends DialogFragment {
                         wifiManager.reconnect();
 
                     } else {
-                        Toasts.setContext(getContext());
-                        Toasts.showUnableAddNetwork();
+                        Toasts.showUnableAddNetwork(getContext());
                     }
                 } else {
-                    Toasts.setContext(getContext());
-                    Toasts.showNetworkIsConfigured();
+                    Toasts.showNetworkIsConfigured(getContext());
                 }
 
             }

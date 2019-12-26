@@ -122,8 +122,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
                         DialogFragment dialogPolicy = new NetworkManagementPolicyAlertFragment();
                         dialogPolicy.show(getFragmentManager(), "NetworkManagementPolicyAlertFragment");
                     } else {
-                        Toasts.setContext(getContext());
-                        Toasts.showUnableToChangePassword();
+                        Toasts.showUnableToChangePassword(getContext());
                     }
 
                 }

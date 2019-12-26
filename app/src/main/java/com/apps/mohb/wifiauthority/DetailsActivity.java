@@ -166,8 +166,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_DETAILS_ZOOM_LEVEL));
 
         } else { // if no location data, show toast to inform this
-            Toasts.setContext(getApplicationContext());
-            Toasts.showNoDetailedInformation(R.string.toast_no_location_information);
+            Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_location_information);
         }
 
     }

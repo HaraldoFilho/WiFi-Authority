@@ -425,8 +425,7 @@ public class MainActivity extends AppCompatActivity implements
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
-                        Toasts.setContext(getApplicationContext());
-                        Toasts.showNoDetailedInformation(R.string.toast_no_details);
+                        Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_details);
                     }
 
                 }
@@ -609,8 +608,7 @@ public class MainActivity extends AppCompatActivity implements
                     intent = new Intent(this, MapActivity.class);
                     startActivity(intent);
                 } else {
-                    Toasts.setContext(getApplicationContext());
-                    Toasts.showNoDetailedInformation(R.string.toast_no_configured_networks);
+                    Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_configured_networks);
                 }
                 break;
 
@@ -1104,8 +1102,7 @@ public class MainActivity extends AppCompatActivity implements
                 DialogFragment dialogPolicy = new NetworkManagementPolicyAlertFragment();
                 dialogPolicy.show(getSupportFragmentManager(), "NetworkManagementPolicyAlertFragment");
             } else {
-                Toasts.setContext(getApplicationContext());
-                Toasts.showUnableRemoveNetwork();
+                Toasts.showUnableRemoveNetwork(getApplicationContext());
             }
         }
 
