@@ -106,7 +106,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                 wifiScannedNetworks = wifiManager.getScanResults();
 
                 if (wifiScannedNetworks.isEmpty()) {
-                    Toasts.showNoNetworkFound(context, R.string.toast_no_network_found);
+                    Toasts.setContext(getApplicationContext());
+                    Toasts.showNoNetworkFound(R.string.toast_no_network_found);
                     return;
                 }
             } catch (Exception e) {
@@ -228,7 +229,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
             if ((wifiScannedNetworks != null) && (wifiScannedNetworks.isEmpty())) {
                 if (minSecurityToShow.matches(Constants.PREF_SECURITY_OPEN)
                         || (minSignalLevelToShow.matches(Constants.PREF_MIN_SIGNAL_VERY_LOW))) {
-                    Toasts.showNoNetworkFound(context, R.string.toast_no_network_to_display);
+                    Toasts.setContext(getApplicationContext());
+                    Toasts.showNoNetworkFound(R.string.toast_no_network_to_display);
                 }
             }
             updateListOfNetworks(context);
@@ -304,7 +306,8 @@ public class ScanNetworksActivity extends AppCompatActivity implements
                         dialog.setArguments(bundle);
                         dialog.show(getSupportFragmentManager(), "AddNetworkDialogFragment");
                     } else { // If network is already configured show dialog informing this
-                        Toasts.showNetworkIsConfigured(getApplicationContext());
+                        Toasts.setContext(getApplicationContext());
+                        Toasts.showNetworkIsConfigured();
                     }
                 } catch (NullPointerException e) {
                     e.printStackTrace();

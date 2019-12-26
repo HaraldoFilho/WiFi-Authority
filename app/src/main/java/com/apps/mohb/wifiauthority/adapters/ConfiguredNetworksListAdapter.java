@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2019 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 8/24/17 10:07 PM
+ *  Last modified : 12/25/19 3:49 PM
  *
  *  -----------------------------------------------------------
  */
@@ -198,7 +198,8 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                     wifiManager.disableNetwork(configuration.networkId);
 
                     if (ConfiguredNetworks.lastSupplicantNetworkState == SupplicantState.AUTHENTICATING) {
-                        Toasts.showNetworkConnectionError(getContext(), R.string.toast_authentication_failed);
+                        Toasts.setContext(getContext());
+                        Toasts.showNetworkConnectionError(R.string.toast_authentication_failed);
                     }
                     state = getContext().getResources().getString(R.string.net_state_disconnected);
                     ConfiguredNetworks.lastSupplicantNetworkState = SupplicantState.DISCONNECTED;

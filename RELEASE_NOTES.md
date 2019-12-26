@@ -1,3 +1,6 @@
+#### **1.0.4**
+- Fixed bugs.
+
 #### **1.0.3**
 - Fixed crashes when opening the map on Android 9.0 (Pie) and higher.
 - Improvements on user interface.

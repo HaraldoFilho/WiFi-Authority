@@ -40,6 +40,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
 
     public interface PasswordChangeDialogListener {
         void onPasswordChangeDialogPositiveClick(DialogFragment dialog);
+
         void onPasswordChangeDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -121,7 +122,8 @@ public class PasswordChangeDialogFragment extends DialogFragment {
                         DialogFragment dialogPolicy = new NetworkManagementPolicyAlertFragment();
                         dialogPolicy.show(getFragmentManager(), "NetworkManagementPolicyAlertFragment");
                     } else {
-                        Toasts.showUnableToChangePassword(getContext());
+                        Toasts.setContext(getContext());
+                        Toasts.showUnableToChangePassword();
                     }
 
                 }

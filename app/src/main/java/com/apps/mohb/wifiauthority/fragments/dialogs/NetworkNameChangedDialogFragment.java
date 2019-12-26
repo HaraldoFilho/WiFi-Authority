@@ -37,6 +37,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
     public interface NetworkNameChangedDialogListener {
         void onNetworkNameChangedDialogPositiveClick(DialogFragment dialog);
+
         void onNetworkNameChangedDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -139,7 +140,8 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
                             Constants.DEFAULT_LATITUDE, Constants.DEFAULT_LONGITUDE);
                     configuredNetworks.saveDataState();
                 } else {
-                    Toasts.showNetworkIsConfigured(getContext());
+                    Toasts.setContext(getContext());
+                    Toasts.showNetworkIsConfigured();
                 }
 
             }
