@@ -1,12 +1,19 @@
+body {
+  color: grey;
+  line-height: 1.5;
+}
+
+img {
+  display: block;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 p.title {
   color: black;
   font-weight: bold;
   line-height: 0.0;
-}
-
-body {
-  color: grey;
-  line-height: 1.5;
 }
 
 a:link {
@@ -24,13 +31,6 @@ a:visited {
   text-decoration: none;
 }
 
-img {
-  display: block;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .header {
   grid-area: header;
   width: 600px;
@@ -44,6 +44,13 @@ img {
   font-size: 20px;
   text-align: justify;
   padding-bottom: 50px;
+}
+
+.panel {
+  grid-area: panel;
+  width: 250px;
+  padding-top: 75px;
+  padding-left: 20px;
 }
 
 .footer {
@@ -61,18 +68,11 @@ img {
   border-width: 1px;
 }
 
-.panel {
-  grid-area: panel;
-  width: 250px;
-  padding-top: 75px;
-  padding-left: 20px;
-}
-
 .grid-container {
   display: grid;
   grid-template-areas:
-    'header panel'
-    'main panel';
+  'header panel'
+  'main panel';
   grid-gap: 20px;
   justify-content: center;
   background-color: #FFFFFF;
@@ -87,34 +87,39 @@ img {
 }
 
 @media screen and (max-width:900px), (orientation: portrait)  {
- .header {
-   width: 100%;
- }
- .main {
-   width: 100%;
- }
- .footer {
-   padding-top: 25px;
- }
- .panel {
-   width: 100%;
-   padding-top: 20px;
-   padding-bottom: 20px;
-   padding-left: 0px;
-   padding-right: 0px;
- }
- .grid-container {
-   display: grid;
-   grid-template-areas:
-     'header'
-     'main'
-     'footer'
-     'panel';
-   grid-gap: 20px;
-   justify-content: center;
-   background-color: #FFFFFF;
-   padding-top: 50px;
-   padding-left: 50px;
-   padding-right: 50px;
- }
+
+  .header {
+    width: 100%;
+  }
+
+  .main {
+    width: 100%;
+  }
+
+  .panel {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .footer {
+    padding-top: 25px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-areas:
+    'header'
+    'main'
+    'panel';
+    grid-gap: 20px;
+    justify-content: center;
+    background-color: #FFFFFF;
+    padding-top: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
 }
