@@ -13,49 +13,55 @@ a:link {
   color: grey;
   text-decoration: none;
 }
-  
+
 a:hover {
   color: grey;
   text-decoration: underline;
 }
-  
+
 a:visited {
   color: grey;
   text-decoration: none;
 }
- 
+
 img {
   display: block;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
-  
-.header { 
+
+.header {
   grid-area: header;
   width: 600px;
   font-size: 50px;
   text-align: left;
 }
-  
-.main { 
+
+.main {
   grid-area: main;
   width: 600px;
   font-size: 20px;
   text-align: justify;
   padding-bottom: 50px;
 }
-  
-.footer { 
-  grid-area: footer; 
-  padding-top: 50px;
-  padding-bottom: 50px;
+
+.footer {
+  grid-area: footer;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  color: grey;
   font-size: 10px;
-  line-height: 2.0;
+  line-height: 1.2;
   text-align: left;
+  border-top-style: solid;
+  border-color: lightgrey;
+  border-width: 1px;
 }
 
-.panel { 
+.panel {
   grid-area: panel;
   width: 250px;
   padding-top: 75px;
@@ -66,8 +72,7 @@ img {
   display: grid;
   grid-template-areas:
     'header panel'
-    'main panel'
-    'footer footer';
+    'main panel';
   grid-gap: 20px;
   justify-content: center;
   background-color: #FFFFFF;
@@ -82,16 +87,16 @@ img {
 }
 
 @media screen and (max-width:900px), (orientation: portrait)  {
- .header { 
+ .header {
    width: 100%;
  }
- .main { 
-   width: 100%; 
+ .main {
+   width: 100%;
  }
- .footer { 
+ .footer {
    padding-top: 25px;
  }
- .panel { 
+ .panel {
    width: 100%;
    padding-top: 20px;
    padding-bottom: 20px;
@@ -102,7 +107,7 @@ img {
    display: grid;
    grid-template-areas:
      'header'
-     'main' 
+     'main'
      'footer'
      'panel';
    grid-gap: 20px;
