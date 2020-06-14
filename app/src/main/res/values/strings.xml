@@ -4,15 +4,16 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.5</string>
-    <string name="version_code" translatable="false">82</string>
+    <string name="version_number" translatable="false">1.0.6</string>
+    <string name="version_code" translatable="false">83</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
     <string name="info_app_url" translatable="false">http://goo.gl/3zOJcC</string>
     <string name="info_name" translatable="false">mohb apps</string>
     <string name="info_website">mohb-apps.com</string>
-    <string name="info_feedback_email">feedback@mohb-apps.com</string>
+    <string name="info_feedback_email" translatable="false">feedback@mohb-apps.com</string>
+    <string name="info_bug_email" translatable="false">bug@mohb-apps.com</string>
     <string name="info_developer">Developer:</string>
     <string name="info_developer_name" translatable="false">Haraldo Albergaria Filho</string>
     <string name="info_skype" translatable="false">skype: mohb.apps</string>
@@ -149,13 +150,11 @@
     <string name="button_turn_wifi_on">TURN WIFI ON</string>
 
     <!--Help pages-->
-    <string name="url_website">https://mohb-apps.com/</string>
-    <string name="url_help_main">wifiauthority-help-your-networks</string>
+    <string name="url_help_path">https://mohb-apps.github.io/WiFiAuthority/help/</string>
+    <string name="url_help_main" translatable="false">your-networks.html</string>
     <string name="url_help_note_tag" translatable="false">#note</string>
-    <string name="url_help_scan">wifiauthority-help-available-networks</string>
-    <string name="url_help_settings">wifiauthority-help-settings</string>
-    <string name="url_contact">contact</string>
-    <string name="url_bug_report">bug-report</string>
+    <string name="url_help_scan" translatable="false">available-networks.html</string>
+    <string name="url_help_settings" translatable="false">settings.html</string>
 
     <!--Security-->
     <string name="security_deactivated">Open</string>

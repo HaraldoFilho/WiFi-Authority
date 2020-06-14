@@ -30,7 +30,6 @@ public class Toasts {
     private static Toast networkIsConfigured;
     private static Toast networkConnectionError;
     private static Toast noNetworkFound;
-    private static Toast helpPage;
 
     /*
          Toast to notify that there is no location information
@@ -150,26 +149,6 @@ public class Toasts {
 
 
     /*
-         Toast to notify that is getting an options_help page from the internet
-    */
-
-    public static void createHelpPage(Context context) {
-        helpPage = Toast.makeText((context), R.string.toast_get_help_page, Toast.LENGTH_SHORT);
-        helpPage.setGravity(Gravity.BOTTOM, Constants.TOAST_X_OFFSET, Constants.TOAST_Y_OFFSET);
-    }
-
-    public static void showHelpPage() {
-        helpPage.show();
-    }
-
-    public static void cancelHelpPage() {
-        if (helpPage != null) {
-            helpPage.cancel();
-        }
-    }
-
-
-    /*
          Cancel all toasts
     */
 
@@ -181,7 +160,6 @@ public class Toasts {
         cancelNetworkConnectionError();
         cancelNoNetworkFound();
         cancelNoDetailedInformation();
-        cancelHelpPage();
     }
 
 }

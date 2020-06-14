@@ -1,0 +1,13 @@
+body {
+  font-family: arial;
+    text-align: justify;
+    line-height: 1.5;
+    margin: 20px;
+}
+
+img {
+  display: inline;
+  width: 20px;
+  height: 20px;
+  background-color: #FFFFFF;
+}

@@ -44,17 +44,13 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // show toast to inform that will
-        // get options_help page from internet
-        Toasts.createHelpPage(getApplicationContext());
-        Toasts.showHelpPage();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         // load options_help page in webView
-        webView.loadUrl(getString(R.string.url_website) + bundle.getString(Constants.KEY_URL));
+        webView.loadUrl(getString(R.string.url_help_path) + bundle.getString(Constants.KEY_URL));
     }
 
     @Override
@@ -98,8 +94,6 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // cancel toast if page if exit options_help screen
-        Toasts.cancelHelpPage();
     }
 
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+
+<h1>Suas Redes</h1>
+
+<h3><b>Barra do aplicativo</b></h3>
+Tem duas opções:
+<br><img style="background-color:#00BA00;" src="../res/icons/ic_map_white_24dp.png"/>  Mostra os locais de todas as redes configuradas em um mapa.
+<br><img style="background-color:#00BA00;" src="../res/icons/ic_more_vert_white_24dp.png"/>    Abre o menu de opções.
+ 
+<br><br><h3><b>Lista "Suas Redes"</b></h3>
+Lista todas as redes configuradas em seu dispositivo com as seguintes informações:
+
+<br><br><big><b>Descrição da rede</b></big> <small>(adicionada pelo usuário)</small>
+<br><b>SSID</b> <small>(fica <span style="color:#00ff00;">verde</span> quando conectada)</small>
+<br>Segurança da rede
+<br>Estado da rede
+
+<br><br><i>Observação: <b>Descrição da rede</b> e <b>SSID</b> podem ser trocadas de posição de acordo com as configurações do usuário.</i>
+
+<br><br>Tem ainda os seguintes ícones de indicação:
+
+<br><br><b>Segurança</b>
+
+<br><img src="../res/icons/ic_enhanced_encryption_green_24dp.png"/> Segurança alta (criptografia WPA/WPA2/FT PSK)
+<br><img src="../res/icons/ic_encryption_yellow_24dp.png"/> Segurança média (criptografia WEP)
+<br><img src="../res/icons/ic_no_encryption_red_24dp.png"/> Rede insegura (rede aberta sem criptografia)
+
+<br><br><b>Nível do sinal</b>
+
+<br><img src="../res/icons/ic_wifi_high_green_24dp.png"/> Sinal forte
+<br><img src="../res/icons/ic_wifi_mid_yellow_24dp.png"/> Sinal fraco
+<br><img src="../res/icons/ic_wifi_low_red_24dp.png"/> Sinal muito fraco
+<br><img src="../res/icons/ic_signal_wifi_out_of_reach_red_24dp.png"/> Fora de alcance
+
+
+<br><br>Há duas operações que você pode executar em um item da lista:
+<br><br><b>Clique</b>
+<br>    Mostra uma tela com informações detalhadas da rede. Isto inclui SSID, endereço MAC e, se conectada, também endereço IP, frequência (apenas Android 5.x e acima), velocidade do link e nível do sinal. Se a rede estiver desconectada será mostrado um "-" no lugar. Também, se disponível, a localização da rede será mostrada em um mapa.
+<br><br><b>Pressionar por alguns segundos</b>
+<br>    Abre um menu com quatro opções:
+<br><br><span style="text-decoration:underline;">Conectar/Desconectar/Cancelar</span>
+<br>    Conecta/desconecta da rede selecionada ou cancela a operação de conexão.
+<br><br><span style="text-decoration:underline;">Alterar senha</span>
+<br>Abre uma caixa de diálogo onde você pode alterar a senha da rede selecionada.
+<br><br><span style="text-decoration:underline;">Editar descrição</span>
+<br>    Abre uma caixa de diálogo onde você pode editar a descrição da rede selecionada.
+<br><p id="note" style="text-align:justify;"><span style="text-decoration:underline;">Excluir</span>
+    <br>    Exclui a rede selecionada da lista de redes configuradas em seu dispositivo.
+    <br><br>    <b>NOTA:</b> Devido a alterações nas políticas da API do <i>Android</i>, para o <i>Android</i> 6.x e superior só será possível excluir redes que foram adicionadas pelo mesmo aplicativo. Se você adicionou a rede usando outro aplicativo ou diretamente das configurações do sistema, você não poderá excluí-lo. Se você quiser gerenciar todas as redes no <i>WiFi Authority</i>, você pode excluir <b>todas</b> as redes usando a opção <i><b>Redefinir configurações de rede</b></i> nas configurações do sistema e você terá a opção de restaurá-las na próxima vez que o aplicativo for aberto. Todas as informações sobre a rede serão restauradas, exceto a senha quando a rede foi adicionada fora do aplicativo, a partir das configurações do sistema ou a opção de <b><i>Armazenar senha</i></b> nas configurações do aplicativo estiver desabilitada.
+
+<br><br><h3><b>Menu de opções</b></h3>
+<b>Configurações</b>
+<br>Exibe a tela de configurações do aplicativo.
+<br><br><b>Ajuda</b>
+<br>    Exibe esta tela de ajuda.
+<br><br><b>Sobre</b>
+<br>    Exibe uma tela com informações sobre o aplicativo.
+ 
+</body>
+</html>

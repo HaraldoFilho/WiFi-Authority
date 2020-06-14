@@ -8,4 +8,6 @@
 /captures
 .externalNativeBuild
 gradlew.bat
+*.apk
+*.aab
 

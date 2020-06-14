@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+
+<h1>Your Networks</h1>
+
+<h3><b>Application bar</b></h3>
+Has two options:<br>
+<br><img src="res/icons/ic_map_white_24dp.png" style="background-color:#00BA00;"/>  Show all configured networks locations on a map.
+<br><img src="res/icons/ic_more_vert_white_24dp.png" style="background-color:#00BA00;"/>  Opens the options menu.
+ 
+<br><br><h3><b>"Your Networks" list</b></h3>
+Lists all the configured networks on your device with the following information:
+
+<br><br><big><strong>Network description</strong></big> <small>(added by the user)</small>
+<br><strong>SSID</strong> <small>(turns <span style="color: #43ca16;">green</span> when connected)</small>
+<br>Network security
+<br>Network state
+
+<br><br><i>Note: <b>Network description</b> and <b>SSID</b> can be swaped according to user's settings.</i>
+
+<br><br>Has also the following indication icons:
+
+<br><br><b>Security</b>
+<br><img src="res/icons/ic_enhanced_encryption_green_24dp.png"/> High security (WPA/WPA2/FT PSK criptography)
+<br><img src="res/icons/ic_encryption_yellow_24dp.png"/> Medium security (WEP security)
+<br><img src="res/icons/ic_no_encryption_red_24dp.png"/> Unsafe network (open network without criptography)
+
+<br><br><b>Signal  level</b>
+<br><img src="res/icons/ic_wifi_high_green_24dp.png"/> Strong signal
+<br><img src="res/icons/ic_wifi_mid_yellow_24dp.png"/> Weak signal
+<br><img src="res/icons/ic_wifi_low_red_24dp.png"/> Very weak signal
+<br><img src="res/icons/ic_signal_wifi_out_of_reach_red_24dp.png"/> Out of reach
+
+<br><br>There are two operations you can execute on a list item:
+<br><br><b>Click</b>
+<br>    Shows a screen with details about the network. This includes SSID, Mac address and, if connected, also IP address, frequency (only Android 5.x and higher), link speed and signal level. If network is disconnected a "-" is shown instead. Also, if available, the location of the network is shown on a map.
+<br><br><b>Press for a few seconds</b>
+<br>    Opens a menu with four options:
+<br><br><span style="text-decoration: underline;">Connect/Disconnect/Cancel</span>
+<br>    Connect/disconnect to/from the selected network or cancel the connection operation.
+<br><br><u>Change password</u>
+<br>Opens a dialog box where you can change the password of the selected network.
+<br><br><span style="text-decoration: underline;">Edit description</span>
+<br>    Opens a dialog box where you can edit the description of the selected network.
+<br><br><span style="text-decoration: underline;">Delete</span>
+<br>    Deletes the selected network from the configured networks list of your device.
+<br><br><b>NOTE:</b>
+<br>Due to changes on the Android API policies, for Android 6.x and higher it will only be possible to delete networks that was added by the same application. If you added the network using another application or direct from the system settings you will not be able to delete it. If you want to manage all networks on WiFi Authority you can delete <b>all</b> networks using the <b><i>Reset network configurations</i></b> option in system settings and you will have the option to restore them the next time the application is opened. All info about the network will be restored, except the password when the network was added outside the application, from system settings or the<i> <b>Store password</b></i> option in application settings is disabled.
+ 
+<br><br><h3><b>Options menu</b></h3>
+<b>Settings</b>
+<br>Shows the application settings screen.
+<br><br><b>Help</b>
+<br>    Shows this help screen.
+<br><br><b>About</b>
+<br>    Shows a screen with information about the application.
+
+</body>
+</html>

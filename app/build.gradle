@@ -7,8 +7,8 @@ android {
         applicationId "com.apps.mohb.wifiauthority"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 82
-        versionName "1.0.5"
+        versionCode 83
+        versionName "1.0.6"
 
         // Enabling multidex support.
         multiDexEnabled true

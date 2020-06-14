@@ -25,13 +25,10 @@
     <string name="layout_no_play_services_title">Google Play Services não está instalado ou precisa ser atualizado</string>
     <string name="layout_press_back_button">Pressione o botão de voltar para sair</string>
     <string name="info_developer">Desenvolvedor:</string>
-    <string name="url_help_main">wifiauthority-ajuda-suas-redes</string>
     <string name="toast_get_help_page">Carregando página de ajuda da internet...</string>
     <string name="action_material_icons">Atribuição dos ícones</string>
     <string name="action_report_bug">Relatar uma falha</string>
     <string name="action_website">Website</string>
-    <string name="url_bug_report">relatorio-de-falha</string>
-    <string name="url_contact">contato</string>
     <string name="dialog_view_text">texto</string>
     <string name="menu_add_network">Adicionar Rede Oculta</string>
     <string name="activity_title_networks">Redes Disponíveis</string>
@@ -54,7 +51,6 @@
     <string name="layout_net_subtitle">Subtitulo</string>
     <string name="security_deactivated">Aberta</string>
     <string name="layout_net_signal">"Nível do sinal: "</string>
-    <string name="url_help_scan">wifiauthority-ajuda-redes-disponiveis</string>
     <string name="context_delete">Excluir</string>
     <string name="context_edit_description">Editar descrição</string>
     <string name="context_forget">Esquecer</string>
@@ -82,8 +78,7 @@
     <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
     <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>
     <string name="info_website">mohb-apps.com.br</string>
-    <string name="info_feedback_email">duvida@mohb-apps.com.br</string>
-    <string name="url_website">https://mohb-apps.com.br/</string>
+    <string name="url_help_path">https://mohb-apps.github.io/WiFiAuthority/help/br/</string>
     <string name="toast_get_legal_notices">Carregando texto de avisos legais...</string>
     <string name="menu_settings">Configurações</string>
     <string name="pref_reconfig_summ_off">Não reconfigura com mudança de nome</string>
@@ -127,7 +122,6 @@
     <string name="action_restore_defaults">Restaurar padrões</string>
     <string name="alert_title_reset_preferences">Restaurar padrões?</string>
     <string name="alert_message_reset_preferences">Todas as configurações serão restauradas para os valores padrão\n</string>
-    <string name="url_help_settings">wifiauthority-ajuda-configuracoes</string>
     <string name="alert_message_wifi_disabled">O WiFi foi desabilitado. Você deseja liga-lo novamente?</string>
     <string name="alert_title_wifi_disabled">WiFi desabilitado!</string>
     <string name="alert_button_close_app">Não, fechar o aplicativo</string>
