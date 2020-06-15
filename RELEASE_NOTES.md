@@ -1,3 +1,6 @@
+#### **1.0.8**
+- Fixed wrong subject on bug e-mail report.
+
 #### **1.0.7**
 - Fixed help pages broken link.
 
