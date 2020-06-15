@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.7</string>
-    <string name="version_code" translatable="false">84</string>
+    <string name="version_number" translatable="false">1.0.8</string>
+    <string name="version_code" translatable="false">85</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -52,6 +52,7 @@
     <string name="action_question">Question</string>
     <string name="action_about_application">about application</string>
     <string name="action_restore_defaults">Restore defaults</string>
+    <string name="action_bug_report">Bug in application</string>
 
     <!--Context menus-->
     <string name="context_edit_description">Edit description</string>

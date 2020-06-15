@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 6/14/20 2:01 PM
+ *  Last modified : 6/15/20 6:55 PM
  *
  *  -----------------------------------------------------------
  */
@@ -65,7 +65,7 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.action_bug_report:
                 String[] bug_address = new String[Constants.QUESTION_ARRAY_SIZE];
                 bug_address[Constants.LIST_HEAD] = getString(R.string.info_bug_email);
-                composeEmail(bug_address, getString(R.string.info_bug_email)
+                composeEmail(bug_address, getString(R.string.action_bug_report)
                         + " " + getString(R.string.info_app_name));
                 break;
 
