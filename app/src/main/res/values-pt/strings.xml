@@ -78,7 +78,7 @@
     <string name="toast_wifi_disabled">WiFi está desligado, ligando...</string>
     <string name="toast_no_configured_networks">Não há nenhuma rede configurada para mostrar no mapa</string>
     <string name="info_website">mohb-apps.com.br</string>
-    <string name="url_help_path">https://mohb-apps.github.io/WiFiAuthority/help/br/</string>
+    <string name="url_help_path">https://mohb-apps.github.io/WiFi-Authority/help/br/</string>
     <string name="toast_get_legal_notices">Carregando texto de avisos legais...</string>
     <string name="menu_settings">Configurações</string>
     <string name="pref_reconfig_summ_off">Não reconfigura com mudança de nome</string>

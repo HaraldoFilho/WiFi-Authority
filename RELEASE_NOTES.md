@@ -1,3 +1,6 @@
+#### **1.0.7**
+- Fixed help pages broken link.
+
 #### **1.0.6**
 - Improvements on user interface.
 

@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.6</string>
-    <string name="version_code" translatable="false">83</string>
+    <string name="version_number" translatable="false">1.0.7</string>
+    <string name="version_code" translatable="false">84</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -150,7 +150,7 @@
     <string name="button_turn_wifi_on">TURN WIFI ON</string>
 
     <!--Help pages-->
-    <string name="url_help_path">https://mohb-apps.github.io/WiFiAuthority/help/</string>
+    <string name="url_help_path">https://mohb-apps.github.io/WiFi-Authority/help/</string>
     <string name="url_help_main" translatable="false">your-networks.html</string>
     <string name="url_help_note_tag" translatable="false">#note</string>
     <string name="url_help_scan" translatable="false">available-networks.html</string>
