@@ -1,3 +1,6 @@
+#### **1.0.9**
+- Updated app URLs with the new website address.
+
 #### **1.0.8**
 - Fixed wrong subject on bug e-mail report.
 

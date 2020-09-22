@@ -4,16 +4,15 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.8</string>
-    <string name="version_code" translatable="false">85</string>
+    <string name="version_number" translatable="false">1.0.9</string>
+    <string name="version_code" translatable="false">87</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
-    <string name="info_app_url" translatable="false">http://goo.gl/3zOJcC</string>
     <string name="info_name" translatable="false">mohb apps</string>
-    <string name="info_website">mohb-apps.com</string>
-    <string name="info_feedback_email" translatable="false">feedback@mohb-apps.com</string>
-    <string name="info_bug_email" translatable="false">bug@mohb-apps.com</string>
+    <string name="info_website">mohb.app</string>
+    <string name="info_feedback_email" translatable="false">feedback@mohb.app</string>
+    <string name="info_bug_email" translatable="false">bug@mohb.app</string>
     <string name="info_developer">Developer:</string>
     <string name="info_developer_name" translatable="false">Haraldo Albergaria Filho</string>
     <string name="info_skype" translatable="false">skype: mohb.apps</string>
