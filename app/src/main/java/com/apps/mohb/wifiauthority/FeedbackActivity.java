@@ -1,21 +1,23 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : FeedbackActivity.java
- *  Last modified : 7/15/17 10:37 AM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
 
 package com.apps.mohb.wifiauthority;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class FeedbackActivity extends AppCompatActivity {
@@ -23,6 +25,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private WebView webView;
     private Bundle bundle;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

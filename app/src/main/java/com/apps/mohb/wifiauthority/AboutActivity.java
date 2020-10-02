@@ -5,7 +5,7 @@
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AboutActivity.java
- *  Last modified : 6/15/20 6:55 PM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -15,11 +15,12 @@ package com.apps.mohb.wifiauthority;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.apps.mohb.wifiauthority.fragments.dialogs.MaterialIconsDialogFragment;
 import com.apps.mohb.wifiauthority.fragments.dialogs.PrivacyPolicyDialogFragment;
@@ -33,8 +34,9 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         // displays app version number
-        TextView version = (TextView) findViewById(R.id.textAppVersion);
-        version.setText(getString(R.string.version_name) + " " + getString(R.string.version_number));
+        TextView version = findViewById(R.id.textAppVersion);
+        String versionText = getString(R.string.version_name) + Constants.SPACE + getString(R.string.version_number);
+        version.setText(versionText);
     }
 
     @Override
@@ -80,13 +82,6 @@ public class AboutActivity extends AppCompatActivity {
                 dialog = new PrivacyPolicyDialogFragment();
                 dialog.show(getSupportFragmentManager(), "PrivacyPolicyDialogFragment");
                 break;
-
-            /* ##### DEPRECATED #####
-            // Legal notices
-            case R.id.action_legal_notices:
-                new GetLegalNotices().execute();
-                break;
-            */
 
             // Icons attribution
             case R.id.action_material_icons:

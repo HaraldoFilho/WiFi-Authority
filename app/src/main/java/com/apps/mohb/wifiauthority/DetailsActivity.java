@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DetailsActivity.java
- *  Last modified : 7/15/17 10:59 AM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -17,8 +17,10 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,20 +34,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private String ssid;
-    private String mac;
-    private Double latitude;
-    private Double longitude;
 
     private Bundle bundle;
-    private GoogleMap googleMap;
     private MapView map;
 
-    private WifiManager wifiManager;
     private WifiInfo wifiInfo;
     private ConfiguredNetworks configuredNetworks;
 
@@ -55,24 +53,24 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-        wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiInfo = wifiManager.getConnectionInfo();
         configuredNetworks = new ConfiguredNetworks(this);
 
         // Views
-        TextView txtNetworkSSID = (TextView) findViewById(R.id.txtNetSSID);
-        TextView txtNetworkMac = (TextView) findViewById(R.id.txtNetMac);
-        TextView txtNetworkIpAddressTitle = (TextView) findViewById(R.id.txtNetIpAddressTitle);
-        TextView txtNetworkIpAddress = (TextView) findViewById(R.id.txtNetIpAddress);
-        TextView txtNetworkLinkSpeedTitle = (TextView) findViewById(R.id.txtNetSpeedTitle);
-        TextView txtNetworkLinkSpeed = (TextView) findViewById(R.id.txtNetSpeed);
-        TextView txtNetworkLinkSpeedUnit = (TextView) findViewById(R.id.txtNetSpeedUnit);
-        TextView txtNetworkSignalLevelTitle = (TextView) findViewById(R.id.txtNetSignalLevelTitle);
-        TextView txtNetworkSignalLevel = (TextView) findViewById(R.id.txtNetSignalLevel);
-        TextView txtNetworkSignalLevelUnit = (TextView) findViewById(R.id.txtNetSignalLevelUnit);
+        TextView txtNetworkSSID = findViewById(R.id.txtNetSSID);
+        TextView txtNetworkMac = findViewById(R.id.txtNetMac);
+        TextView txtNetworkIpAddressTitle = findViewById(R.id.txtNetIpAddressTitle);
+        TextView txtNetworkIpAddress = findViewById(R.id.txtNetIpAddress);
+        TextView txtNetworkLinkSpeedTitle = findViewById(R.id.txtNetSpeedTitle);
+        TextView txtNetworkLinkSpeed = findViewById(R.id.txtNetSpeed);
+        TextView txtNetworkLinkSpeedUnit = findViewById(R.id.txtNetSpeedUnit);
+        TextView txtNetworkSignalLevelTitle = findViewById(R.id.txtNetSignalLevelTitle);
+        TextView txtNetworkSignalLevel = findViewById(R.id.txtNetSignalLevel);
+        TextView txtNetworkSignalLevelUnit = findViewById(R.id.txtNetSignalLevelUnit);
 
         // create map and initialize it
-        map = (MapView) findViewById(R.id.mapView);
+        map = findViewById(R.id.mapView);
         MapsInitializer.initialize(this);
         map.onCreate(savedInstanceState);
         map.getMapAsync(this);
@@ -80,8 +78,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         bundle = getIntent().getExtras();
 
         // Get SSID and MAC address of the network...
+        assert bundle != null;
         ssid = bundle.getString(Constants.KEY_SSID);
-        mac = bundle.getString(Constants.KEY_BSSID).toUpperCase();
+        String mac = Objects.requireNonNull(bundle.getString(Constants.KEY_BSSID)).toUpperCase();
 
         // ... and show them
         txtNetworkSSID.setText(ssid);
@@ -115,7 +114,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             // Show link speed
             if (wifiInfo.getLinkSpeed() > Constants.NO_FREQ_SET) {
                 txtNetworkLinkSpeed.setText(String.valueOf(wifiInfo.getLinkSpeed()));
-                txtNetworkLinkSpeedUnit.setText(Constants.SPACE + WifiInfo.LINK_SPEED_UNITS);
+                String speedUnits = Constants.SPACE + WifiInfo.LINK_SPEED_UNITS;
+                txtNetworkLinkSpeedUnit.setText(speedUnits);
             } else {
                 doNotShowView(txtNetworkLinkSpeedTitle);
                 doNotShowView(txtNetworkLinkSpeed);
@@ -124,7 +124,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
             // Show signal level
             txtNetworkSignalLevel.setText(String.valueOf(wifiInfo.getRssi()));
-            txtNetworkSignalLevelUnit.setText(Constants.SPACE + getString(R.string.layout_db));
+            String levelUnit = Constants.SPACE + getString(R.string.layout_db);
+            txtNetworkSignalLevelUnit.setText(levelUnit);
 
             // Show frequency
             setNetworkFrequencyText(true);
@@ -153,17 +154,15 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        this.googleMap = googleMap;
-
-        latitude = bundle.getDouble(Constants.KEY_LATITUDE);
-        longitude = bundle.getDouble(Constants.KEY_LONGITUDE);
+        double latitude = bundle.getDouble(Constants.KEY_LATITUDE);
+        double longitude = bundle.getDouble(Constants.KEY_LONGITUDE);
 
         // Check if there is location data and show it on map
         if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
             LatLng networkPosition = new LatLng(latitude, longitude);
-            Marker marker = this.googleMap.addMarker(new MarkerOptions().position(networkPosition));
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(networkPosition));
             marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
-            this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_DETAILS_ZOOM_LEVEL));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(networkPosition, Constants.MAP_DETAILS_ZOOM_LEVEL));
 
         } else { // if no location data, show toast to inform this
             Toasts.showNoDetailedInformation(getApplicationContext(), R.string.toast_no_location_information);
@@ -172,7 +171,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         map.onSaveInstanceState(outState);
     }
@@ -214,10 +213,13 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 }
             }
             if (configuredNetworks.getFrequency(ssid) > Constants.NO_FREQ_SET) {
+                String netFreq;
                 if (configuredNetworks.getFrequency(ssid) < Constants.FREQ_5GHZ) {
-                    txtNetworkFrequency.setText(Constants.SPACE + getResources().getString(R.string.layout_net_freq_2p4ghz));
+                    netFreq = Constants.SPACE + getResources().getString(R.string.layout_net_freq_2p4ghz);
+                    txtNetworkFrequency.setText(netFreq);
                 } else {
-                    txtNetworkFrequency.setText(Constants.SPACE + getResources().getString(R.string.layout_net_freq_5ghz));
+                    netFreq = Constants.SPACE + getResources().getString(R.string.layout_net_freq_5ghz);
+                    txtNetworkFrequency.setText(netFreq);
                 }
                 txtNetworkFrequencyUnit.setText(getResources().getString(R.string.layout_net_freq_unit));
             } else {
@@ -243,14 +245,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         int ip3 = convertToUnsignedInteger(ipAddressBytes[2]);
         int ip4 = convertToUnsignedInteger(ipAddressBytes[3]);
 
-        // Build the IP address string
-        String ipAddress
-                = Integer.toString(ip1) + "."
-                + Integer.toString(ip2) + "."
-                + Integer.toString(ip3) + "."
-                + Integer.toString(ip4);
-
-        return ipAddress;
+        // Build and return the IP address string
+        return ip1 + Constants.DOT + ip2 + Constants.DOT + ip3 + Constants.DOT + ip4;
 
     }
 

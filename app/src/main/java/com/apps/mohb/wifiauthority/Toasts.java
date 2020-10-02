@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Toasts.java
- *  Last modified : 8/21/17 11:20 PM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */

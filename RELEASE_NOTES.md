@@ -1,3 +1,10 @@
+#### **1.0.10**
+- Migrated code to Android X
+- Updated settings activity
+- Replaced the deprecated GoogleApiClient with the new FusedLocationProviderClient
+- Changed minSdk to 21
+- Changed targetSdk back to 28
+
 #### **1.0.9**
 - Updated app URLs with the new website address.
 

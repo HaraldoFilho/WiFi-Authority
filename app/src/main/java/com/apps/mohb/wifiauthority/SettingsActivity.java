@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : SettingsActivity.java
- *  Last modified : 8/10/17 10:56 PM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -17,22 +17,24 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.apps.mohb.wifiauthority.fragments.dialogs.PreferencesResetAlertFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 
+import java.util.Objects;
 
-/**
+
+/*
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
  * settings are split by category, with category headers shown to the left of
@@ -45,8 +47,6 @@ import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
  */
 public class SettingsActivity extends AppCompatActivity implements
         PreferencesResetAlertFragment.PreferencesResetDialogListener {
-
-    GeneralPreferenceFragment settingsFragment;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -110,9 +110,8 @@ public class SettingsActivity extends AppCompatActivity implements
         setupActionBar();
 
         // Create settings fragment which actually contain the settings screen
-        settingsFragment = new GeneralPreferenceFragment();
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, settingsFragment)
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -170,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity implements
      * Make sure to deny any unknown fragments here.
      */
     protected boolean isValidFragment(String fragmentName) {
-        return PreferenceFragment.class.getName().equals(fragmentName)
+        return GeneralPreferenceFragment.class.getName().equals(fragmentName)
                 || GeneralPreferenceFragment.class.getName().equals(fragmentName);
     }
 
@@ -179,24 +178,23 @@ public class SettingsActivity extends AppCompatActivity implements
      * activity is showing a two-pane settings UI.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
+    public static class GeneralPreferenceFragment extends PreferenceFragmentCompat {
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.preferences, rootKey);
             setHasOptionsMenu(true);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_header)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_sort)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_security)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_signal)));
+            bindPreferenceSummaryToValue(Objects.requireNonNull(findPreference(getString(R.string.pref_key_header))));
+            bindPreferenceSummaryToValue(Objects.requireNonNull(findPreference(getString(R.string.pref_key_sort))));
+            bindPreferenceSummaryToValue(Objects.requireNonNull(findPreference(getString(R.string.pref_key_security))));
+            bindPreferenceSummaryToValue(Objects.requireNonNull(findPreference(getString(R.string.pref_key_signal))));
 
-            setPreferenceClickListener(findPreference(Constants.PREF_KEY_STORE_PASSWORD));
+            setPreferenceClickListener(Objects.requireNonNull(findPreference(Constants.PREF_KEY_STORE_PASSWORD)));
 
         }
 
@@ -207,7 +205,7 @@ public class SettingsActivity extends AppCompatActivity implements
             public boolean onPreferenceClick(Preference preference) {
                 // If store password settings option was disabled clear all passwords
                 if (!preference.getSharedPreferences().getBoolean(Constants.PREF_KEY_STORE_PASSWORD, false)) {
-                    ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(getActivity().getApplicationContext());
+                    ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(requireActivity().getApplicationContext());
                     configuredNetworks.clearAllPasswords();
                 }
                 return true;
@@ -226,20 +224,20 @@ public class SettingsActivity extends AppCompatActivity implements
     @Override // Yes
     public void onAlertDialogPositiveClick(DialogFragment dialog) {
         // Clear settings on memory
-        PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().clear().apply();
         // Set defaults on memory
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         // Update settings screen with the default values
-        getFragmentManager().beginTransaction().detach(settingsFragment);
-        settingsFragment = new GeneralPreferenceFragment();
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, settingsFragment)
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new GeneralPreferenceFragment())
                 .commit();
     }
 
     @Override // No
     public void onAlertDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 }

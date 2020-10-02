@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : AddNetworkDialogFragment.java
- *  Last modified : 8/27/17 6:13 PM
+ *  Last modified : 10/1/20 9:43 PM
  *
  *  -----------------------------------------------------------
  */
@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -31,10 +30,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
 import com.apps.mohb.wifiauthority.Toasts;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
+
+import java.util.Objects;
 
 
 public class AddNetworkDialogFragment extends DialogFragment {
@@ -65,25 +69,26 @@ public class AddNetworkDialogFragment extends DialogFragment {
     private double lastLatitude;
     private double lastLongitude;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = requireActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.fragment_add_network_dialog, null);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setView(view);
         final Bundle bundle = this.getArguments();
 
-        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) requireActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiConfiguration = new WifiConfiguration();
         configuredNetworks = new ConfiguredNetworks(getContext());
 
-        networkName = (EditText) view.findViewById(R.id.txtSSID);
-        networkSecurity = (Spinner) view.findViewById(R.id.spinSecurity);
-        networkPasswd = (EditText) view.findViewById(R.id.txtPassword);
-        checkPasswdVisible = (CheckBox) view.findViewById(R.id.checkPasswd);
-        networkDescription = (EditText) view.findViewById(R.id.txtDescription);
+        networkName = view.findViewById(R.id.txtSSID);
+        networkSecurity = view.findViewById(R.id.spinSecurity);
+        networkPasswd = view.findViewById(R.id.txtPassword);
+        checkPasswdVisible = view.findViewById(R.id.checkPasswd);
+        networkDescription = view.findViewById(R.id.txtDescription);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.security_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         networkSecurity.setAdapter(adapter);
@@ -123,10 +128,10 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
                 if (configuredNetworks.isValidPassword(networkSecurity.getSelectedItemPosition(),
                         networkPasswd.getText().toString())) {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 
                 } else {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
 
                 if (networkSecurity.getLastVisiblePosition() == Constants.SET_OPEN) {
@@ -148,7 +153,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
         networkPasswd.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
-                ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             }
 
             @Override
@@ -174,10 +179,10 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
                 if (configuredNetworks.isValidPassword(networkSecurity.getSelectedItemPosition(),
                         networkPasswd.getText().toString())) {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 
                 } else {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
 
             }
@@ -205,7 +210,15 @@ public class AddNetworkDialogFragment extends DialogFragment {
                 password = networkPasswd.getText().toString();
                 securityOption = networkSecurity.getSelectedItemPosition();
 
-                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid)) {
+                boolean networkIsConfiguredBySSID = false;
+                try {
+                    networkIsConfiguredBySSID = configuredNetworks
+                            .isConfiguredBySSID(wifiManager.getConfiguredNetworks(), ssid);
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+
+                if (!networkIsConfiguredBySSID) {
 
                     wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
                     wifiConfiguration.SSID = configuredNetworks.getCfgSSID(ssid);
@@ -269,7 +282,7 @@ public class AddNetworkDialogFragment extends DialogFragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

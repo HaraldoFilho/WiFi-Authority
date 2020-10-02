@@ -1,3 +1,15 @@
+/*
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
+ *
+ *  Project       : WiFiAuthority
+ *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
+ *
+ *  File          : ExampleUnitTest.java
+ *  Last modified : 9/30/20 5:16 PM
+ *
+ *  -----------------------------------------------------------
+ */
+
 package com.apps.mohb.wifiauthority;
 
 import org.junit.Test;

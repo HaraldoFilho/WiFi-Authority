@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2019 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MainActivity.java
- *  Last modified : 12/24/19 5:41 PM
+ *  Last modified : 10/1/20 9:49 PM
  *
  *  -----------------------------------------------------------
  */
@@ -28,11 +28,6 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +36,12 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.apps.mohb.wifiauthority.adapters.ConfiguredNetworksListAdapter;
 import com.apps.mohb.wifiauthority.fragments.dialogs.AddNetworkDialogFragment;
@@ -54,9 +55,10 @@ import com.apps.mohb.wifiauthority.fragments.dialogs.RestoreNetworksAlertFragmen
 import com.apps.mohb.wifiauthority.fragments.dialogs.WifiDisabledAlertFragment;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.apps.mohb.wifiauthority.networks.NetworkData;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -64,6 +66,7 @@ import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -75,28 +78,21 @@ public class MainActivity extends AppCompatActivity implements
         PasswordChangeDialogFragment.PasswordChangeDialogListener,
         LocationPermissionsAlertFragment.LocationPermissionsDialogListener,
         NetworkManagementPolicyAlertFragment.NetworkManagementPolicyDialogListener,
-        RestoreNetworksAlertFragment.RestoreNetworksListener,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        RestoreNetworksAlertFragment.RestoreNetworksListener {
 
     private WifiManager wifiManager;
-    private WiFiScanReceiver wifiScanReceiver;
     private List<ScanResult> wifiScannedNetworks;
     private List<WifiConfiguration> wifiConfiguredNetworks;
     private ListView networksListView;
-    private View listHeader;
-    private View listFooter;
     private FloatingActionButton fab;
     private DialogFragment wifiDisabledDialog;
 
     private ConfiguredNetworksListAdapter networksListAdapter;
-    private AdapterView.AdapterContextMenuInfo menuInfo;
 
     private ConfiguredNetworks configuredNetworks;
     protected WifiConfiguration network;
 
-    private GoogleApiClient googleApiClient;
-    private Location location;
+    private FusedLocationProviderClient fusedLocationClient;
     private double lastLatitude;
     private double lastLongitude;
 
@@ -139,18 +135,6 @@ public class MainActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
 
             wifiScannedNetworks = wifiManager.getScanResults();
-
-            // Get the last user's none location. Most of the times
-            // this corresponds to user's current location or very near
-            try {
-                location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                if (location != null) {
-                    lastLatitude = location.getLatitude();
-                    lastLongitude = location.getLongitude();
-                }
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
 
             // Get saved state of networks additional data
             try {
@@ -275,13 +259,13 @@ public class MainActivity extends AppCompatActivity implements
                                 // Check if update has failed and the name changed dialog is not opened
                                 if ((updateResult == Constants.NETWORK_UPDATE_FAIL) && (!networkNameChangedDialogOpened)) {
 
-                                    /**
+                                    /*
                                      Opens name changed dialog with the following data of the changed network:
                                      - Description
                                      - Old name (SSID)
                                      - New name (SSID)
                                      - Security
-                                     **/
+                                     */
                                     DialogFragment networkNameChangedDialog = new NetworkNameChangedDialogFragment();
 
                                     Bundle bundle = new Bundle();
@@ -353,10 +337,10 @@ public class MainActivity extends AppCompatActivity implements
 
         // Create list header and footer, that will insert spaces on top and bottom of the
         // list to make material design effect elevation and shadow
-        listHeader = getLayoutInflater().inflate(R.layout.list_header, networksListView);
-        listFooter = getLayoutInflater().inflate(R.layout.list_footer, networksListView);
+        View listHeader = getLayoutInflater().inflate(R.layout.list_header, networksListView);
+        View listFooter = getLayoutInflater().inflate(R.layout.list_footer, networksListView);
 
-        networksListView = (ListView) findViewById(R.id.networksList);
+        networksListView = findViewById(R.id.networksList);
 
         // Insert header and footer if version is Lollipop (5.x) or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -369,7 +353,11 @@ public class MainActivity extends AppCompatActivity implements
         registerForContextMenu(networksListView);
 
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+        try {
+            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
         configuredNetworks = new ConfiguredNetworks(this);
 
         // Create floating action button and handle clicks on it to add a network
@@ -397,9 +385,9 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 // Set default values for these variables
-                String ssid = Constants.EMPTY;
-                Double latitude = Constants.DEFAULT_LATITUDE;
-                Double longitude = Constants.DEFAULT_LONGITUDE;
+                String ssid;
+                double latitude;
+                double longitude;
 
                 // Get the correct position of clicked item according to Android version
                 // due to use of header and footer
@@ -460,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
         // Set and register a scan receiver to get available networks
-        wifiScanReceiver = new WiFiScanReceiver();
+        WiFiScanReceiver wifiScanReceiver = new WiFiScanReceiver();
         registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 
         // Shared preferences variable to control if Network Management Policy Dialog for Marshmallow (version 6.x)
@@ -477,20 +465,8 @@ public class MainActivity extends AppCompatActivity implements
         this.registerReceiver(wifiStateMonitor, filter);
 
         // Create an instance of GoogleAPIClient to load maps
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        googleApiClient.connect();
     }
 
     @Override
@@ -499,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // If Settings was opened from ScanActivity reopen it
         if (settings.getBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false)) {
-            settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false).commit();
+            settings.edit().putBoolean(Constants.PREF_KEY_SCAN_ACTIVITY, false).apply();
             Intent intent = new Intent(this, ScanNetworksActivity.class);
             startActivity(intent);
         }
@@ -551,7 +527,7 @@ public class MainActivity extends AppCompatActivity implements
                     configuredNetworks.collectGarbage(wifiManager.getConfiguredNetworks());
                 }
             }
-        } catch (Exception e) {
+        } catch (SecurityException | NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -560,10 +536,7 @@ public class MainActivity extends AppCompatActivity implements
                 == PackageManager.PERMISSION_GRANTED) {
             if (wifiManager.isWifiEnabled()) {
                 updateListOfNetworks();
-                // If GoogleApiClient is connected start scanning for available networks
-                if (googleApiClient.isConnected()) {
-                    wifiManager.startScan();
-                }
+                wifiManager.startScan();
             }
         } else {
             // Check if user already denied permission request
@@ -582,6 +555,22 @@ public class MainActivity extends AppCompatActivity implements
 
         // Set that Network Name Changed Dialog was not already been opened
         networkNameChangedDialogOpened = false;
+
+        // Get the last user's none location. Most of the times
+        // this corresponds to user's current location or very near
+        try {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        lastLatitude = location.getLatitude();
+                        lastLongitude = location.getLongitude();
+                    }
+                }
+            });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -630,9 +619,6 @@ public class MainActivity extends AppCompatActivity implements
             // About
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
-                bundle = new Bundle();
-                bundle.putString(Constants.KEY_URL, getString(R.string.url_help_main));
-                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
 
@@ -660,7 +646,7 @@ public class MainActivity extends AppCompatActivity implements
 
         if (wifiManager.isWifiEnabled()) {
             // Set text according to network state
-            switch (configuredNetworks.supplicantNetworkState) {
+            switch (ConfiguredNetworks.supplicantNetworkState) {
                 // Disconnected
                 case DISCONNECTED:
                     itemConnect.setTitle(R.string.context_connect);
@@ -704,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         network = wifiConfiguredNetworks.get(getCorrectPosition(menuInfo.position));
         ssid = network.SSID;
@@ -761,48 +747,21 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        googleApiClient.disconnect();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
     @Override // read result of permissions requests
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode) {
-            case Constants.FINE_LOCATION_PERMISSION_REQUEST: {
-                // if permission is granted create list of networks
-                if (grantResults.length > Constants.RESULTS_EMPTY
-                        && ((grantResults[Constants.RESULT_INDEX] == PackageManager.PERMISSION_GRANTED))) {
-                    updateListOfNetworks();
-                } else {
-                    finish();
-                }
-                return;
+        if (requestCode == Constants.FINE_LOCATION_PERMISSION_REQUEST) {// if permission is granted create list of networks
+            if (grantResults.length > Constants.RESULTS_EMPTY
+                    && ((grantResults[Constants.RESULT_INDEX] == PackageManager.PERMISSION_GRANTED))) {
+                updateListOfNetworks();
+            } else {
+                finish();
             }
         }
-    }
-
-
-    // GoogleClientApi callback methods
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        wifiManager.startScan();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
     }
 
 
@@ -822,11 +781,7 @@ public class MainActivity extends AppCompatActivity implements
          Check if user's last location has been acquired
     */
     private boolean isLastLocationKnown() {
-        if ((lastLatitude != Constants.DEFAULT_LATITUDE) && (lastLongitude != Constants.DEFAULT_LONGITUDE)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (lastLatitude != Constants.DEFAULT_LATITUDE) && (lastLongitude != Constants.DEFAULT_LONGITUDE);
     }
 
     /*
@@ -895,7 +850,12 @@ public class MainActivity extends AppCompatActivity implements
         if (wifiConfiguredNetworks != null) {
             wifiConfiguredNetworks.clear();
         }
-        wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+        try {
+            wifiConfiguredNetworks = wifiManager.getConfiguredNetworks();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            return;
+        }
 
         wifiScannedNetworks = wifiManager.getScanResults();
 
@@ -920,12 +880,14 @@ public class MainActivity extends AppCompatActivity implements
                     getResources().getString(R.string.pref_def_header));
 
             try {
+                assert sort != null;
                 switch (sort) {
 
                     // Automatic
                     case Constants.PREF_SORT_AUTO:
 
                         // Sorts according to title display mode preference
+                        assert header != null;
                         if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
                             sortByDescription();
                         } else {
@@ -956,7 +918,7 @@ public class MainActivity extends AppCompatActivity implements
                                     listIterator.next();
                                 }
 
-                                return wifiManager.compareSignalLevel(rhsLevel, lhsLevel);
+                                return WifiManager.compareSignalLevel(rhsLevel, lhsLevel);
                             }
                         });
 
@@ -1067,7 +1029,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // Cancel
     public void onDescriptionEditDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 
@@ -1080,7 +1042,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onPasswordChangeDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 
@@ -1110,7 +1072,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // No
     public void onNetworkDeleteDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 
@@ -1129,7 +1091,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // Cancel
     public void onNetworkNameChangedDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
         networkNameChangedDialogOpened = false;
     }
 
@@ -1155,7 +1117,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // OK
     public void onAlertNetworkManagementPolicyDialogPositiveClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
     @Override // Tell me more
@@ -1170,7 +1132,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // Do not show again
     public void onAlertNetworkManagementPolicyDialogNegativeClick(DialogFragment dialog) {
-        showNetworkManagementPolicyWarnPref.edit().putBoolean(Constants.NET_MNG_POLICY_WARN, false).commit();
+        showNetworkManagementPolicyWarnPref.edit().putBoolean(Constants.NET_MNG_POLICY_WARN, false).apply();
     }
 
 
@@ -1178,15 +1140,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override // Connect
     public void onAddNetworkDialogPositiveClick(DialogFragment dialog) {
-        // If GoogleApiClient is connected start scanning for available networks
-        if (googleApiClient.isConnected()) {
-            wifiManager.startScan();
-        }
+        // Start scanning for available networks
+        wifiManager.startScan();
     }
 
     @Override // Cancel
     public void onAddNetworkDialogNegativeClick(DialogFragment dialog) {
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 
@@ -1233,7 +1193,7 @@ public class MainActivity extends AppCompatActivity implements
         } catch (Exception e) {
             e.printStackTrace();
         }
-        dialog.getDialog().cancel();
+        Objects.requireNonNull(dialog.getDialog()).cancel();
     }
 
 

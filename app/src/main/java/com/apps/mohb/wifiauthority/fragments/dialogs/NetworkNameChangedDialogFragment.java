@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkNameChangedDialogFragment.java
- *  Last modified : 8/6/17 11:37 AM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */
@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +26,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
 import com.apps.mohb.wifiauthority.Toasts;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
+
+import java.util.Objects;
 
 
 public class NetworkNameChangedDialogFragment extends DialogFragment {
@@ -43,9 +47,6 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
     private NetworkNameChangedDialogListener mListener;
 
-    private TextView networkDescription;
-    private TextView networkOldName;
-    private TextView networkNewName;
     private EditText networkPasswd;
     private CheckBox checkPasswdVisible;
     private CheckBox checkConnect;
@@ -65,20 +66,21 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
     private boolean connect;
 
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_ssid_changed, null);
 
-        networkDescription = (TextView) view.findViewById(R.id.txtNetSubtitle);
-        networkOldName = (TextView) view.findViewById(R.id.txtOldName);
-        networkNewName = (TextView) view.findViewById(R.id.txtNewName);
-        networkPasswd = (EditText) view.findViewById(R.id.txtNewPassword);
-        checkPasswdVisible = (CheckBox) view.findViewById(R.id.checkNewPasswd);
-        checkConnect = (CheckBox) view.findViewById(R.id.checkConnect);
+        TextView networkDescription = view.findViewById(R.id.txtNetSubtitle);
+        TextView networkOldName = view.findViewById(R.id.txtOldName);
+        TextView networkNewName = view.findViewById(R.id.txtNewName);
+        networkPasswd = view.findViewById(R.id.txtNewPassword);
+        checkPasswdVisible = view.findViewById(R.id.checkNewPasswd);
+        checkConnect = view.findViewById(R.id.checkConnect);
 
-        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) requireActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiConfiguration = new WifiConfiguration();
         configuredNetworks = new ConfiguredNetworks(getContext());
         connect = false;
@@ -90,18 +92,20 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
 
         if (bundle != null) {
             networkDescription.setText(bundle.getString(Constants.KEY_DESCRIPTION));
-            networkOldName.setText(getString(R.string.dialog_network_name_changed_colon)
-                    + bundle.getString(Constants.KEY_OLD_NAME));
-            networkNewName.setText(getString(R.string.dialog_network_name_changed_colon)
-                    + bundle.getString(Constants.KEY_NEW_NAME));
+
+            String oldName = getString(R.string.dialog_network_name_changed_colon) + bundle.getString(Constants.KEY_OLD_NAME);
+            String newName = getString(R.string.dialog_network_name_changed_colon) + bundle.getString(Constants.KEY_NEW_NAME);
+            networkOldName.setText(oldName);
+            networkNewName.setText(newName);
 
             mac = bundle.getString(Constants.KEY_BSSID);
-            oldSSID = configuredNetworks.getDataSSID(bundle.getString(Constants.KEY_OLD_NAME));
-            newSSID = configuredNetworks.getDataSSID(bundle.getString(Constants.KEY_NEW_NAME));
+            oldSSID = configuredNetworks.getDataSSID(Objects.requireNonNull(bundle.getString(Constants.KEY_OLD_NAME)));
+            newSSID = configuredNetworks.getDataSSID(Objects.requireNonNull(bundle.getString(Constants.KEY_NEW_NAME)));
             isHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
             description = bundle.getString(Constants.KEY_DESCRIPTION);
             security = bundle.getString(Constants.KEY_SECURITY);
 
+            assert security != null;
             wifiConfiguration = configuredNetworks.setNetworkCiphers(wifiConfiguration, security);
 
             builder.setTitle(R.string.dialog_network_name_changed_title);
@@ -112,8 +116,16 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int id) {
                 mListener.onNetworkNameChangedDialogPositiveClick(NetworkNameChangedDialogFragment.this);
 
-                if (!configuredNetworks.isConfiguredBySSID(wifiManager.getConfiguredNetworks(), newSSID)) {
 
+                boolean networkIsConfiguredBySSID = false;
+                try {
+                    networkIsConfiguredBySSID = configuredNetworks
+                            .isConfiguredBySSID(wifiManager.getConfiguredNetworks(), newSSID);
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+
+                if (!networkIsConfiguredBySSID) {
                     wifiConfiguration.status = WifiConfiguration.Status.DISABLED;
                     wifiConfiguration.SSID = configuredNetworks.getCfgSSID(newSSID);
                     wifiConfiguration.priority = Constants.CFG_PRIORITY;
@@ -167,11 +179,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
         checkConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkConnect.isChecked()) {
-                    connect = true;
-                } else {
-                    connect = false;
-                }
+                connect = checkConnect.isChecked();
             }
         });
 
@@ -180,7 +188,7 @@ public class NetworkNameChangedDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.apps.mohb.wifiauthority"
-    android:versionCode="@string/version_code"
-    android:versionName="@string/version_number">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.apps.mohb.wifiauthority">
 
     <!-- Permissions to manage WiFi -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -26,12 +25,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/info_app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">

@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : RestoreNetworksAlertFragment.java
- *  Last modified : 7/15/17 10:42 AM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -16,7 +16,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.apps.mohb.wifiauthority.R;
 
@@ -25,12 +27,14 @@ public class RestoreNetworksAlertFragment extends DialogFragment {
 
     public interface RestoreNetworksListener {
         void onAlertDialogPositiveClick(DialogFragment dialog);
+
         void onAlertDialogNegativeClick(DialogFragment dialog);
     }
 
     private RestoreNetworksListener mListener;
 
 
+    @NonNull
     @Override
     public AlertDialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -52,7 +56,7 @@ public class RestoreNetworksAlertFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

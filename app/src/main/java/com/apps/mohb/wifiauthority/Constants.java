@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : Constants.java
- *  Last modified : 8/12/17 12:32 AM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */
@@ -158,6 +158,7 @@ public class Constants {
     public static final String EMPTY = "";
     public static final String SPACE = " ";
     public static final String QUOTE = "\"";
+    public static final String DOT = ".";
     public static final String INVALID_MAC = "00:00:00:00:00:00";
 
     // Debug

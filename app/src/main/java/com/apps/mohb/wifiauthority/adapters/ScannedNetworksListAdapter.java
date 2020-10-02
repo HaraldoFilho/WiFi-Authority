@@ -1,29 +1,32 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ScannedNetworksListAdapter.java
- *  Last modified : 8/21/17 7:56 PM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */
 
 package com.apps.mohb.wifiauthority.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
@@ -35,7 +38,7 @@ import java.util.List;
 /*
     Adapter to connect Array List to ListView
 */
-public class ScannedNetworksListAdapter extends ArrayAdapter {
+public class ScannedNetworksListAdapter extends ArrayAdapter<ScanResult> {
 
     private WifiManager wifiManager;
     private ConfiguredNetworks configuredNetworks;
@@ -48,14 +51,17 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
         settings = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
+    @SuppressLint("ViewHolder")
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        ScanResult result = (ScanResult) getItem(position);
+        ScanResult result = getItem(position);
 
         convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_scan, parent, false);
 
         TextView txtScanNetworkName = convertView.findViewById(R.id.txtScanNetName);
+        assert result != null;
         txtScanNetworkName.setText(result.SSID);
 
         ImageView imgCfg = convertView.findViewById(R.id.imgCfg);
@@ -131,7 +137,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
             TextView txtScanNetworkSignal = convertView.findViewById(R.id.txtScanNetSignal);
             txtScanNetworkSignal.setText(String.valueOf(result.level));
 
-            switch (wifiManager.calculateSignalLevel(result.level, Constants.LEVELS)) {
+            switch (WifiManager.calculateSignalLevel(result.level, Constants.LEVELS)) {
 
                 case Constants.LEVEL_HIGH:
                     imgWiFi.setImageDrawable(ContextCompat.getDrawable(getContext(),
@@ -149,7 +155,7 @@ public class ScannedNetworksListAdapter extends ArrayAdapter {
                     break;
 
             }
-        } catch (Exception e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
 

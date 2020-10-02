@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : NetworkData.java
- *  Last modified : 8/6/17 11:02 AM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */

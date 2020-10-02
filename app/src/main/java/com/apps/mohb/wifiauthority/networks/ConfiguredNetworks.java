@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2019 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworks.java
- *  Last modified : 12/24/19 4:42 PM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */
@@ -19,9 +19,10 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
-import android.preference.PreferenceManager;
 import android.util.JsonReader;
 import android.util.JsonWriter;
+
+import androidx.preference.PreferenceManager;
 
 import com.apps.mohb.wifiauthority.Constants;
 
@@ -44,7 +45,6 @@ public class ConfiguredNetworks {
 
     private SharedPreferences preferences;
     private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
 
 
     public ConfiguredNetworks(Context context) {
@@ -59,7 +59,6 @@ public class ConfiguredNetworks {
 
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         preferences = context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
-        editor = preferences.edit();
 
         try {
             getDataState();
@@ -81,7 +80,7 @@ public class ConfiguredNetworks {
         saveDataState();
     }
 
-    public boolean removeNetworkData(String ssid) {
+    public void removeNetworkData(String ssid) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -89,11 +88,10 @@ public class ConfiguredNetworks {
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 networksData.remove(iterator.nextIndex());
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
     }
 
     public void collectGarbage(List<WifiConfiguration> wifiConfiguredNetworks)
@@ -196,7 +194,7 @@ public class ConfiguredNetworks {
         wifiConfiguration.priority = Constants.CFG_PRIORITY;
         wifiConfiguration = setNetworkSecurity(wifiConfiguration, getNetworkSecurity(security), getCfgPassword(password));
 
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         int netId = wifiManager.addNetwork(wifiConfiguration);
 
@@ -393,7 +391,7 @@ public class ConfiguredNetworks {
 
     // SETTERS
 
-    public boolean setLocationBySSID(String ssid, double latitude, double longitude) {
+    public void setLocationBySSID(String ssid, double latitude, double longitude) {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
@@ -403,14 +401,13 @@ public class ConfiguredNetworks {
                 data.setLatitude(latitude);
                 data.setLongitude(longitude);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
     }
 
-    public boolean setLocationByMacAddress(String bssid, double latitude, double longitude) {
+    public void setLocationByMacAddress(String bssid, double latitude, double longitude) {
 
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
@@ -420,14 +417,13 @@ public class ConfiguredNetworks {
                 data.setLatitude(latitude);
                 data.setLongitude(longitude);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
     }
 
-    public boolean setMacAddressBySSID(String ssid, String mac) {
+    public void setMacAddressBySSID(String ssid, String mac) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -435,15 +431,14 @@ public class ConfiguredNetworks {
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 data.setMacAddress(mac);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
-    public boolean setDescriptionBySSID(String ssid, String description) {
+    public void setDescriptionBySSID(String ssid, String description) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -451,15 +446,14 @@ public class ConfiguredNetworks {
             if (getDescriptionBySSID(ssid).matches(data.getSSID())) {
                 data.setDescription(description);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
-    public boolean setHidden(String ssid, boolean hidden) {
+    public void setHidden(String ssid, boolean hidden) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -467,15 +461,14 @@ public class ConfiguredNetworks {
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 data.setHidden(hidden);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
-    public boolean setFrequency(String ssid, int frequency) {
+    public void setFrequency(String ssid, int frequency) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -483,15 +476,14 @@ public class ConfiguredNetworks {
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 data.setFrequency(frequency);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
-    public boolean setPassword(String ssid, String password) {
+    public void setPassword(String ssid, String password) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -502,11 +494,10 @@ public class ConfiguredNetworks {
                 }
                 data.setPassword(password);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
@@ -566,7 +557,7 @@ public class ConfiguredNetworks {
 
     // UPDATERS
 
-    public boolean updateNetworkDescription(String ssid, String description) {
+    public void updateNetworkDescription(String ssid, String description) {
         ListIterator<NetworkData> iterator = networksData.listIterator();
         NetworkData data;
         while (iterator.hasNext()) {
@@ -574,11 +565,10 @@ public class ConfiguredNetworks {
             if (getDataSSID(ssid).matches(data.getSSID())) {
                 data.setDescription(description);
                 saveDataState();
-                return true;
+                return;
             }
             iterator.next();
         }
-        return false;
 
     }
 
@@ -595,11 +585,10 @@ public class ConfiguredNetworks {
                 while (cfgIterator.hasNext()) {
                     configuration = configuredNetworks.get(cfgIterator.nextIndex());
                     if (data.getSSID().matches(getDataSSID(configuration.SSID))) {
-                        WifiConfiguration updatedConfiguration = configuration;
-                        updatedConfiguration.SSID = getCfgSSID(getDataSSID(ssid));
+                        configuration.SSID = getCfgSSID(getDataSSID(ssid));
                         data.setSSID(getDataSSID(ssid));
                         saveDataState();
-                        return updatedConfiguration;
+                        return configuration;
                     }
                     cfgIterator.next();
                 }
@@ -691,11 +680,7 @@ public class ConfiguredNetworks {
     public boolean isAvailable(
             List<ScanResult> wifiScannedNetworks, String ssid, String mac) throws NullPointerException {
 
-        if (isAvailableBySSID(wifiScannedNetworks, ssid) || isAvailableByMacAddress(wifiScannedNetworks, mac)) {
-            return true;
-        } else {
-            return false;
-        }
+        return isAvailableBySSID(wifiScannedNetworks, ssid) || isAvailableByMacAddress(wifiScannedNetworks, mac);
     }
 
     public boolean isAvailableBySSID(
@@ -734,11 +719,7 @@ public class ConfiguredNetworks {
 
     public boolean hasNetworksData() {
 
-        if (!networksData.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !networksData.isEmpty();
 
     }
 
@@ -772,19 +753,13 @@ public class ConfiguredNetworks {
 
     public boolean isValidPassword(int securityOption, String password) {
 
-        if ((((securityOption == Constants.SET_WPA) || (securityOption == Constants.SET_EAP))
+        return (((securityOption == Constants.SET_WPA) || (securityOption == Constants.SET_EAP))
                 && ((password.length() >= Constants.WPA_PASSWORD_MIN_LENGTH)
                 && (password.length() <= Constants.WPA_PASSWORD_MAX_LENGTH)))
                 || ((securityOption == Constants.SET_WEP)
                 && ((password.length() == Constants.WEP_PASSWORD_64BIT_LENGTH)
                 || (password.length() == Constants.WEP_PASSWORD_128BIT_LENGTH)))
-                || (securityOption == Constants.SET_OPEN)) {
-
-            return true;
-
-        } else {
-            return false;
-        }
+                || (securityOption == Constants.SET_OPEN);
 
     }
 
@@ -793,19 +768,17 @@ public class ConfiguredNetworks {
 
     public void setDataState(ArrayList<NetworkData> data) throws IOException, IllegalStateException {
         String jsonData = writeJsonString(data);
+        SharedPreferences.Editor editor = preferences.edit();
         editor.putString(Constants.DATA, jsonData);
-        editor.commit();
+        editor.apply();
     }
 
     // get a network data list from memory through a json string
     // if list was not saved yet creates a new array list
-    public boolean getDataState() throws IOException, IllegalStateException {
+    public void getDataState() throws IOException, IllegalStateException {
         String jsonData = preferences.getString(Constants.DATA, null);
         if (jsonData != null) {
             networksData = readJsonString(jsonData);
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -846,11 +819,8 @@ public class ConfiguredNetworks {
 
     // read a json string containing a list of network items
     private ArrayList<NetworkData> readJsonString(String jsonString) throws IOException, IllegalStateException {
-        JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
-        try {
+        try (JsonReader jsonReader = new JsonReader(new StringReader(jsonString))) {
             return readDataArrayList(jsonReader);
-        } finally {
-            jsonReader.close();
         }
     }
 
@@ -874,8 +844,8 @@ public class ConfiguredNetworks {
         String dataSecurity = Constants.EMPTY;
         int dataFrequency = Constants.NO_FREQ_SET;
         String dataPassword = Constants.EMPTY;
-        Double dataLatitude = Constants.DEFAULT_LATITUDE;
-        Double dataLongitude = Constants.DEFAULT_LONGITUDE;
+        double dataLatitude = Constants.DEFAULT_LATITUDE;
+        double dataLongitude = Constants.DEFAULT_LONGITUDE;
 
         jsonReader.beginObject();
         while (jsonReader.hasNext()) {

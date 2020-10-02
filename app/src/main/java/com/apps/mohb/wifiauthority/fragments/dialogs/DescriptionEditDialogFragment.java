@@ -1,26 +1,29 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : DescriptionEditDialogFragment.java
- *  Last modified : 8/6/17 11:36 AM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
 
 package com.apps.mohb.wifiauthority.fragments.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
@@ -31,6 +34,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
 
     public interface DescriptionEditDialogListener {
         void onDescriptionEditDialogPositiveClick(DialogFragment dialog);
+
         void onDescriptionEditDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -39,23 +43,24 @@ public class DescriptionEditDialogFragment extends DialogFragment {
     private EditText text;
     private String networkSSID;
     private boolean isHidden;
-    private LayoutInflater inflater;
-    private Bundle bundle;
     View view;
 
+    @SuppressLint("InflateParams")
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        inflater = getActivity().getLayoutInflater();
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.fragment_description_edit_dialog, null);
 
-        bundle = this.getArguments();
+        Bundle bundle = this.getArguments();
+        assert bundle != null;
         networkSSID = bundle.getString(Constants.KEY_SSID);
         isHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
 
         configuredNetworks = new ConfiguredNetworks(getContext());
 
-        text = (EditText) view.findViewById(R.id.txtEdit);
+        text = view.findViewById(R.id.txtEdit);
         if (configuredNetworks.hasNetworkAdditionalData(networkSSID)) {
             text.setText(configuredNetworks.getDescriptionBySSID(networkSSID));
         }
@@ -87,7 +92,7 @@ public class DescriptionEditDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

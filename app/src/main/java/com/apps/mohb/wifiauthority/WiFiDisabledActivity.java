@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : WiFiDisabledActivity.java
- *  Last modified : 7/12/17 10:54 PM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -16,9 +16,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class WiFiDisabledActivity extends AppCompatActivity {
@@ -32,7 +33,7 @@ public class WiFiDisabledActivity extends AppCompatActivity {
 
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
-        Button button = (Button) findViewById(R.id.button);
+        Button button = findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,7 +26,7 @@
             android:title="@string/pref_title_sort" />
 
         <!-- Reconfiguration -->
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:key="@string/pref_key_reconfig"
             android:title="@string/pref_title_reconfig"
             android:summaryOn="@string/pref_reconfig_summ_on"
@@ -34,7 +34,7 @@
             android:defaultValue="@string/pref_def_reconfig" />
 
         <!--Password storage-->
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:key="@string/pref_key_store_password"
             android:title="@string/pref_title_store_password"
             android:summaryOn="@string/pref_store_password_summ_on"
@@ -42,7 +42,7 @@
             android:defaultValue="false" />
 
         <!--Restore network configurations-->
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:key="@string/pref_key_restore_networks"
             android:title="@string/pref_title_restore_networks"
             android:summaryOn="@string/pref_restore_networks_summ_on"
@@ -76,7 +76,7 @@
             android:title="@string/pref_title_signal" />
 
         <!--Show all networks-->
-        <CheckBoxPreference
+        <SwitchPreferenceCompat
             android:key="@string/pref_key_show_all"
             android:title="@string/pref_title_show_all"
             android:summaryOn="@string/pref_show_all_summ_on"

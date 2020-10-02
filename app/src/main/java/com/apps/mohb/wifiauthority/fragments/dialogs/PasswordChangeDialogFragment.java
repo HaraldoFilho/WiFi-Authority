@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : PasswordChangeDialogFragment.java
- *  Last modified : 8/19/17 11:21 AM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -21,7 +21,6 @@ import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -30,10 +29,15 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
 import com.apps.mohb.wifiauthority.Toasts;
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
+
+import java.util.Objects;
 
 
 public class PasswordChangeDialogFragment extends DialogFragment {
@@ -55,21 +59,23 @@ public class PasswordChangeDialogFragment extends DialogFragment {
     private String networkSecurity;
     private CheckBox checkPasswdVisible;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final LayoutInflater inflater = getActivity().getLayoutInflater();
+        final LayoutInflater inflater = requireActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.fragment_password_change_dialog, null);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final Bundle bundle = this.getArguments();
 
-        wifiManager = (WifiManager) getActivity().getApplicationContext().getSystemService(getContext().WIFI_SERVICE);
+        wifiManager = (WifiManager) requireActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiConfiguration = new WifiConfiguration();
         configuredNetworks = new ConfiguredNetworks(getContext());
 
-        networkPasswd = (EditText) view.findViewById(R.id.txtChangePasswd);
-        checkPasswdVisible = (CheckBox) view.findViewById(R.id.checkPasswdChange);
+        networkPasswd = view.findViewById(R.id.txtChangePasswd);
+        checkPasswdVisible = view.findViewById(R.id.checkPasswdChange);
 
+        assert bundle != null;
         networkId = bundle.getInt(Constants.KEY_NETWORK_ID);
         networkSSID = bundle.getString(Constants.KEY_SSID);
         networkIsHidden = bundle.getBoolean(Constants.KEY_HIDDEN);
@@ -113,14 +119,14 @@ public class PasswordChangeDialogFragment extends DialogFragment {
 
                     // Shared preferences variable to control if Network Management Policy Dialog for Marshmallow (version 6.x)
                     // or higher must be shown
-                    SharedPreferences showNetworkManagementPolicyWarnPref = getContext()
+                    SharedPreferences showNetworkManagementPolicyWarnPref = requireContext()
                             .getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
 
                     // If version is Marshmallow (6.x) or higher show dialog explaining new networks manage,ent policy
                     if (((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M))
                             && (showNetworkManagementPolicyWarnPref.getBoolean(Constants.NET_MNG_POLICY_WARN, true))) {
                         DialogFragment dialogPolicy = new NetworkManagementPolicyAlertFragment();
-                        dialogPolicy.show(getFragmentManager(), "NetworkManagementPolicyAlertFragment");
+                        dialogPolicy.show(getParentFragmentManager(), "NetworkManagementPolicyAlertFragment");
                     } else {
                         Toasts.showUnableToChangePassword(getContext());
                     }
@@ -152,7 +158,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
         networkPasswd.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
-                ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
             }
 
             @Override
@@ -178,10 +184,10 @@ public class PasswordChangeDialogFragment extends DialogFragment {
 
                 if (configuredNetworks.isValidPassword(configuredNetworks.getNetworkSecurity(networkSecurity),
                         networkPasswd.getText().toString())) {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 
                 } else {
-                    ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    ((AlertDialog) Objects.requireNonNull(getDialog())).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                 }
 
             }
@@ -192,7 +198,7 @@ public class PasswordChangeDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         // Verify that the host activity implements the callback interface
         try {

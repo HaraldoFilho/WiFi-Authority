@@ -4,8 +4,8 @@
 
     <!--Application version-->
     <string name="version_name">version: </string>
-    <string name="version_number" translatable="false">1.0.9</string>
-    <string name="version_code" translatable="false">87</string>
+    <string name="version_number" translatable="false">1.0.10</string>
+    <string name="version_code" translatable="false">90</string>
 
     <!--Application information-->
     <string name="info_app_name" translatable="false">WiFi Authority</string>
@@ -104,7 +104,7 @@
     <string name="alert_button_close_app">No, close application</string>
 
     <!-- Progress dialogs -->
-    <string name="progress_scan_networks">Scanning for available networks,\nplease wait...</string>
+    <string name="progress_scan_networks">Scanning for available networks,\nplease wait…</string>
 
     <!--Toasts-->
     <string name="toast_unable_add_network">Unable to add network. Please, check if all network info is correct and try again</string>
@@ -116,10 +116,10 @@
     <string name="toast_no_configured_networks">There is no configured networks to show on map</string>
     <string name="toast_invalid_password">Please, type a valid password</string>
     <string name="toast_network_is_configured">This network is already configured</string>
-    <string name="toast_wifi_disabled">WiFi is turned off, turning it on...</string>
-    <string name="toast_get_legal_notices">Loading legal notices text...</string>
+    <string name="toast_wifi_disabled">WiFi is turned off, turning it on…</string>
+    <string name="toast_get_legal_notices">Loading legal notices text…</string>
     <string name="toast_no_legal_notices">Couldn\'t load legal notices text</string>
-    <string name="toast_get_help_page">Loading help page from internet...</string>
+    <string name="toast_get_help_page">Loading help page from internet…</string>
     <string name="toast_authentication_failed">Authentication failed</string>
     <string name="toast_obt_ip_address_failed">Failed on obtain IP address</string>
     <string name="toast_no_network_found">No network has been found</string>
@@ -168,10 +168,10 @@
 
     <string name="net_state_idle">Idle</string>
     <string name="net_state_disconnected">Disconnected</string>
-    <string name="net_state_scannig">Scanning...</string>
-    <string name="net_state_connecting">Connecting...</string>
-    <string name="net_state_authenticating">Authenticating...</string>
-    <string name="net_state_obt_ip_address">Obtaining IP address...</string>
+    <string name="net_state_scannig">Scanning…</string>
+    <string name="net_state_connecting">Connecting…</string>
+    <string name="net_state_authenticating">Authenticating…</string>
+    <string name="net_state_obt_ip_address">Obtaining IP address…</string>
     <string name="net_state_connected">Connected</string>
     <string name="net_state_out_of_reach">Out of reach</string>
 

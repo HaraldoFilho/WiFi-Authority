@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2017 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : MapActivity.java
- *  Last modified : 7/10/17 7:11 PM
+ *  Last modified : 10/1/20 1:33 AM
  *
  *  -----------------------------------------------------------
  */
@@ -13,8 +13,9 @@
 package com.apps.mohb.wifiauthority;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.apps.mohb.wifiauthority.networks.ConfiguredNetworks;
 import com.apps.mohb.wifiauthority.networks.NetworkData;
@@ -34,13 +35,9 @@ import java.util.ListIterator;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap map;
-
-    private double latitude;
     private double minLatitude;
     private double maxLatitude;
 
-    private double longitude;
     private double minLongitude;
     private double maxLongitude;
 
@@ -52,6 +49,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
 
         // Set the base minimum values for compare.
@@ -68,18 +66,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
 
         ConfiguredNetworks configuredNetworks = new ConfiguredNetworks(this);
         List<NetworkData> networksData = configuredNetworks.getConfiguredNetworksData();
 
-        ListIterator iterator = networksData.listIterator();
+        ListIterator<NetworkData> iterator = networksData.listIterator();
 
         while (iterator.hasNext()) {
 
             // Get latitude and longitude values for each configured network
-            latitude = networksData.get(iterator.nextIndex()).getLatitude();
-            longitude = networksData.get(iterator.nextIndex()).getLongitude();
+            double latitude = networksData.get(iterator.nextIndex()).getLatitude();
+            double longitude = networksData.get(iterator.nextIndex()).getLongitude();
 
             if ((latitude != Constants.DEFAULT_LATITUDE) && (longitude != Constants.DEFAULT_LONGITUDE)) {
 
@@ -102,7 +99,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 // Put a marker on the network position with its SSID as label
                 LatLng networkPosition = new LatLng(latitude, longitude);
                 String ssid = networksData.get(iterator.nextIndex()).getSSID();
-                Marker marker = map.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
+                Marker marker = googleMap.addMarker(new MarkerOptions().position(networkPosition).title(ssid));
                 marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_wifi_marker_blue_36dp));
 
             }
@@ -124,11 +121,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         }
 
         // Get the display size to construct map boundaries prior to layout phase
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
 
         // Set the camera to the greatest possible zoom level that includes all networks
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(
                 allNetworksArea, displayMetrics.widthPixels, displayMetrics.heightPixels,
                 (int) getResources().getDimension(R.dimen.map_bounds_padding)));
 

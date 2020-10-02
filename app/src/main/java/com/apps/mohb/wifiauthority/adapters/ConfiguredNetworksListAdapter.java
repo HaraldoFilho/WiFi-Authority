@@ -1,11 +1,11 @@
 /*
- *  Copyright (c) 2019 mohb apps - All Rights Reserved
+ *  Copyright (c) 2020 mohb apps - All Rights Reserved
  *
  *  Project       : WiFiAuthority
  *  Developer     : Haraldo Albergaria Filho, a.k.a. mohb apps
  *
  *  File          : ConfiguredNetworksListAdapter.java
- *  Last modified : 12/26/19 12:19 PM
+ *  Last modified : 10/1/20 9:31 PM
  *
  *  -----------------------------------------------------------
  */
@@ -18,14 +18,16 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
-import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.apps.mohb.wifiauthority.Constants;
 import com.apps.mohb.wifiauthority.R;
@@ -37,24 +39,17 @@ import java.util.List;
 
 // Adapter to connect Array List to ListView
 
-public class ConfiguredNetworksListAdapter extends ArrayAdapter {
+public class ConfiguredNetworksListAdapter extends ArrayAdapter<WifiConfiguration> {
 
     private WifiManager wifiManager;
-    private List<WifiConfiguration> wifiConfiguredNetworks;
-    private List<ScanResult> wifiScannedNetworks;
     private ConfiguredNetworks configuredNetworks;
-    private WifiConfiguration configuration;
-    private String ssid;
-    private String mac;
-    private SharedPreferences settings;
 
     private String state;
 
     public ConfiguredNetworksListAdapter(Context context, List<WifiConfiguration> wifiConfiguredNetworks,
                                          ConfiguredNetworks configuredNetworks) {
         super(context, 0, wifiConfiguredNetworks);
-        wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        this.wifiConfiguredNetworks = wifiConfiguredNetworks;
+        wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         this.configuredNetworks = configuredNetworks;
         try {
             this.configuredNetworks.getDataState();
@@ -64,16 +59,18 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        configuration = (WifiConfiguration) getItem(position);
-        ssid = configuredNetworks.getDataSSID(configuration.SSID);
-        mac = configuredNetworks.getMacAddressBySSID(ssid);
+        WifiConfiguration configuration = getItem(position);
+        assert configuration != null;
+        String ssid = configuredNetworks.getDataSSID(configuration.SSID);
+        String mac = configuredNetworks.getMacAddressBySSID(ssid);
 
-        wifiScannedNetworks = wifiManager.getScanResults();
+        List<ScanResult> wifiScannedNetworks = wifiManager.getScanResults();
 
-        settings = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_networks, parent, false);
@@ -95,6 +92,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
                 getContext().getResources().getString(R.string.pref_def_header));
 
         // Check if option to show description first is selected
+        assert header != null;
         if (header.matches(Constants.PREF_HEADER_DESCRIPTION)) {
             txtNetworkName.setText(description);
             txtNetworkDescription.setText(ssid);
@@ -155,7 +153,7 @@ public class ConfiguredNetworksListAdapter extends ArrayAdapter {
 
             if (configuredNetworks.isAvailable(wifiScannedNetworks, ssid, mac)) {
 
-                switch (wifiManager.calculateSignalLevel(
+                switch (WifiManager.calculateSignalLevel(
                         configuredNetworks.getScannedNetworkLevel(wifiScannedNetworks, mac), Constants.LEVELS)) {
 
                     case Constants.LEVEL_HIGH:
